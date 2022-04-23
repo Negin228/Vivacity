@@ -5,8 +5,8 @@ import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import { Form as FinalForm } from 'react-final-form';
 import classNames from 'classnames';
 import * as validators from '../../util/validators';
-import { Form, PrimaryButton, FieldTextInput } from '../../components';
-
+import { Form, PrimaryButton, FieldTextInput, TypeButtons } from '../../components';
+import config from '../../config';
 import css from './SignupForm.module.css';
 
 const KEY_CODE_ENTER = 13;
@@ -24,6 +24,9 @@ const SignupFormComponent = props => (
         invalid,
         intl,
         onOpenTermsOfService,
+        values,
+        userTypeConfig,
+        type,
       } = fieldRenderProps;
 
       // email
@@ -109,7 +112,7 @@ const SignupFormComponent = props => (
 
       const classes = classNames(rootClassName || css.root, className);
       const submitInProgress = inProgress;
-      const submitDisabled = invalid || submitInProgress;
+      const submitDisabled = invalid || submitInProgress || !values?.userType;
 
       const handleTermsKeyUp = e => {
         // Allow click action with keyboard like with normal links
@@ -132,6 +135,20 @@ const SignupFormComponent = props => (
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           <div>
+            <div className={css.userTypeContainer}>
+              <h2 className={css.userTypeHeading}>
+                <FormattedMessage id="SignupForm.userTypeHeading" />
+              </h2>
+              <TypeButtons
+                userTypeConfig={userTypeConfig}
+                formValues={values}
+                changeForm={type => {
+                  fieldRenderProps.form.change('userType', type);
+                  // setType(type);
+                }}
+                type={type}
+              />
+            </div>
             <FieldTextInput
               type="email"
               id={formId ? `${formId}.email` : 'email'}
@@ -194,7 +211,7 @@ const SignupFormComponent = props => (
   />
 );
 
-SignupFormComponent.defaultProps = { inProgress: false };
+SignupFormComponent.defaultProps = { inProgress: false, userTypeConfig: config.custom.userType };
 
 const { bool, func } = PropTypes;
 

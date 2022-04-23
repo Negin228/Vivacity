@@ -849,6 +849,7 @@
   "SignupForm.signUp": "Sign up",
   "SignupForm.termsAndConditionsAcceptText": "By signing up you accept the {termsLink}",
   "SignupForm.termsAndConditionsLinkText": "terms and conditions",
+  "SignupForm.userTypeHeading": "I am a:",
   "SortBy.heading": "Sort by",
   "StripeBankAccountTokenInputField.accountNumber.inline": "account number",
   "StripeBankAccountTokenInputField.accountNumber.label": "Bank account number",

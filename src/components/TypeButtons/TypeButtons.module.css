@@ -1,0 +1,75 @@
+@import '../../styles/marketplaceDefaults.css';
+@import '../../styles/propertySets.css';
+@import '../../styles/customMediaQueries.css';
+
+.userTypeButtons {
+  /* Layout */
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  box-shadow: 0 1px 6px rgba(57, 73, 76, 0.35);
+  margin: 6px 0 24px;
+  border-radius: 2px;
+  width: 100%;
+
+  /* Remove left line while active */
+  & > div.typeButtonActive:before,
+  & > div:hover:before,
+  & > div.typeButtonActive + div:before {
+    background-color: transparent;
+  }
+}
+
+.typeButton {
+  /* Layout */
+  display: inline-block;
+  float: left;
+  position: relative;
+  padding: 11px 28px;
+  user-select: none;
+  border: solid 2px transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  width: 50%;
+  transition: all 0.15s;
+
+  /* Font styles */
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 500;
+  text-align: center;
+  vertical-align: middle;
+
+  &:nth-child(1) {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+  }
+
+  &:nth-child(2) {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    &:before {
+      content: '';
+      position: absolute;
+      left: -2px;
+      top: -2px;
+      bottom: -2px;
+      width: 1px;
+      background-color: #e0e0e0;
+    }
+  }
+
+  &:hover {
+    background-color: var(--marketplaceColor);
+    color: var(--matterColorLight);
+  }
+}
+
+.typeButtonActive {
+  background-color: var(--marketplaceColorLight);
+  color: var(--matterColorLight);
+
+  &:hover {
+    background-color: var(--marketplaceColor);
+  }
+}

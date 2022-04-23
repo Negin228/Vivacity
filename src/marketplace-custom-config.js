@@ -163,3 +163,8 @@ export const sortConfig = {
     { key: 'relevance', label: 'Relevance', longLabel: 'Relevance (Keyword search)' },
   ],
 };
+
+export const userType = [
+  { key: 'student', label: 'Student' },
+  { key: 'teacher', label: 'Teacher' },
+];
