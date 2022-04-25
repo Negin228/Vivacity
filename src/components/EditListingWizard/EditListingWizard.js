@@ -42,7 +42,6 @@ export const TABS = [
   DESCRIPTION,
   FEATURES,
   //POLICY,
-  LOCATION,
   PRICING,
   ...availabilityMaybe,
   PHOTOS,
@@ -67,7 +66,7 @@ const tabLabel = (intl, tab) => {
   } else if (tab === PRICING) {
     key = 'EditListingWizard.tabLabelPricing';
   } else if (tab === AVAILABILITY) {
-    key = 'EditListingWizard.tabLabelAvailability';
+    key = 'Date';
   } else if (tab === PHOTOS) {
     key = 'EditListingWizard.tabLabelPhotos';
   }
@@ -106,7 +105,13 @@ const tabCompleted = (tab, listing) => {
     case PRICING:
       return !!price;
     case AVAILABILITY:
-      return !!availabilityPlan;
+      return !!(
+        publicData.timezone &&
+        publicData.startDate &&
+        publicData.endDate &&
+        publicData.classDuration &&
+        publicData.seats
+      );
     case PHOTOS:
       return images && images.length > 0;
     default:
@@ -228,14 +233,14 @@ class EditListingWizard extends Component {
       (hasRequirements(stripeAccountData, 'past_due') ||
         hasRequirements(stripeAccountData, 'currently_due'));
 
-    if (stripeConnected && !requirementsMissing) {
-      onPublishListingDraft(id);
-    } else {
-      this.setState({
-        draftId: id,
-        showPayoutDetails: true,
-      });
-    }
+    // if (stripeConnected && !requirementsMissing) {
+    onPublishListingDraft(id);
+    // } else {
+    //   this.setState({
+    //     draftId: id,
+    //     showPayoutDetails: true,
+    //   });
+    // }
   }
 
   handlePayoutModalClose() {

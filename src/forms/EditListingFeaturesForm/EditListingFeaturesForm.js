@@ -55,7 +55,12 @@ const EditListingFeaturesFormComponent = props => (
           {errorMessage}
           {errorMessageShowListing}
 
-          <FieldCheckboxGroup className={css.features} id={name} name={name} options={options} />
+          <FieldCheckboxGroup
+            className={css.features}
+            id={name}
+            name={name}
+            options={config.custom.workoutTypes}
+          />
 
           <Button
             className={css.submitButton}

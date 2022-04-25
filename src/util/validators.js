@@ -88,7 +88,14 @@ export const bookingDateRequired = inValidDateMessage => value => {
   const dateIsValid = value && value.date instanceof Date;
   return !dateIsValid ? inValidDateMessage : VALID;
 };
-
+export const fieldSelectModernRequired = message => value => {
+  if (typeof value === 'undefined' || value === null || value.length === 0) {
+    return message;
+  } else if (value) {
+    return VALID;
+  }
+  return message;
+};
 export const bookingDatesRequired = (inValidStartDateMessage, inValidEndDateMessage) => value => {
   const startDateIsValid = value && value.startDate instanceof Date;
   const endDateIsValid = value && value.endDate instanceof Date;

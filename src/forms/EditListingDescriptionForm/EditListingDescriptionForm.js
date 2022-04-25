@@ -5,10 +5,15 @@ import { Form as FinalForm } from 'react-final-form';
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
-import { maxLength, required, composeValidators } from '../../util/validators';
-import { Form, Button, FieldTextInput } from '../../components';
+import {
+  maxLength,
+  required,
+  composeValidators,
+  fieldSelectModernRequired,
+} from '../../util/validators';
+import { Form, Button, FieldTextInput, FieldSelectModern } from '../../components';
 import CustomCertificateSelectFieldMaybe from './CustomCertificateSelectFieldMaybe';
-
+import config from '../../config';
 import css from './EditListingDescriptionForm.module.css';
 
 const TITLE_MAX_LENGTH = 60;
@@ -92,8 +97,8 @@ const EditListingDescriptionFormComponent = props => (
             name="title"
             className={css.title}
             type="text"
-            label={titleMessage}
-            placeholder={titlePlaceholderMessage}
+            label="Name Of Class"
+            placeholder="Enter Name Of Class"
             maxLength={TITLE_MAX_LENGTH}
             validate={composeValidators(required(titleRequiredMessage), maxLength60Message)}
             autoFocus
@@ -109,13 +114,16 @@ const EditListingDescriptionFormComponent = props => (
             validate={composeValidators(required(descriptionRequiredMessage))}
           />
 
-          <CustomCertificateSelectFieldMaybe
-            id="certificate"
-            name="certificate"
-            certificateOptions={certificateOptions}
-            intl={intl}
+          <FieldSelectModern
+            className={css.features}
+            id="languages"
+            name="languages"
+            label="Languages"
+            options={config.custom.languages}
+            placeholder="Select a language"
+            validate={fieldSelectModernRequired('Please select a language')}
+            isSearchable={true}
           />
-
           <Button
             className={css.submitButton}
             type="submit"
