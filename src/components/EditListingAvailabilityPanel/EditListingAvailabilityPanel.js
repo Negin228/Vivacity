@@ -55,18 +55,16 @@ const EditListingAvailabilityPanel = props => {
         initialValues={{
           timezone: publicData.timezone ? publicData.timezone : undefined,
           start_date: publicData.startDate ? new Date(publicData.startDate) : undefined,
-          end_date: publicData.endDate ? new Date(publicData.endDate) : undefined,
           seats: publicData.seats ? publicData.seats : undefined,
           class_duration: publicData.classDuration ? publicData.classDuration : undefined,
         }}
         saveActionMsg={submitButtonText}
         onSubmit={values => {
-          const { timezone, start_date, end_date, seats, class_duration } = values;
+          const { timezone, start_date, seats, class_duration } = values;
           const updateValues = {
             publicData: {
               timezone: timezone,
               startDate: start_date.toISOString(),
-              endDate: end_date.toISOString(),
               seats: seats,
               classDuration: class_duration,
             },

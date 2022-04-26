@@ -42,12 +42,17 @@ const listingTab = (listing, selectedPageName) => {
 };
 
 const UserNav = props => {
-  const { className, rootClassName, selectedPageName, listing } = props;
+  const { className, rootClassName, selectedPageName, isCurrentUserClient, listing } = props;
   const classes = classNames(rootClassName || css.root, className);
 
   const tabs = [
     {
-      ...listingTab(listing, selectedPageName),
+      text: <FormattedMessage id="ManageListingsPage.yourListings" />,
+      selected: selectedPageName === 'ManageListingsPage',
+      linkProps: {
+        name: 'ManageListingsPage',
+      },
+      disabled: isCurrentUserClient,
     },
     {
       text: <FormattedMessage id="UserNav.profileSettingsPage" />,

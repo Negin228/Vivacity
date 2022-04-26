@@ -108,7 +108,6 @@ const tabCompleted = (tab, listing) => {
       return !!(
         publicData.timezone &&
         publicData.startDate &&
-        publicData.endDate &&
         publicData.classDuration &&
         publicData.seats
       );

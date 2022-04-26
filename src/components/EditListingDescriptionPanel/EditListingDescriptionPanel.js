@@ -10,6 +10,9 @@ import { EditListingDescriptionForm } from '../../forms';
 import config from '../../config';
 
 import css from './EditListingDescriptionPanel.module.css';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { clearPreviousListingData } from '../../containers/EditListingPage/EditListingPage.duck';
 
 const EditListingDescriptionPanel = props => {
   const {
@@ -25,7 +28,12 @@ const EditListingDescriptionPanel = props => {
     updateInProgress,
     errors,
   } = props;
-
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    if (dispatch && clearPreviousListingData) {
+      dispatch(clearPreviousListingData());
+    }
+  }, []);
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
   const { description, title, publicData } = currentListing.attributes;

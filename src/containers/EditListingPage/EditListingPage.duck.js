@@ -65,6 +65,7 @@ export const SAVE_PAYOUT_DETAILS_REQUEST = 'app/EditListingPage/SAVE_PAYOUT_DETA
 export const SAVE_PAYOUT_DETAILS_SUCCESS = 'app/EditListingPage/SAVE_PAYOUT_DETAILS_SUCCESS';
 export const SAVE_PAYOUT_DETAILS_ERROR = 'app/EditListingPage/SAVE_PAYOUT_DETAILS_ERROR';
 
+export const CLEAR_PREVIOUS_LISTING_DATA = 'app/EditListingPage/CLEAR_PREVIOUS_LISTING_DATA';
 // ================ Reducer ================ //
 
 const initialState = {
@@ -118,6 +119,14 @@ export default function reducer(state = initialState, action = {}) {
         createListingDraftInProgress: false,
         submittedListingId: payload.data.id,
         listingDraft: payload.data,
+      };
+
+    case CLEAR_PREVIOUS_LISTING_DATA:
+      return {
+        ...state,
+        createListingDraftInProgress: false,
+        submittedListingId: null,
+        listingDraft: null,
       };
     case CREATE_LISTING_DRAFT_ERROR:
       return {
@@ -323,7 +332,7 @@ export const removeListingImage = imageId => ({
 // All the action creators that don't have the {Success, Error} suffix
 // take the params object that the corresponding SDK endpoint method
 // expects.
-
+export const clearPreviousListingData = () => ({ type: CLEAR_PREVIOUS_LISTING_DATA });
 // SDK method: ownListings.create
 export const createListingDraft = requestAction(CREATE_LISTING_DRAFT_REQUEST);
 export const createListingDraftSuccess = successAction(CREATE_LISTING_DRAFT_SUCCESS);

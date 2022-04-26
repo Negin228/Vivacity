@@ -120,15 +120,6 @@ const EditListingAvailabilityPlanFormComponent = props => (
             minDate={new Date()}
             validate={composeValidators(required('Start date is required'))}
           />
-          <Datepicker
-            className={css.title}
-            id="end_date"
-            name="end_date"
-            label="End Date"
-            placeholder="Enter end date"
-            minDate={new Date()}
-            validate={composeValidators(required('End date is required'))}
-          />
           <FieldSelectModern
             className={css.features}
             id="class_duration"

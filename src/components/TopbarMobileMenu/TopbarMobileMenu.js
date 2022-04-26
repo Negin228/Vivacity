@@ -100,11 +100,11 @@ const TopbarMobileMenu = props => {
           <FormattedMessage id="TopbarMobileMenu.inboxLink" />
           {notificationCountBadge}
         </NamedLink>
-        <OwnListingLink
+        {/* <OwnListingLink
           listing={currentUserListing}
           listingFetched={currentUserListingFetched}
           className={css.navigationLink}
-        />
+        /> */}
         <NamedLink
           className={classNames(css.navigationLink, currentPageClass('ProfileSettingsPage'))}
           name="ProfileSettingsPage"
@@ -116,6 +116,13 @@ const TopbarMobileMenu = props => {
           name="AccountSettingsPage"
         >
           <FormattedMessage id="TopbarMobileMenu.accountSettingsLink" />
+        </NamedLink>
+        <NamedLink
+          className={classNames(css.navigationLink, currentPageClass('ManageListingsPage'))}
+          name="ManageListingsPage"
+        >
+          <span className={css.menuItemBorder} />
+          <FormattedMessage id="TopbarDesktop.yourListingsLink" />
         </NamedLink>
       </div>
       <div className={css.footer}>
