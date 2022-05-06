@@ -8,7 +8,7 @@ import { LISTING_STATE_DRAFT } from '../../util/types';
 import { ListingLink } from '../../components';
 import { EditListingAvailabilityPlanForm } from '../../forms';
 import config from '../../config';
-
+import moment from 'moment';
 import css from './EditListingAvailabilityPanel.module.css';
 
 const EditListingAvailabilityPanel = props => {
@@ -61,12 +61,17 @@ const EditListingAvailabilityPanel = props => {
         saveActionMsg={submitButtonText}
         onSubmit={values => {
           const { timezone, start_date, seats, class_duration } = values;
+          const startDateISO = start_date.toISOString();
+          const selectedDate = moment(startDateISO).tz(timezone);
+          const unix_time_stamp = selectedDate.unix();
           const updateValues = {
             publicData: {
               timezone: timezone,
               startDate: start_date.toISOString(),
               seats: seats,
               classDuration: class_duration,
+              unixTimeStamp: unix_time_stamp,
+              classDurationFilter: [class_duration.key],
             },
           };
 

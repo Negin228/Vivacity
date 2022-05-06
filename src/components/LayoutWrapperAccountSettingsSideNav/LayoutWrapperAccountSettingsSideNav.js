@@ -5,7 +5,7 @@
 import React, { useEffect } from 'react';
 import { node, number, string, shape } from 'prop-types';
 import { compose } from 'redux';
-
+import { connect } from 'react-redux';
 import { FormattedMessage } from '../../util/reactIntl';
 import { withViewport } from '../../util/contextHelpers';
 import { LayoutWrapperSideNav } from '../../components';
@@ -78,9 +78,19 @@ const LayoutWrapperAccountSettingsSideNavComponent = props => {
     };
   });
 
-  const { currentTab } = props;
-
-  const tabs = [
+  const { currentTab, currentUser } = props;
+  const currentUserIsProvider =
+    currentUser?.attributes?.profile?.publicData?.userType === 'teacher';
+  const payObj = {
+    text: <FormattedMessage id="LayoutWrapperAccountSettingsSideNav.paymentsTabTitle" />,
+    selected: currentTab === 'StripePayoutPage',
+    id: 'StripePayoutPageTab',
+    linkProps: {
+      name: 'StripePayoutPage',
+    },
+  };
+  let tabs = [];
+  tabs = [
     {
       text: <FormattedMessage id="LayoutWrapperAccountSettingsSideNav.contactDetailsTabTitle" />,
       selected: currentTab === 'ContactDetailsPage',
@@ -97,14 +107,7 @@ const LayoutWrapperAccountSettingsSideNavComponent = props => {
         name: 'PasswordChangePage',
       },
     },
-    {
-      text: <FormattedMessage id="LayoutWrapperAccountSettingsSideNav.paymentsTabTitle" />,
-      selected: currentTab === 'StripePayoutPage',
-      id: 'StripePayoutPageTab',
-      linkProps: {
-        name: 'StripePayoutPage',
-      },
-    },
+
     {
       text: <FormattedMessage id="LayoutWrapperAccountSettingsSideNav.paymentMethodsTabTitle" />,
       selected: currentTab === 'PaymentMethodsPage',
@@ -114,7 +117,9 @@ const LayoutWrapperAccountSettingsSideNavComponent = props => {
       },
     },
   ];
-
+  if (currentUserIsProvider) {
+    tabs = [...tabs, payObj];
+  }
   return <LayoutWrapperSideNav tabs={tabs} />;
 };
 
@@ -138,8 +143,14 @@ LayoutWrapperAccountSettingsSideNavComponent.propTypes = {
   }).isRequired,
 };
 
-const LayoutWrapperAccountSettingsSideNav = compose(withViewport)(
-  LayoutWrapperAccountSettingsSideNavComponent
-);
+const mapStateToProps = state => ({ currentUser: state.user.currentUser });
+const mapDispatchToProps = dispatch => ({});
 
+const LayoutWrapperAccountSettingsSideNav = compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  withViewport
+)(LayoutWrapperAccountSettingsSideNavComponent);
 export default LayoutWrapperAccountSettingsSideNav;

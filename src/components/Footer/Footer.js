@@ -4,6 +4,8 @@ import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { twitterPageURL } from '../../util/urlHelpers';
 import config from '../../config';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import {
   IconSocialMediaFacebook,
   IconSocialMediaInstagram,
@@ -54,10 +56,10 @@ const renderSocialMediaLinks = intl => {
 };
 
 const Footer = props => {
-  const { rootClassName, className, intl } = props;
+  const { rootClassName, className, intl, currentUser } = props;
   const socialMediaLinks = renderSocialMediaLinks(intl);
   const classes = classNames(rootClassName || css.root, className);
-
+  const userType = currentUser?.attributes?.profile?.publicData?.userType;
   return (
     <div className={classes}>
       <div className={css.topBorderWrapper}>
@@ -83,11 +85,13 @@ const Footer = props => {
             </div>
             <div className={css.infoLinks}>
               <ul className={css.list}>
-                <li className={css.listItem}>
-                  <NamedLink name="NewListingPage" className={css.link}>
-                    <FormattedMessage id="Footer.toNewListingPage" />
-                  </NamedLink>
-                </li>
+                {userType === 'teacher' ? (
+                  <li className={css.listItem}>
+                    <NamedLink name="NewListingPage" className={css.link}>
+                      <FormattedMessage id="Footer.toNewListingPage" />
+                    </NamedLink>
+                  </li>
+                ) : null}
                 <li className={css.listItem}>
                   <NamedLink name="AboutPage" className={css.link}>
                     <FormattedMessage id="Footer.toAboutPage" />
@@ -285,5 +289,14 @@ Footer.propTypes = {
   className: string,
   intl: intlShape.isRequired,
 };
+const mapStateToProps = state => ({ currentUser: state.user.currentUser });
+const mapDispatchToProps = dispatch => ({});
 
-export default injectIntl(Footer);
+const FooterPage = compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
+)(injectIntl(Footer));
+
+export default FooterPage;

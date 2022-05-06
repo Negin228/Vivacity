@@ -94,12 +94,7 @@ const EditListingAvailabilityPlanFormComponent = props => (
       const submitReady = (updated && pristine) || ready;
       const submitInProgress = updateInProgress;
       const submitDisabled = invalid || disabled || submitInProgress;
-      const durationOptions = [
-        { key: '30_min', value: '30_min', label: '30 min' },
-        { key: '60_min', value: '60_min', label: '1 hour' },
-        { key: '90_min', value: '90_min', label: '90 min' },
-      ];
-      console.log('values', values);
+
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           {errorMessageCreateListingDraft}
@@ -125,7 +120,7 @@ const EditListingAvailabilityPlanFormComponent = props => (
             id="class_duration"
             name="class_duration"
             label="Duration Of Class"
-            options={durationOptions}
+            options={config.custom.durationOptions}
             placeholder="Select duration"
             validate={fieldSelectModernRequired('Please select a duration')}
             isSearchable={true}

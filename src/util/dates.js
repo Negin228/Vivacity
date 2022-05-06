@@ -3,7 +3,7 @@
 // and slows down the first paint.
 import moment from 'moment-timezone/builds/moment-timezone-with-data-10-year-range.min';
 import jstz from 'jstimezonedetect';
-
+import mt from 'moment';
 /**
  * Input names for the DateRangePicker from react-dates.
  */
@@ -99,7 +99,15 @@ export const isValidTimeZone = timeZone => {
  */
 export const getTimeZoneNames = relevantZonesRegExp => {
   const allTimeZones = moment.tz.names();
-  return relevantZonesRegExp ? allTimeZones.filter(z => relevantZonesRegExp.test(z)) : allTimeZones;
+  const changedTZ = allTimeZones.map(i => {
+    return {
+      i,
+      t: moment.tz(i).format('Z'),
+    };
+  });
+  console.log('moment', changedTZ);
+
+  return relevantZonesRegExp ? changedTZ.filter(z => relevantZonesRegExp.test(z.i)) : allTimeZones;
 };
 
 /**

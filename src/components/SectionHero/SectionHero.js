@@ -20,14 +20,7 @@ const SectionHero = props => {
         <h2 className={css.heroSubTitle}>
           <FormattedMessage id="SectionHero.subTitle" />
         </h2>
-        <NamedLink
-          name="SearchPage"
-          to={{
-            search:
-              'address=United%20States%20of%20America&bounds=71.540724%2C-66.885444%2C18.765563%2C-179.9',
-          }}
-          className={css.heroButton}
-        >
+        <NamedLink name="SearchPage" className={css.heroButton}>
           <FormattedMessage id="SectionHero.browseButton" />
         </NamedLink>
       </div>

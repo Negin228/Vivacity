@@ -15,8 +15,8 @@ const FieldTimeZoneSelect = props => {
         Pick something...
       </option>
       {getTimeZoneNames(relevantZonesPattern).map(tz => (
-        <option key={tz} value={tz}>
-          {tz}
+        <option key={tz.i} value={tz.i}>
+          {tz.i} GMT {tz.t}
         </option>
       ))}
     </FieldSelect>
