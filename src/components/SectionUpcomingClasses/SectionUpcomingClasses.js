@@ -32,9 +32,7 @@ const SectionUpcomingClasses = ({ loading, error, products, intl }) => {
   return (
     <div className={classNames(css.productsWrapper, 'bg-white')}>
       {products?.length > 0 ? (
-        <h3 className={`text-left text-6xl font-bold mt-6 ${css.allColumns}`}>
-          {intl.formatMessage({ id: 'SectionUpcomingClasses.title' })}
-        </h3>
+        <h3 className={css.title}>{intl.formatMessage({ id: 'SectionUpcomingClasses.title' })}</h3>
       ) : null}
       <div className={css.container}>
         {(products ?? []).map(p => (

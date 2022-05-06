@@ -2,7 +2,7 @@
 .container {
     display: grid;
     margin: 0 auto;
-    padding: 1rem 0rem 3rem 2rem;
+    padding: 1rem 0rem 3rem 0;
     grid-template-columns: repeat(auto-fit, minmax(317px, 0fr));
     gap: 2em;
     @media (max-width: 1170px) {

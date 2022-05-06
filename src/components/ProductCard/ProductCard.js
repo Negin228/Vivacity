@@ -40,8 +40,8 @@ function ProductCard({ title, id, timeZone, startDate, price, images, intl, teac
           </div>
         </div> */}
 
-        <div className="flex items-center justify-between">
-          <h3 className="text-gray-900 truncate text-base font-normal mr-4 my-0 py-3">
+        <div>
+          <h3>
             {formattedDate} at {formattedTime} {timeZone}
           </h3>
           <p className={css.price}>
