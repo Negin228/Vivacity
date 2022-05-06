@@ -8,7 +8,7 @@ import { createSlug } from '../../util/urlHelpers';
 import css from './ProductCard.module.css';
 import { AiFillStar } from 'react-icons/ai';
 import classNames from 'classnames';
-
+import mt from 'moment-timezone';
 function ProductCard({ title, id, timeZone, startDate, price, images, intl, teacherName }) {
   const history = useHistory();
   const handleClick = () =>
@@ -18,6 +18,7 @@ function ProductCard({ title, id, timeZone, startDate, price, images, intl, teac
   const newStartDate = new Date(startDate);
   const formattedDate = moment(newStartDate).format('dddd, MMMM Do');
   const formattedTime = moment(newStartDate).format('h:mm a');
+  const timezoneOffset = mt.tz(timeZone).format('Z');
   return (
     <div className={css.product} onClick={handleClick}>
       {/* <div className="px-3 flex items-center justify-between">
@@ -42,7 +43,7 @@ function ProductCard({ title, id, timeZone, startDate, price, images, intl, teac
 
         <div>
           <h3>
-            {formattedDate} at {formattedTime} {timeZone}
+            {formattedDate} at {formattedTime} GMT {timezoneOffset}
           </h3>
           <p className={css.price}>
             {title} with {teacherName}
