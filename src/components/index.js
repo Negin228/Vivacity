@@ -182,3 +182,5 @@ export { default as TransactionPanel } from './TransactionPanel/TransactionPanel
 export { default as TypeButtons } from './TypeButtons/TypeButtons'
 export { default as FieldSelectModern } from './FieldSelectModern/FieldSelectModern';
 export { default as Datepicker } from './DatePicker/Datepicker';
+export { default as SectionUpcomingClasses } from './SectionUpcomingClasses/SectionUpcomingClasses';
+export { default as ProductCard } from './ProductCard/ProductCard';

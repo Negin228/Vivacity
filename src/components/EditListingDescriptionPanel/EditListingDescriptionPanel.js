@@ -71,7 +71,7 @@ const EditListingDescriptionPanel = props => {
           const updateValues = {
             title: title,
             description,
-            publicData: { languages: languages },
+            publicData: { languages: languages, languagesFilter: [languages.key] },
           };
 
           onSubmit(updateValues);

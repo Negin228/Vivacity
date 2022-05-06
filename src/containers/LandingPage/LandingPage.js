@@ -12,6 +12,7 @@ import {
   SectionHero,
   SectionHowItWorks,
   SectionLocations,
+  SectionUpcomingClasses,
   LayoutSingleColumn,
   LayoutWrapperTopbar,
   LayoutWrapperMain,
@@ -19,7 +20,7 @@ import {
   Footer,
 } from '../../components';
 import { TopbarContainer } from '../../containers';
-
+import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import facebookImage from '../../assets/yogatimeFacebook-1200x630.jpg';
 import twitterImage from '../../assets/yogatimeTwitter-600x314.jpg';
 import css from './LandingPage.module.css';
@@ -32,6 +33,9 @@ export const LandingPageComponent = props => {
     scrollingDisabled,
     currentUserListing,
     currentUserListingFetched,
+    products,
+    productsLoading,
+    productsError,
   } = props;
 
   // Schema for search engines (helps them to understand what this page is about)
@@ -41,7 +45,7 @@ export const LandingPageComponent = props => {
   const schemaTitle = intl.formatMessage({ id: 'LandingPage.schemaTitle' }, { siteTitle });
   const schemaDescription = intl.formatMessage({ id: 'LandingPage.schemaDescription' });
   const schemaImage = `${config.canonicalRootURL}${facebookImage}`;
-
+  console.log(currentUserListing);
   return (
     <Page
       className={css.root}
@@ -73,6 +77,15 @@ export const LandingPageComponent = props => {
             <li className={css.section}>
               <div className={css.sectionContentFirstChild}>
                 <SectionLocations />
+              </div>
+            </li>
+            <li className={css.section}>
+              <div className={css.sectionContent}>
+                <SectionUpcomingClasses
+                  loading={productsLoading}
+                  error={productsError}
+                  products={products}
+                />
               </div>
             </li>
             <li className={css.section}>
@@ -113,11 +126,19 @@ LandingPageComponent.propTypes = {
 
 const mapStateToProps = state => {
   const { currentUserListing, currentUserListingFetched } = state.user;
-
+  const { productIds, productsLoading, productsError } = state.LandingPage;
+  const products = productIds?.map(t => {
+    const ref = { id: t, type: 'listing' };
+    const listings = getMarketplaceEntities(state, [ref]);
+    return listings.length === 1 ? listings[0] : null;
+  });
   return {
     scrollingDisabled: isScrollingDisabled(state),
     currentUserListing,
     currentUserListingFetched,
+    products,
+    productsLoading,
+    productsError,
   };
 };
 

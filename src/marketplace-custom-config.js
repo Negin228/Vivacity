@@ -32,137 +32,11 @@
  *         and tie them with correct extended data key
  *         (i.e. pub_<key> or meta_<key>).
  */
-
-export const filters = [
-  {
-    id: 'dates-length',
-    label: 'Dates',
-    type: 'BookingDateRangeLengthFilter',
-    group: 'primary',
-    // Note: BookingDateRangeFilter is fixed filter,
-    // you can't change "queryParamNames: ['dates'],"
-    queryParamNames: ['dates', 'minDuration'],
-    config: {
-      // A global time zone to use in availability searches. As listings
-      // can be in various time zones, we must decide what time zone we
-      // use in search when looking for available listings within a
-      // certain time interval.
-      //
-      // If you have all/most listings in a certain time zone, change this
-      // config value to that.
-      //
-      // See: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-      searchTimeZone: 'Etc/UTC',
-
-      // Options for the minimum duration of the booking
-      options: [
-        { key: '0', label: 'Any length' },
-        { key: '60', label: '1 hour', shortLabel: '1h' },
-        { key: '120', label: '2 hours', shortLabel: '2h' },
-      ],
-    },
-  },
-  {
-    id: 'price',
-    label: 'Price',
-    type: 'PriceFilter',
-    group: 'primary',
-    // Note: PriceFilter is fixed filter,
-    // you can't change "queryParamNames: ['price'],"
-    queryParamNames: ['price'],
-    // Price filter configuration
-    // Note: unlike most prices this is not handled in subunits
-    config: {
-      min: 0,
-      max: 1000,
-      step: 5,
-    },
-  },
-  {
-    id: 'keyword',
-    label: 'Keyword',
-    type: 'KeywordFilter',
-    group: 'primary',
-    // Note: KeywordFilter is fixed filter,
-    // you can't change "queryParamNames: ['keywords'],"
-    queryParamNames: ['keywords'],
-    // NOTE: If you are ordering search results by distance
-    // the keyword search can't be used at the same time.
-    // You can turn on/off ordering by distance from config.js file.
-    config: {},
-  },
-  {
-    id: 'yogaStyles',
-    label: 'Yoga styles',
-    type: 'SelectMultipleFilter',
-    group: 'secondary',
-    queryParamNames: ['pub_yogaStyles'],
-    config: {
-      // Optional modes: 'has_all', 'has_any'
-      // https://www.sharetribe.com/api-reference/marketplace.html#extended-data-filtering
-      searchMode: 'has_all',
-
-      // "key" is the option you see in Flex Console.
-      // "label" is set here for this web app's UI only.
-      // Note: label is not added through the translation files
-      // to make filter customizations a bit easier.
-      options: [
-        { key: 'ashtanga', label: 'Ashtanga' },
-        { key: 'hatha', label: 'Hatha' },
-        { key: 'kundalini', label: 'Kundalini' },
-        { key: 'restorative', label: 'Restorative' },
-        { key: 'vinyasa', label: 'Vinyasa' },
-        { key: 'yin', label: 'Yin' },
-      ],
-    },
-  },
-  {
-    id: 'certificate',
-    label: 'Certificate',
-    type: 'SelectSingleFilter',
-    group: 'secondary',
-    queryParamNames: ['pub_certificate'],
-    config: {
-      // "key" is the option you see in Flex Console.
-      // "label" is set here for the UI only.
-      // Note: label is not added through the translation files
-      // to make filter customizations a bit easier.
-      options: [
-        { key: 'none', label: 'None', hideFromFilters: true, hideFromListingInfo: true },
-        { key: '200h', label: 'Registered yoga teacher 200h' },
-        { key: '500h', label: 'Registered yoga teacher 500h' },
-      ],
-    },
-  },
+export const durationOptions = [
+  { key: '30_min', value: '30_min', label: '30 min' },
+  { key: '60_min', value: '60_min', label: '1 hour' },
+  { key: '90_min', value: '90_min', label: '90 min' },
 ];
-
-export const sortConfig = {
-  // Enable/disable the sorting control in the SearchPage
-  active: true,
-
-  // Note: queryParamName 'sort' is fixed,
-  // you can't change it since Flex API expects it to be named as 'sort'
-  queryParamName: 'sort',
-
-  // Internal key for the relevance option, see notes below.
-  relevanceKey: 'relevance',
-
-  // Keyword filter is sorting the results already by relevance.
-  // If keyword filter is active, we need to disable sorting.
-  conflictingFilters: ['keyword'],
-
-  options: [
-    { key: 'createdAt', label: 'Newest' },
-    { key: '-createdAt', label: 'Oldest' },
-    { key: '-price', label: 'Lowest price' },
-    { key: 'price', label: 'Highest price' },
-
-    // The relevance is only used for keyword search, but the
-    // parameter isn't sent to the Marketplace API. The key is purely
-    // for handling the internal state of the sorting dropdown.
-    { key: 'relevance', label: 'Relevance', longLabel: 'Relevance (Keyword search)' },
-  ],
-};
 
 export const userType = [
   { key: 'student', label: 'Student' },
@@ -1092,3 +966,131 @@ export const languages = [
 ];
 
 export const workoutTypes = [{ key: 'yoga', label: 'Yoga' }, { key: 'stretch', label: 'Stretch' }];
+
+export const filters = [
+  // {
+  //   id: 'dates-length',
+  //   label: 'Dates',
+  //   type: 'BookingDateRangeLengthFilter',
+  //   group: 'primary',
+  //   // Note: BookingDateRangeFilter is fixed filter,
+  //   // you can't change "queryParamNames: ['dates'],"
+  //   queryParamNames: ['dates', 'minDuration'],
+  //   config: {
+  //     // A global time zone to use in availability searches. As listings
+  //     // can be in various time zones, we must decide what time zone we
+  //     // use in search when looking for available listings within a
+  //     // certain time interval.
+  //     //
+  //     // If you have all/most listings in a certain time zone, change this
+  //     // config value to that.
+  //     //
+  //     // See: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  //     searchTimeZone: 'Etc/UTC',
+
+  //     // Options for the minimum duration of the booking
+  //     options: [
+  //       { key: '0', label: 'Any length' },
+  //       { key: '60', label: '1 hour', shortLabel: '1h' },
+  //       { key: '120', label: '2 hours', shortLabel: '2h' },
+  //     ],
+  //   },
+  // },
+  {
+    id: 'price',
+    label: 'Price',
+    type: 'PriceFilter',
+    group: 'primary',
+    // Note: PriceFilter is fixed filter,
+    // you can't change "queryParamNames: ['price'],"
+    queryParamNames: ['price'],
+    // Price filter configuration
+    // Note: unlike most prices this is not handled in subunits
+    config: {
+      min: 0,
+      max: 1000,
+      step: 5,
+    },
+  },
+  {
+    id: 'keyword',
+    label: 'Keyword',
+    type: 'KeywordFilter',
+    group: 'primary',
+    // Note: KeywordFilter is fixed filter,
+    // you can't change "queryParamNames: ['keywords'],"
+    queryParamNames: ['keywords'],
+    // NOTE: If you are ordering search results by distance
+    // the keyword search can't be used at the same time.
+    // You can turn on/off ordering by distance from config.js file.
+    config: {},
+  },
+  {
+    id: 'languages',
+    label: 'Languages',
+    type: 'SelectSingleFilter',
+    group: 'primary',
+    queryParamNames: ['pub_languagesFilter'],
+    config: {
+      searchMode: 'has_all',
+      options: [...languages],
+    },
+  },
+  {
+    id: 'classDuration',
+    label: 'Class Duration',
+    type: 'SelectMultipleFilter',
+    group: 'primary',
+    queryParamNames: ['pub_classDurationFilter'],
+    config: {
+      searchMode: 'has_all',
+      options: [...durationOptions],
+    },
+  },
+  {
+    id: 'yogaStyles',
+    label: 'Workouts',
+    type: 'SelectMultipleFilter',
+    group: 'secondary',
+    queryParamNames: ['pub_yogaStyles'],
+    config: {
+      // Optional modes: 'has_all', 'has_any'
+      // https://www.sharetribe.com/api-reference/marketplace.html#extended-data-filtering
+      searchMode: 'has_all',
+
+      // "key" is the option you see in Flex Console.
+      // "label" is set here for this web app's UI only.
+      // Note: label is not added through the translation files
+      // to make filter customizations a bit easier.
+      options: [{ key: 'yoga', label: 'Yoga' }, { key: 'stretch', label: 'Stretch' }],
+    },
+  },
+];
+
+export const sortConfig = {
+  // Enable/disable the sorting control in the SearchPage
+  active: true,
+
+  // Note: queryParamName 'sort' is fixed,
+  // you can't change it since Flex API expects it to be named as 'sort'
+  queryParamName: 'sort',
+
+  // Internal key for the relevance option, see notes below.
+  relevanceKey: 'relevance',
+
+  // Keyword filter is sorting the results already by relevance.
+  // If keyword filter is active, we need to disable sorting.
+  conflictingFilters: ['keyword'],
+
+  options: [
+    { key: 'createdAt', label: 'Newest' },
+    { key: '-createdAt', label: 'Oldest' },
+    { key: '-price', label: 'Lowest price' },
+    { key: 'price', label: 'Highest price' },
+
+    // The relevance is only used for keyword search, but the
+    // parameter isn't sent to the Marketplace API. The key is purely
+    // for handling the internal state of the sorting dropdown.
+    { key: 'relevance', label: 'Relevance', longLabel: 'Relevance (Keyword search)' },
+  ],
+};

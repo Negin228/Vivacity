@@ -42,7 +42,7 @@ const TopbarDesktop = props => {
   useEffect(() => {
     setMounted(true);
   }, []);
-
+  const userType = currentUser?.attributes?.profile?.publicData?.userType;
   const authenticatedOnClientSide = mounted && isAuthenticated;
   const isAuthenticatedOrJustHydrated = isAuthenticated || !mounted;
 
@@ -85,13 +85,17 @@ const TopbarDesktop = props => {
       </MenuLabel>
       <MenuContent className={css.profileMenuContent}>
         <MenuItem key="ManageListingsPage" disabled={isCurrentUserClient}>
-          <NamedLink
-            className={classNames(css.yourListingsLink, currentPageClass('ManageListingsPage'))}
-            name="ManageListingsPage"
-          >
-            <span className={css.menuItemBorder} />
-            <FormattedMessage id="TopbarDesktop.yourListingsLink" />
-          </NamedLink>
+          {userType === 'teacher' ? (
+            <NamedLink
+              className={classNames(css.yourListingsLink, currentPageClass('ManageListingsPage'))}
+              name="ManageListingsPage"
+            >
+              <span className={css.menuItemBorder} />
+              <FormattedMessage id="TopbarDesktop.yourListingsLink" />
+            </NamedLink>
+          ) : (
+            ''
+          )}
         </MenuItem>
         <MenuItem key="ProfileSettingsPage">
           <NamedLink
@@ -169,7 +173,7 @@ const TopbarDesktop = props => {
         />
       </NamedLink>
       {search}
-      {createListingLink}
+      {userType === 'teacher' ? createListingLink : ''}
       {inboxLink}
       {profileMenu}
       {signupLink}

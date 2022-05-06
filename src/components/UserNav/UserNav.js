@@ -7,6 +7,7 @@ import { LinkTabNavHorizontal } from '../../components';
 import { ensureOwnListing } from '../../util/data';
 import { LISTING_STATE_DRAFT } from '../../util/types';
 import { getListingType, createSlug } from '../../util/urlHelpers';
+import { connect } from 'react-redux';
 
 import css from './UserNav.module.css';
 
@@ -42,18 +43,27 @@ const listingTab = (listing, selectedPageName) => {
 };
 
 const UserNav = props => {
-  const { className, rootClassName, selectedPageName, isCurrentUserClient, listing } = props;
+  const {
+    className,
+    rootClassName,
+    selectedPageName,
+    currentUser,
+    isCurrentUserClient,
+    listing,
+  } = props;
   const classes = classNames(rootClassName || css.root, className);
-
-  const tabs = [
-    {
-      text: <FormattedMessage id="ManageListingsPage.yourListings" />,
-      selected: selectedPageName === 'ManageListingsPage',
-      linkProps: {
-        name: 'ManageListingsPage',
-      },
-      disabled: isCurrentUserClient,
+  const currentUserIsProvider =
+    currentUser?.attributes?.profile?.publicData?.userType === 'teacher';
+  const tabObj = {
+    text: <FormattedMessage id="ManageListingsPage.yourListings" />,
+    selected: selectedPageName === 'ManageListingsPage',
+    linkProps: {
+      name: 'ManageListingsPage',
     },
+    disabled: isCurrentUserClient,
+  };
+  let tabs = [];
+  tabs = [
     {
       text: <FormattedMessage id="UserNav.profileSettingsPage" />,
       selected: selectedPageName === 'ProfileSettingsPage',
@@ -71,6 +81,10 @@ const UserNav = props => {
       },
     },
   ];
+
+  if (currentUserIsProvider) {
+    tabs = [...tabs, tabObj];
+  }
 
   return (
     <LinkTabNavHorizontal className={classes} tabRootClassName={css.tab} tabs={tabs} skin="dark" />
@@ -90,4 +104,10 @@ UserNav.propTypes = {
   selectedPageName: string.isRequired,
 };
 
-export default UserNav;
+const mapStateToProps = state => ({ currentUser: state.user.currentUser });
+const mapDispatchToProps = dispatch => ({});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UserNav);

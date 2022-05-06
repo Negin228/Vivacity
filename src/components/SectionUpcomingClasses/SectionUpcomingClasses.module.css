@@ -1,0 +1,57 @@
+@import '../../styles/propertySets.css';
+.container {
+    display: grid;
+    margin: 0 auto;
+    padding: 1rem 0rem 3rem 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(317px, 0fr));
+    gap: 2em;
+    @media (max-width: 1170px) {
+      max-width: 90%;
+    }
+    @media (max-width: 768px) {
+      max-width: 90%;
+      padding: 1rem 0 3rem 0;
+    }
+    @media (max-width: 598px) {
+      max-width: 85%;
+      padding: 1rem 0 3rem 0;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+  }
+  .title {
+    @apply --marketplaceH1FontStyles;
+    margin-top: 0;
+  }
+  .productsWrapper {
+    /* background-color: #f6f5f7; */
+  }
+  
+  .loadingContainer {
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    & p {
+      & svg {
+        height: 40px;
+      }
+    }
+  }
+  
+  .error {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    margin-top: 1rem;
+    color: red;
+    font-weight: normal;
+    font-size: 1rem;
+  }
+  
+  .allColumns {
+    padding-left: 2.5rem;
+    padding-bottom: 5px;
+    color: var(--matterColor);
+  }
+  /* ////////test */
+  

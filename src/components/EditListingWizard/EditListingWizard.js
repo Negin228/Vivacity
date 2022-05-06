@@ -377,7 +377,12 @@ class EditListingWizard extends Component {
     if (returnedNormallyFromStripe && stripeConnected && !requirementsMissing) {
       return <NamedRedirect name="EditListingPage" params={pathParams} />;
     }
+    const currentUserIsProvider =
+      currentUser?.attributes?.profile?.publicData?.userType === 'teacher';
 
+    if (!currentUserIsProvider) {
+      return <NamedRedirect name="LandingPage" />;
+    }
     return (
       <div className={classes} ref={setPortalRootAfterInitialRender}>
         <Tabs
