@@ -44,6 +44,7 @@ import { StripePaymentForm } from '../../forms';
 import { isScrollingDisabled } from '../../ducks/UI.duck';
 import { confirmCardPayment, retrievePaymentIntent } from '../../ducks/stripe.duck';
 import { savePaymentMethod } from '../../ducks/paymentMethods.duck';
+import moment from 'moment';
 
 import {
   initiateOrder,
@@ -372,12 +373,12 @@ export class CheckoutPageComponent extends Component {
 
     const orderParams = {
       listingId: pageData.listing.id,
-      bookingStart: tx.booking.attributes.start,
-      bookingEnd: tx.booking.attributes.end,
+      bookingStart: tx.booking?.attributes?.start,
+      bookingEnd: tx.booking?.attributes?.end,
       quantity: pageData.bookingData ? pageData.bookingData.quantity : null,
       ...optionalPaymentParams,
     };
-
+    console.log({ orderParams });
     return handlePaymentIntentCreation(orderParams);
   }
 
@@ -747,7 +748,8 @@ export class CheckoutPageComponent extends Component {
     // e.g. {country: 'FI'}
 
     const initalValuesForStripePayment = { name: userName };
-
+    const startDate = currentListing.attributes.publicData?.startDate;
+    const formattedDate = moment(startDate).format('dddd, MMMM Do YYYY, h:mm a');
     return (
       <Page {...pageProps}>
         {topbar}
@@ -832,7 +834,12 @@ export class CheckoutPageComponent extends Component {
             </div>
             <div className={css.detailsHeadings}>
               <h2 className={css.detailsTitle}>{listingTitle}</h2>
-              <p className={css.detailsSubtitle}>{detailsSubTitle}</p>
+              <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
+                <b>Price:</b> {detailsSubTitle}
+              </p>
+              <p className={css.detailsSubtitle}>
+                <b>Start date:</b> {formattedDate}
+              </p>
             </div>
             {speculateTransactionErrorMessage}
             {breakdown}

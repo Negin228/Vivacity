@@ -9,7 +9,7 @@ import css from './ProductCard.module.css';
 import { AiFillStar } from 'react-icons/ai';
 import classNames from 'classnames';
 import mt from 'moment-timezone';
-function ProductCard({ title, id, timeZone, startDate, price, images, intl, teacherName }) {
+function ProductCard({ title, id, timeZone, startDate, images, teacherName }) {
   const history = useHistory();
   const handleClick = () =>
     history.push({

@@ -11,6 +11,7 @@ import { parse, stringify } from '../../util/urlHelpers';
 import config from '../../config';
 import { ModalInMobile, Button } from '../../components';
 import { BookingTimeForm } from '../../forms';
+import moment from 'moment';
 
 import css from './BookingPanel.module.css';
 
@@ -82,6 +83,8 @@ const BookingPanel = props => {
   const showClosedListingHelpText = listing.id && isClosed;
   const { formattedPrice, priceTitle } = priceData(price, intl);
   const isBook = !!parse(location.search).book;
+  const { publicData } = listing.attributes;
+  console.log('BookingPanel props', publicData);
 
   const subTitleText = !!subTitle
     ? subTitle
@@ -100,7 +103,8 @@ const BookingPanel = props => {
 
   const classes = classNames(rootClassName || css.root, className);
   const titleClasses = classNames(titleClassName || css.bookingTitle);
-
+  const startDate = new Date(publicData.startDate);
+  const formattedDate = moment(startDate).format('dddd, MMMM Do YYYY, h:mm a');
   return (
     <div className={classes}>
       <ModalInMobile
@@ -115,6 +119,7 @@ const BookingPanel = props => {
           <h1 className={css.title}>{title}</h1>
         </div>
         <div className={css.bookingHeading}>
+          <h3>Price:</h3>
           <div className={css.desktopPriceContainer}>
             <div className={css.desktopPriceValue} title={priceTitle}>
               {formattedPrice}
@@ -123,6 +128,8 @@ const BookingPanel = props => {
               <FormattedMessage id={unitTranslationKey} />
             </div>
           </div>
+          <h3>Start date:</h3>
+          <p>{formattedDate}</p>
           <div className={css.bookingHeadingContainer}>
             <h2 className={titleClasses}>{title}</h2>
             {subTitleText ? <div className={css.bookingHelp}>{subTitleText}</div> : null}
