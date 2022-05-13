@@ -42,6 +42,7 @@ const log = require('./log');
 const { sitemapStructure } = require('./sitemap');
 const csp = require('./csp');
 const sdkUtils = require('./api-util/sdk');
+const flexIntegrationSdk = require('sharetribe-flex-integration-sdk');
 
 const buildPath = path.resolve(__dirname, '..', 'build');
 const env = process.env.REACT_APP_ENV;
@@ -59,6 +60,12 @@ const app = express();
 
 const errorPage = fs.readFileSync(path.join(buildPath, '500.html'), 'utf-8');
 
+const clientId = process.env.SHARETRIBE_INTEGRATION_CLIENT_ID;
+const clientSecret = process.env.SHARETRIBE_INTEGRATION_CLIENT_SECRET;
+const integrationSdk = flexIntegrationSdk.createInstance({
+  clientId,
+  clientSecret,
+});
 // load sitemap and robots file structure
 // and write those into files
 sitemap(sitemapStructure()).toFile();
@@ -174,7 +181,7 @@ const noCacheHeaders = {
 const httpAgent = new http.Agent({ keepAlive: true });
 const httpsAgent = new https.Agent({ keepAlive: true });
 
-app.get('*', (req, res) => {
+app.get('*', async (req, res) => {
   if (req.url.startsWith('/static/')) {
     // The express.static middleware only handles static resources
     // that it finds, otherwise passes them through. However, we don't
@@ -210,6 +217,22 @@ app.get('*', (req, res) => {
     ...baseUrl,
   });
 
+  if (req.url === '/trainers') {
+    try {
+      const users = await integrationSdk.users
+        .query({
+          pub_userType: 'teacher',
+          meta_featured: true,
+          include: ['profileImage'],
+        })
+        .then(res => {
+          return res.data;
+        });
+      return res.status(200).send(users);
+    } catch (err) {
+      console.log('trainers error', err);
+    }
+  }
   // Until we have a better plan for caching dynamic content and we
   // make sure that no sensitive data can appear in the prefetched
   // data, let's disable response caching altogether.
