@@ -146,6 +146,7 @@ export const EditListingPageComponent = props => {
       updateListingError = null,
       showListingsError = null,
       uploadImageError = null,
+      setStockError = null,
       fetchExceptionsError = null,
       addExceptionError = null,
       deleteExceptionError = null,
@@ -159,6 +160,7 @@ export const EditListingPageComponent = props => {
       createStripeAccountError,
       fetchExceptionsError,
       addExceptionError,
+      setStockError,
       deleteExceptionError,
     };
     // TODO: is this dead code? (shouldRedirect is checked before)

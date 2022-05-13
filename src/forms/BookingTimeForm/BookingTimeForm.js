@@ -97,6 +97,8 @@ export class BookingTimeFormComponent extends Component {
             lineItems,
             fetchLineItemsInProgress,
             fetchLineItemsError,
+            startDate,
+            seats,
           } = fieldRenderProps;
 
           const startTime = values && values.bookingStartTime ? values.bookingStartTime : null;
@@ -109,7 +111,7 @@ export class BookingTimeFormComponent extends Component {
             id: 'BookingTimeForm.bookingEndTitle',
           });
 
-          const startDate = startTime ? timestampToDate(startTime) : null;
+          // const startDate = startTime ? timestampToDate(startTime) : null;
           const endDate = endTime ? timestampToDate(endTime) : null;
 
           // This is the place to collect breakdown estimation data. See the
@@ -120,7 +122,7 @@ export class BookingTimeFormComponent extends Component {
               ? {
                   unitType,
                   startDate,
-                  endDate,
+                  seats,
                   timeZone,
                 }
               : null;

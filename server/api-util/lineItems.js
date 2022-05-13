@@ -29,8 +29,25 @@ const PROVIDER_COMMISSION_PERCENTAGE = -10;
  */
 exports.transactionLineItems = (listing, bookingData) => {
   const unitPrice = listing.attributes.price;
-  const { startDate, endDate } = bookingData;
+  const hasStockReservationQuantity = bookingData && bookingData.stockReservationQuantity;
+  const hasQuantity = bookingData && bookingData.quantity;
+  const { bookingStart, bookingEnd } = bookingData || {};
+  const hasQuantityInformation = hasStockReservationQuantity || hasQuantity;
+  if (!hasQuantityInformation) {
+    const message = `Error: transition should contain quantity information: 
+      stockReservationQuantity, quantity, or bookingStart & bookingEnd (if "line-item/day" or "line-item/night" is used)`;
+    const error = new Error(message);
+    error.status = 400;
+    error.statusText = message;
+    error.data = {};
+    throw error;
+  }
 
+  const orderQuantity = hasStockReservationQuantity
+    ? bookingData.stockReservationQuantity
+    : hasQuantity
+    ? bookingData.quantity
+    : 1;
   /**
    * If you want to use pre-defined component and translations for printing the lineItems base price for booking,
    * you should use code line-item/units
@@ -43,10 +60,9 @@ exports.transactionLineItems = (listing, bookingData) => {
   const booking = {
     code: bookingUnitType,
     unitPrice,
-    quantity: calculateQuantityFromHours(startDate, endDate),
+    quantity: orderQuantity,
     includeFor: ['customer', 'provider'],
   };
-
   const providerCommission = {
     code: 'line-item/provider-commission',
     unitPrice: calculateTotalFromLineItems([booking]),

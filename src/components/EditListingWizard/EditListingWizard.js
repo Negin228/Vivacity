@@ -105,12 +105,7 @@ const tabCompleted = (tab, listing) => {
     case PRICING:
       return !!price;
     case AVAILABILITY:
-      return !!(
-        publicData.timezone &&
-        publicData.startDate &&
-        publicData.classDuration &&
-        publicData.seats
-      );
+      return !!(publicData.timezone && publicData.startDate && publicData.classDuration);
     case PHOTOS:
       return images && images.length > 0;
     default:

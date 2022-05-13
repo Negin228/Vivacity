@@ -83,7 +83,10 @@ export const autocompletePlaceSelected = message => value => {
     value.selectedPlace.origin instanceof LatLng;
   return selectedPlaceIsValid ? VALID : message;
 };
-
+export const numberAtLeast = (message, minNumber) => value => {
+  const valueNum = parseNum(value);
+  return typeof valueNum === 'number' && valueNum >= minNumber ? VALID : message;
+};
 export const bookingDateRequired = inValidDateMessage => value => {
   const dateIsValid = value && value.date instanceof Date;
   return !dateIsValid ? inValidDateMessage : VALID;

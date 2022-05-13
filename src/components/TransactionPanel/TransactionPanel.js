@@ -31,6 +31,7 @@ import {
 } from '../../components';
 import { SendMessageForm } from '../../forms';
 import config from '../../config';
+import moment from 'moment';
 
 // These are internal components that make this file more readable.
 import AddressLinkMaybe from './AddressLinkMaybe';
@@ -286,7 +287,8 @@ export class TransactionPanelComponent extends Component {
     const listingTitle = currentListing.attributes.deleted
       ? deletedListingTitle
       : currentListing.attributes.title;
-
+    const startDate = new Date(currentListing.attributes.publicData.startDate);
+    const formattedDate = moment(startDate).format('dddd, MMMM Do YYYY, h:mm a');
     const unitType = config.bookingUnitType;
     const isNightly = unitType === LINE_ITEM_NIGHT;
     const isDaily = unitType === LINE_ITEM_DAY;
@@ -435,6 +437,7 @@ export class TransactionPanelComponent extends Component {
                 showDetailCardHeadings={stateData.showDetailCardHeadings}
                 listingTitle={listingTitle}
                 subTitle={bookingSubTitle}
+                startDate={formattedDate}
                 location={location}
                 geolocation={geolocation}
                 showAddress={stateData.showAddress}

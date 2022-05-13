@@ -41,6 +41,10 @@ export const SHOW_LISTINGS_REQUEST = 'app/EditListingPage/SHOW_LISTINGS_REQUEST'
 export const SHOW_LISTINGS_SUCCESS = 'app/EditListingPage/SHOW_LISTINGS_SUCCESS';
 export const SHOW_LISTINGS_ERROR = 'app/EditListingPage/SHOW_LISTINGS_ERROR';
 
+export const SET_STOCK_REQUEST = 'app/EditListingPage/SET_STOCK_REQUEST';
+export const SET_STOCK_SUCCESS = 'app/EditListingPage/SET_STOCK_SUCCESS';
+export const SET_STOCK_ERROR = 'app/EditListingPage/SET_STOCK_ERROR';
+
 export const UPLOAD_IMAGE_REQUEST = 'app/EditListingPage/UPLOAD_IMAGE_REQUEST';
 export const UPLOAD_IMAGE_SUCCESS = 'app/EditListingPage/UPLOAD_IMAGE_SUCCESS';
 export const UPLOAD_IMAGE_ERROR = 'app/EditListingPage/UPLOAD_IMAGE_ERROR';
@@ -76,6 +80,8 @@ const initialState = {
   updateListingError: null,
   showListingsError: null,
   uploadImageError: null,
+  setStockError: null,
+  setStockInProgress: false,
   createListingDraftInProgress: false,
   submittedListingId: null,
   redirectToListing: false,
@@ -230,6 +236,13 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, images, imageOrder, removedImageIds };
     }
 
+    case SET_STOCK_REQUEST:
+      return { ...state, setStockInProgress: true, setStockError: null };
+    case SET_STOCK_SUCCESS:
+      return { ...state, setStockInProgress: false };
+    case SET_STOCK_ERROR:
+      return { ...state, setStockInProgress: false, setStockError: payload };
+
     case FETCH_EXCEPTIONS_REQUEST:
       return {
         ...state,
@@ -358,6 +371,11 @@ export const uploadImage = requestAction(UPLOAD_IMAGE_REQUEST);
 export const uploadImageSuccess = successAction(UPLOAD_IMAGE_SUCCESS);
 export const uploadImageError = errorAction(UPLOAD_IMAGE_ERROR);
 
+// SDK method: stock.compareAndSet
+export const setStockRequest = requestAction(SET_STOCK_REQUEST);
+export const setStockSuccess = successAction(SET_STOCK_SUCCESS);
+export const setStockError = errorAction(SET_STOCK_ERROR);
+
 // SDK method: availabilityExceptions.query
 export const fetchAvailabilityExceptionsRequest = requestAction(FETCH_EXCEPTIONS_REQUEST);
 export const fetchAvailabilityExceptionsSuccess = successAction(FETCH_EXCEPTIONS_SUCCESS);
@@ -382,8 +400,12 @@ export const savePayoutDetailsError = errorAction(SAVE_PAYOUT_DETAILS_ERROR);
 export function requestShowListing(actionPayload) {
   return (dispatch, getState, sdk) => {
     dispatch(showListings(actionPayload));
+    const queryParams = {
+      include: ['author', 'images', 'currentStock'],
+      // 'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
+    };
     return sdk.ownListings
-      .show(actionPayload)
+      .show({ ...actionPayload, ...queryParams })
       .then(response => {
         // EditListingPage fetches new listing data, which also needs to be added to global data
         dispatch(addMarketplaceEntities(response));
@@ -394,27 +416,61 @@ export function requestShowListing(actionPayload) {
   };
 }
 
+// Set stock if requested among listing update info
+export function compareAndSetStock(listingId, oldTotal, newTotal) {
+  return (dispatch, getState, sdk) => {
+    dispatch(setStockRequest());
+
+    return sdk.stock
+      .compareAndSet({ listingId, oldTotal, newTotal }, { expand: true })
+      .then(response => {
+        // NOTE: compareAndSet returns the stock resource of the listing.
+        // We update client app's internal state with these updated API entities.
+        dispatch(addMarketplaceEntities(response));
+        dispatch(setStockSuccess(response));
+      })
+      .catch(e => {
+        log.error(e, 'update-stock-failed', { listingId, oldTotal, newTotal });
+        return dispatch(setStockError(storableError(e)));
+      });
+  };
+}
+
+// Helper function to make compareAndSetStock call if stock update is needed.
+const updateStockOfListingMaybe = (listingId, stockTotals, dispatch) => {
+  const { oldTotal, newTotal } = stockTotals || {};
+  // Note: newTotal and oldTotal must be given, but oldTotal can be null
+  const hasStockTotals = newTotal >= 0 && typeof oldTotal !== 'undefined';
+
+  if (listingId && hasStockTotals) {
+    return dispatch(compareAndSetStock(listingId, oldTotal, newTotal));
+  }
+  return Promise.resolve();
+};
+
 export function requestCreateListingDraft(data) {
   return (dispatch, getState, sdk) => {
     dispatch(createListingDraft(data));
 
     const queryParams = {
       expand: true,
-      include: ['author', 'images'],
+      include: ['author', 'images', 'currentStock'],
       'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
     };
 
+    let createDraftResponse = null;
     return sdk.ownListings
       .createDraft(data, queryParams)
       .then(response => {
-        //const id = response.data.data.id.uuid;
-
-        // Add the created listing to the marketplace data
-        dispatch(addMarketplaceEntities(response));
-
+        createDraftResponse = response;
+        const listingId = response.data.data.id;
+        // If stockUpdate info is passed through, update stock
+        return updateStockOfListingMaybe(listingId, data.stockUpdate, dispatch);
+      })
+      .then(() => {
         // Modify store to understand that we have created listing and can redirect away
-        dispatch(createListingDraftSuccess(response));
-        return response;
+        dispatch(createListingDraftSuccess(createDraftResponse));
+        return createDraftResponse;
       })
       .catch(e => {
         log.error(e, 'create-listing-draft-failed', { listingData: data });
@@ -459,26 +515,22 @@ export function requestUpdateListing(tab, data) {
     dispatch(updateListing(data));
     const { id } = data;
     let updateResponse;
-    return sdk.ownListings
-      .update(data)
+    const queryParams = {
+      id,
+      include: ['author', 'images', 'currentStock'],
+      'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
+    };
+    return updateStockOfListingMaybe(id, data.stockUpdate, dispatch)
+      .then(() => sdk.ownListings.update(data, queryParams))
       .then(response => {
-        updateResponse = response;
-        const payload = {
-          id,
-          include: ['author', 'images'],
-          'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
-        };
-        return dispatch(requestShowListing(payload));
-      })
-      .then(() => {
+        dispatch(updateListingSuccess(response));
+        dispatch(addMarketplaceEntities(response));
         dispatch(markTabUpdated(tab));
-        dispatch(updateListingSuccess(updateResponse));
-        return updateResponse;
+        return response;
       })
       .catch(e => {
         log.error(e, 'update-listing-failed', { listingData: data });
-        dispatch(updateListingError(storableError(e)));
-        throw e;
+        return dispatch(updateListingError(storableError(e)));
       });
   };
 }

@@ -29,7 +29,8 @@ const EditListingAvailabilityPanel = props => {
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
   const { description, title, publicData } = currentListing.attributes;
-
+  const currentStockRaw = currentListing.currentStock?.attributes?.quantity;
+  const currentStock = typeof currentStockRaw != null ? currentStockRaw : 1;
   const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
   const panelTitle = isPublished ? (
     <FormattedMessage
@@ -55,20 +56,31 @@ const EditListingAvailabilityPanel = props => {
         initialValues={{
           timezone: publicData.timezone ? publicData.timezone : undefined,
           start_date: publicData.startDate ? new Date(publicData.startDate) : undefined,
-          seats: publicData.seats ? publicData.seats : undefined,
+          stock: currentStock,
           class_duration: publicData.classDuration ? publicData.classDuration : undefined,
         }}
         saveActionMsg={submitButtonText}
         onSubmit={values => {
-          const { timezone, start_date, seats, class_duration } = values;
+          const { timezone, start_date, stock, class_duration } = values;
+          const hasStockQuantityChanged = stock && currentStockRaw !== stock;
+          const oldTotal = currentStockRaw != null ? currentStockRaw : null;
+          const stockUpdateMaybe = hasStockQuantityChanged
+            ? {
+                stockUpdate: {
+                  oldTotal,
+                  newTotal: stock,
+                },
+              }
+            : {};
           const startDateISO = start_date.toISOString();
           const selectedDate = moment(startDateISO).tz(timezone);
           const unix_time_stamp = selectedDate.unix();
           const updateValues = {
+            ...stockUpdateMaybe,
             publicData: {
               timezone: timezone,
               startDate: start_date.toISOString(),
-              seats: seats,
+              stock: stock,
               classDuration: class_duration,
               unixTimeStamp: unix_time_stamp,
               classDurationFilter: [class_duration.key],

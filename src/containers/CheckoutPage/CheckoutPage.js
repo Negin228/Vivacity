@@ -28,6 +28,7 @@ import {
   isTransactionChargeDisabledError,
   isTransactionZeroPaymentError,
   transactionInitiateOrderStripeErrors,
+  isTransactionInitiateListingInsufficientStockError,
 } from '../../util/errors';
 import { formatMoney } from '../../util/currency';
 import { TRANSITION_ENQUIRE, txIsPaymentPending, txIsPaymentExpired } from '../../util/transaction';
@@ -160,31 +161,26 @@ export class CheckoutPageComponent extends Component {
       // Store data only if data is passed through props and user has navigated through a link.
       storeData(bookingData, bookingDates, listing, transaction, STORAGE_KEY);
     }
-
     // NOTE: stored data can be empty if user has already successfully completed transaction.
     const pageData = hasDataInProps
-      ? { bookingData, bookingDates, listing, transaction }
+      ? { bookingData, listing, transaction }
       : storedData(STORAGE_KEY);
-
     // Check if a booking is already created according to stored data.
     const tx = pageData ? pageData.transaction : null;
     const isBookingCreated = tx && tx.booking && tx.booking.id;
 
+    const quantity = pageData.bookingData.quantity;
+    const quantityMaybe = quantity ? { quantity } : {};
     const shouldFetchSpeculatedTransaction =
       pageData &&
       pageData.listing &&
       pageData.listing.id &&
       pageData.bookingData &&
-      pageData.bookingDates &&
-      pageData.bookingDates.bookingStart &&
-      pageData.bookingDates.bookingEnd &&
-      pageData.bookingData.quantity &&
       !isBookingCreated;
 
     if (shouldFetchSpeculatedTransaction) {
       const listingId = pageData.listing.id;
       const transactionId = tx ? tx.id : null;
-      const { bookingStart, bookingEnd } = pageData.bookingDates;
 
       // Fetch speculated transaction for showing price in booking breakdown
       // NOTE: if unit type is line-item/units, quantity needs to be added.
@@ -192,8 +188,7 @@ export class CheckoutPageComponent extends Component {
       fetchSpeculatedTransaction(
         {
           listingId,
-          bookingStart,
-          bookingEnd,
+          ...quantityMaybe,
         },
         transactionId
       );
@@ -370,15 +365,13 @@ export class CheckoutPageComponent extends Component {
         : selectedPaymentFlow === PAY_AND_SAVE_FOR_LATER_USE
         ? { setupPaymentMethodForSaving: true }
         : {};
-
+    const quantity = pageData.bookingData?.quantity;
+    const quantityMaybe = quantity ? { quantity } : {};
     const orderParams = {
       listingId: pageData.listing.id,
-      bookingStart: tx.booking?.attributes?.start,
-      bookingEnd: tx.booking?.attributes?.end,
-      quantity: pageData.bookingData ? pageData.bookingData.quantity : null,
+      ...quantityMaybe,
       ...optionalPaymentParams,
     };
-    console.log({ orderParams });
     return handlePaymentIntentCreation(orderParams);
   }
 
@@ -555,12 +548,12 @@ export class CheckoutPageComponent extends Component {
       currentAuthor.id.uuid === currentUser.id.uuid;
 
     const hasListingAndAuthor = !!(currentListing.id && currentAuthor.id);
-    const hasBookingDates = !!(
-      bookingDates &&
-      bookingDates.bookingStart &&
-      bookingDates.bookingEnd
-    );
-    const hasRequiredData = hasListingAndAuthor && hasBookingDates;
+    // const hasBookingDates = !!(
+    //   bookingDates &&
+    //   bookingDates.bookingStart &&
+    //   bookingDates.bookingEnd
+    // );
+    const hasRequiredData = hasListingAndAuthor;
     const canShowPage = hasRequiredData && !isOwnListing;
     const shouldRedirect = !isLoading && !canShowPage;
 
