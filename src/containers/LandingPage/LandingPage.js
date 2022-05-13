@@ -37,6 +37,9 @@ export const LandingPageComponent = props => {
     products,
     productsLoading,
     productsError,
+    trainers,
+    trainersLoading,
+    trainersError,
   } = props;
 
   // Schema for search engines (helps them to understand what this page is about)
@@ -46,7 +49,6 @@ export const LandingPageComponent = props => {
   const schemaTitle = intl.formatMessage({ id: 'LandingPage.schemaTitle' }, { siteTitle });
   const schemaDescription = intl.formatMessage({ id: 'LandingPage.schemaDescription' });
   const schemaImage = `${config.canonicalRootURL}${facebookImage}`;
-  console.log(currentUserListing);
   return (
     <Page
       className={css.root}
@@ -91,7 +93,11 @@ export const LandingPageComponent = props => {
             </li>
             <li className={css.section}>
               <div className={css.sectionContent}>
-                <SectionTrainers products={products} />
+                <SectionTrainers
+                  trainers={trainers}
+                  loading={trainersLoading}
+                  error={trainersError}
+                />
               </div>
             </li>
             <li className={css.section}>
@@ -132,11 +138,24 @@ LandingPageComponent.propTypes = {
 
 const mapStateToProps = state => {
   const { currentUserListing, currentUserListingFetched } = state.user;
-  const { productIds, productsLoading, productsError } = state.LandingPage;
+  const {
+    productIds,
+    productsLoading,
+    productsError,
+    trainersLoading,
+    trainerData,
+    trainersError,
+  } = state.LandingPage;
   const products = productIds?.map(t => {
     const ref = { id: t, type: 'listing' };
     const listings = getMarketplaceEntities(state, [ref]);
     return listings.length === 1 ? listings[0] : null;
+  });
+  const trainers = trainerData?.map(trainer => {
+    return {
+      trainerName: trainer.attributes?.profile?.displayName,
+      trainerProfileImage: trainer.profileImage?.attributes?.variants?.default?.url,
+    };
   });
   return {
     scrollingDisabled: isScrollingDisabled(state),
@@ -145,6 +164,9 @@ const mapStateToProps = state => {
     products,
     productsLoading,
     productsError,
+    trainers,
+    trainersLoading,
+    trainersError,
   };
 };
 
