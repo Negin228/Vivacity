@@ -42,7 +42,7 @@ const SectionUpcomingClasses = ({ loading, error, products, intl }) => {
             metadata={p?.attributes?.metadata}
             title={p?.attributes?.title}
             teacherName={p?.author?.attributes?.profile?.displayName}
-            startDate={p?.attributes?.publicData?.startDate}
+            startDate={p?.attributes?.publicData?.unixTimeStamp}
             timeZone={p?.attributes?.publicData?.timezone}
             description={p?.attributes?.description}
             publicData={p?.attributes?.publicData}
