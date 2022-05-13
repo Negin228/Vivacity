@@ -18,9 +18,11 @@ const SectionTrainers = props => {
             <div className={css.step}>
               <img
                 src={trainer.trainerProfileImage ? trainer.trainerProfileImage : image}
-                style={{ width: '60%', borderRadius: '50%', height: '50%' }}
+                style={{ width: '80%', borderRadius: '50%', height: '65%' }}
               />
-              <h2 className={css.stepTitle}>{trainer.trainerName}</h2>
+              <h2 style={{ marginLeft: '35px' }} className={css.stepTitle}>
+                {trainer.trainerName}
+              </h2>
             </div>
           </>
         ))}
