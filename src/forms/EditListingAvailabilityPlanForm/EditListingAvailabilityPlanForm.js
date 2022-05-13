@@ -7,6 +7,8 @@ import { Form as FinalForm } from 'react-final-form';
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
+import * as validators from '../../util/validators';
+import { isOldTotalMismatchStockError } from '../../util/errors';
 import {
   maxLength,
   required,
@@ -58,7 +60,15 @@ const EditListingAvailabilityPlanFormComponent = props => (
           maxLength: TITLE_MAX_LENGTH,
         }
       );
-
+      const { updateListingError, createListingDraftError, showListingsError, setStockError } =
+        fetchErrors || {};
+      const stockValidator = validators.numberAtLeast(
+        intl.formatMessage({ id: 'EditListingPricingForm.stockIsRequired' }),
+        0
+      );
+      const stockErrorMessage = isOldTotalMismatchStockError(setStockError)
+        ? intl.formatMessage({ id: 'EditListingPricingForm.oldStockTotalWasOutOfSync' })
+        : intl.formatMessage({ id: 'EditListingPricingForm.stockUpdateFailed' });
       const descriptionMessage = intl.formatMessage({
         id: 'EditListingDescriptionForm.description',
       });
@@ -70,7 +80,6 @@ const EditListingAvailabilityPlanFormComponent = props => (
         id: 'EditListingDescriptionForm.descriptionRequired',
       });
 
-      const { updateListingError, createListingDraftError, showListingsError } = fetchErrors || {};
       const errorMessageUpdateListing = updateListingError ? (
         <p className={css.error}>
           <FormattedMessage id="EditListingDescriptionForm.updateFailed" />
@@ -126,16 +135,17 @@ const EditListingAvailabilityPlanFormComponent = props => (
             isSearchable={true}
           />
           <FieldTextInput
-            id="seats"
-            name="seats"
             className={css.title}
-            type="number"
+            id="stock"
+            name="stock"
             label="Seats"
             placeholder="Enter No Of Seats"
-            maxLength={TITLE_MAX_LENGTH}
-            min={1}
+            type="number"
+            min={0}
+            validate={stockValidator}
             onKeyDown={e => (e.keyCode === 189 || e.keyCode === 190) && e.preventDefault()}
           />
+          {setStockError ? <p className={css.error}>{stockErrorMessage}</p> : null}
           <Button
             className={css.submitButton}
             type="submit"

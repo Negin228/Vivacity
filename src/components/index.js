@@ -184,3 +184,4 @@ export { default as FieldSelectModern } from './FieldSelectModern/FieldSelectMod
 export { default as Datepicker } from './DatePicker/Datepicker';
 export { default as SectionUpcomingClasses } from './SectionUpcomingClasses/SectionUpcomingClasses';
 export { default as ProductCard } from './ProductCard/ProductCard';
+export { default as SectionTrainers } from './SectionTrainers/SectionTrainers';

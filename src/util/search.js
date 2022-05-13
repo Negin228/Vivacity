@@ -41,3 +41,5 @@ export const findOptionsForSelectFilter = (filterId, filters) => {
   const filter = filters.find(f => f.id === filterId);
   return filter && filter.config && filter.config.options ? filter.config.options : [];
 };
+
+export const isStockInUse = config => config.listingManagementType === 'stock';

@@ -45,7 +45,18 @@ const bookingProcessAlias = 'flex-hourly-default-process/release-1';
 // Note 2: Translations will use different translation keys for night, day or unit
 //         depending on the value chosen.
 const bookingUnitType = 'line-item/units';
+const listingManagementType = 'stock';
+const listing = {
+  // This flag defines if unit type translation is used:
+  // e.g. "100 € per night" vs "100 €"
+  showUnitTypeTranslations: false,
 
+  // These aspectWidth and aspectHeight values are used to calculate aspect ratio.
+  aspectWidth: 400,
+  aspectHeight: 400,
+  // Listings have custom image variants, which are named here.
+  variantPrefix: 'listing-card',
+};
 // Should the application fetch available time slots (currently defined as
 // start and end dates) to be shown on listing page.
 const enableAvailability = process.env.REACT_APP_AVAILABILITY_ENABLED === 'true';
@@ -200,6 +211,8 @@ const config = {
   locale,
   bookingProcessAlias,
   bookingUnitType,
+  listingManagementType,
+  listing,
   enableAvailability,
   dayCountAvailableForBooking,
   i18n,

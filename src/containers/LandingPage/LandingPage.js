@@ -18,6 +18,7 @@ import {
   LayoutWrapperMain,
   LayoutWrapperFooter,
   Footer,
+  SectionTrainers,
 } from '../../components';
 import { TopbarContainer } from '../../containers';
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
@@ -86,6 +87,11 @@ export const LandingPageComponent = props => {
                   error={productsError}
                   products={products}
                 />
+              </div>
+            </li>
+            <li className={css.section}>
+              <div className={css.sectionContent}>
+                <SectionTrainers products={products} />
               </div>
             </li>
             <li className={css.section}>
