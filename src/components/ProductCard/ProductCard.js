@@ -15,9 +15,8 @@ function ProductCard({ title, id, timeZone, startDate, images, teacherName }) {
     history.push({
       pathname: `/l/${createSlug(title)}/${id}`,
     });
-  const newStartDate = new Date(startDate);
-  const formattedDate = moment(newStartDate).format('dddd, MMMM Do');
-  const formattedTime = moment(newStartDate).format('h:mm a');
+  const formattedDate = moment.unix(startDate).format('dddd, MMMM Do');
+  const formattedTime = moment.unix(startDate).format('h:mm a');
   const timezoneOffset = mt.tz(timeZone).format('Z');
   return (
     <div className={css.product} onClick={handleClick}>
