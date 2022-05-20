@@ -318,10 +318,7 @@ export const speculateTransaction = (orderParams, transactionId) => (dispatch, g
   const { deliveryMethod, quantity, bookingDates, ...otherOrderParams } = orderParams;
   const quantityMaybe = quantity ? { stockReservationQuantity: quantity } : {};
   const bookingParamsMaybe = bookingDates || {};
-  const bookingData = {
-    startDate: orderParams.bookingStart,
-    endDate: orderParams.bookingEnd,
-  };
+
   const transitionParams = {
     ...quantityMaybe,
     ...bookingParamsMaybe,

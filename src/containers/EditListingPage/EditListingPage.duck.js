@@ -459,8 +459,9 @@ export function requestCreateListingDraft(data) {
     };
 
     let createDraftResponse = null;
+    const { stockUpdate, ...rest } = data;
     return sdk.ownListings
-      .createDraft(data, queryParams)
+      .createDraft(rest, queryParams)
       .then(response => {
         createDraftResponse = response;
         const listingId = response.data.data.id;
@@ -520,8 +521,9 @@ export function requestUpdateListing(tab, data) {
       include: ['author', 'images', 'currentStock'],
       'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
     };
-    return updateStockOfListingMaybe(id, data.stockUpdate, dispatch)
-      .then(() => sdk.ownListings.update(data, queryParams))
+    const { stockUpdate, ...rest } = data;
+    return updateStockOfListingMaybe(id, stockUpdate, dispatch)
+      .then(() => sdk.ownListings.update(rest, queryParams))
       .then(response => {
         dispatch(updateListingSuccess(response));
         dispatch(addMarketplaceEntities(response));

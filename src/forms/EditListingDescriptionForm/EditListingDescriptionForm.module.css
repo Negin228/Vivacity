@@ -51,3 +51,11 @@
     margin-top: 100px;
   }
 }
+
+.features {
+  margin-bottom: 24px;
+
+  @media (--viewportMedium) {
+    margin-bottom: 32px;
+  }
+}

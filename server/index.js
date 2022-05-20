@@ -29,6 +29,8 @@ const bodyParser = require('body-parser');
 const enforceSsl = require('express-enforces-ssl');
 const path = require('path');
 const sharetribeSdk = require('sharetribe-flex-sdk');
+const nodemailer = require('nodemailer');
+const sgTransport = require('nodemailer-sendgrid-transport');
 const sitemap = require('express-sitemap');
 const passport = require('passport');
 const auth = require('./auth');
@@ -59,13 +61,19 @@ const cspEnabled = CSP === 'block' || CSP === 'report';
 const app = express();
 
 const errorPage = fs.readFileSync(path.join(buildPath, '500.html'), 'utf-8');
-
 const clientId = process.env.SHARETRIBE_INTEGRATION_CLIENT_ID;
 const clientSecret = process.env.SHARETRIBE_INTEGRATION_CLIENT_SECRET;
 const integrationSdk = flexIntegrationSdk.createInstance({
   clientId,
   clientSecret,
 });
+const options = {
+  auth: {
+    api_key: process.env.SENDGRID_API_KEY,
+  },
+};
+
+const transporter = nodemailer.createTransport(sgTransport(options));
 // load sitemap and robots file structure
 // and write those into files
 sitemap(sitemapStructure()).toFile();
@@ -180,7 +188,40 @@ const noCacheHeaders = {
 // for setting up new TCP connections.
 const httpAgent = new http.Agent({ keepAlive: true });
 const httpsAgent = new https.Agent({ keepAlive: true });
+app.post('*', async (req, res) => {
+  if (req.url.startsWith('/contact')) {
+    const { name, email, userType, message } = req.body;
 
+    if (!userType || !message)
+      return res.status(422).send({ message: 'Please fill all the fields' });
+
+    try {
+      const mailBody = `
+      <h3>
+      The following user contacted via contact form.
+      </h3>
+      ${name ? `<strong>Name:</strong> ${name}` : ''} <br />
+      ${email ? `<strong>Email:</strong>  ${email}` : ''} <br/> 
+      <strong>User type: </strong> ${userType} <br/> 
+      <strong>Message:</strong> ${message} <br/>
+      `;
+      const sent = await transporter.sendMail({
+        //TODO: Replace it by admin's email
+        from: process.env.SENDGRID_SENDER_EMAIL,
+        to: process.env.SENDGRID_SENDER_EMAIL,
+        subject: 'Vivacity contact form message',
+        replyTo: email ? email : '',
+        text: userType,
+
+        html: mailBody,
+      });
+      return res.send({ message: 'Message sent successfully', success: true });
+    } catch (e) {
+      console.log(e);
+      return res.status(500).send({ message: 'Message sending failed', success: false });
+    }
+  }
+});
 app.get('*', async (req, res) => {
   if (req.url.startsWith('/static/')) {
     // The express.static middleware only handles static resources
@@ -223,6 +264,7 @@ app.get('*', async (req, res) => {
         .query({
           pub_userType: 'teacher',
           meta_featured: true,
+          sort: 'meta_sortingOrder',
           include: ['profileImage'],
         })
         .then(res => {

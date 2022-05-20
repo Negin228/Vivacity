@@ -105,8 +105,6 @@ export const getTimeZoneNames = relevantZonesRegExp => {
       t: moment.tz(i).format('Z'),
     };
   });
-  console.log('moment', changedTZ);
-
   return relevantZonesRegExp ? changedTZ.filter(z => relevantZonesRegExp.test(z.i)) : allTimeZones;
 };
 

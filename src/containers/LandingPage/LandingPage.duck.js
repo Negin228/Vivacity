@@ -88,7 +88,7 @@ export const getAllListings = () => async (dispatch, getState, sdk) => {
       ],
       'limit.images': 1,
       perPage: 10,
-      pub_featured: true,
+      // pub_featured: true,
     });
 
     dispatch(addMarketplaceEntities(response));

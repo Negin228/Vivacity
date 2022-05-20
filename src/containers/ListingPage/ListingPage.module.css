@@ -227,7 +227,7 @@
 .bookingPanel {
   @media (--viewportLarge) {
     display: block;
-    margin-top: 79px;
+    /* margin-top: 79px;  removed to cut extra space on listing page booking panel.  */
     margin-left: 60px;
     border-left-style: solid;
     border-left-width: 1px;

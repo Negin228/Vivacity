@@ -40,10 +40,10 @@ const availabilityMaybe = config.enableAvailability ? [AVAILABILITY] : [];
 // If you want to add a free text field to your listings you can enable the POLICY tab
 export const TABS = [
   DESCRIPTION,
-  FEATURES,
+  // FEATURES,
   //POLICY,
-  PRICING,
-  ...availabilityMaybe,
+  // PRICING,
+  // ...availabilityMaybe,
   PHOTOS,
 ];
 
@@ -95,17 +95,34 @@ const tabCompleted = (tab, listing) => {
 
   switch (tab) {
     case DESCRIPTION:
-      return !!(description && title);
-    case FEATURES:
-      return !!(publicData && publicData.yogaStyles);
-    case POLICY:
-      return !!(publicData && typeof publicData.rules !== 'undefined');
-    case LOCATION:
-      return !!(geolocation && publicData && publicData.location && publicData.location.address);
-    case PRICING:
-      return !!price;
-    case AVAILABILITY:
-      return !!(publicData.timezone && publicData.startDate && publicData.classDuration);
+      return !!(
+        description &&
+        title &&
+        price &&
+        publicData &&
+        publicData.yogaStyles &&
+        publicData.timezone &&
+        publicData.startDate &&
+        publicData.classDuration &&
+        publicData.classDurationFilter &&
+        publicData.stock
+      );
+    // case FEATURES:
+    //   return !!( );
+    // case POLICY:
+    //   return !!(publicData && typeof publicData.rules !== 'undefined');
+    // case LOCATION:
+    //   return !!(geolocation && publicData && publicData.location && publicData.location.address);
+    // case PRICING:
+    //   return !!price;
+    // case AVAILABILITY:
+    //   return !!(
+    //     publicData.timezone &&
+    //     publicData.startDate &&
+    //     publicData.classDuration &&
+    //     publicData.classDurationFilter &&
+    //     publicData.stock
+    //   );
     case PHOTOS:
       return images && images.length > 0;
     default:

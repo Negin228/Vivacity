@@ -38,12 +38,22 @@ import { arrayOf, string } from 'prop-types';
 import classNames from 'classnames';
 import { FormattedMessage } from '../../util/reactIntl';
 import { propTypes } from '../../util/types';
+import defaultImage from './defaultBanner.jpeg';
 
 import NoImageIcon from './NoImageIcon';
 import css from './ResponsiveImage.module.css';
 
 const ResponsiveImage = props => {
-  const { className, rootClassName, alt, noImageMessage, image, variants, ...rest } = props;
+  const {
+    className,
+    rootClassName,
+    alt,
+    noImageMessage,
+    image,
+    isListingPage,
+    variants,
+    ...rest
+  } = props;
   const classes = classNames(rootClassName || css.root, className);
 
   if (image == null || variants.length === 0) {
@@ -77,7 +87,7 @@ const ResponsiveImage = props => {
 
   const imgProps = {
     className: classes,
-    srcSet,
+    srcSet: isListingPage ? defaultImage : srcSet,
     ...rest,
   };
 
