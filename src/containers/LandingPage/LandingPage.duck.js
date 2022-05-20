@@ -106,7 +106,7 @@ export const getAllTrainers = () => async (dispatch, getState) => {
   dispatch(fetchTrainerRequest());
   try {
     axios
-      .get('http://localhost:4000/trainers')
+      .get('/trainers')
       .then(res => {
         const denormalisedResponse = denormalisedResponseEntities(res);
         dispatch(fetchTrainerSuccess(denormalisedResponse));
