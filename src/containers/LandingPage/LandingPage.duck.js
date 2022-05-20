@@ -88,7 +88,7 @@ export const getAllListings = () => async (dispatch, getState, sdk) => {
       ],
       'limit.images': 1,
       perPage: 10,
-      pub_featured: true,
+      // pub_featured: true,
     });
 
     dispatch(addMarketplaceEntities(response));
@@ -106,7 +106,7 @@ export const getAllTrainers = () => async (dispatch, getState) => {
   dispatch(fetchTrainerRequest());
   try {
     axios
-      .get('http://localhost:4000/trainers')
+      .get('/trainers')
       .then(res => {
         const denormalisedResponse = denormalisedResponseEntities(res);
         dispatch(fetchTrainerSuccess(denormalisedResponse));

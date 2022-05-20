@@ -33,7 +33,9 @@ const TransactionPage = loadable(() => import(/* webpackChunkName: "TransactionP
 const ManageListingsPage = loadable(() => import(/* webpackChunkName: "ManageListingsPage" */ './containers/ManageListingsPage/ManageListingsPage'));
 // Styleguide helps you to review current components and develop new ones
 const StyleguidePage = loadable(() => import(/* webpackChunkName: "StyleguidePage" */ './containers/StyleguidePage/StyleguidePage'));
-
+const HowItWorks = loadable(() => import(/* webpackChunkName: "HowItWorks" */ './containers/HowItWorks/HowItWorks'));
+const ContactUs = loadable(() => import(/* webpackChunkName: "ContactUs" */ './containers/ContactUs/ContactUs'));
+const SuccessPage = loadable(() => import(/* webpackChunkName: "SuccessPage" */ './containers/ContactUs/SuccessPage'));
 export const ACCOUNT_SETTINGS_PAGES = [
   'ContactDetailsPage',
   'PasswordChangePage',
@@ -67,6 +69,21 @@ const routeConfiguration = () => {
       path: '/about',
       name: 'AboutPage',
       component: AboutPage,
+    },
+    {
+      path: '/how-it-works',
+      name: 'HowItWorks',
+      component: HowItWorks,
+    },
+    {
+      path: '/contact-us',
+      name: 'ContactPage',
+      component: ContactUs,
+    },
+    {
+      path: '/success',
+      name: 'SuccessPage',  
+      component: SuccessPage
     },
     {
       path: '/s',

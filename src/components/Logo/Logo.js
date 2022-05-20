@@ -5,7 +5,7 @@ import IconLogo from './IconLogo';
 import css from './Logo.module.css';
 
 const Logo = props => {
-  const { className, format, ...rest } = props;
+  const { className, format, from, ...rest } = props;
   const mobileClasses = classNames(css.logoMobile, className);
 
   // If you want to use image instead of svg as a logo you can use the following code.
@@ -15,6 +15,7 @@ const Logo = props => {
   return (
     <IconLogo
       className={format === 'desktop' ? className : mobileClasses}
+      from={from}
       format={format}
       {...rest}
     />

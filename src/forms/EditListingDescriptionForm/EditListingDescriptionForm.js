@@ -4,26 +4,41 @@ import { compose } from 'redux';
 import { Form as FinalForm } from 'react-final-form';
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
-import { propTypes } from '../../util/types';
 import {
   maxLength,
   required,
   composeValidators,
   fieldSelectModernRequired,
 } from '../../util/validators';
-import { Form, Button, FieldTextInput, FieldSelectModern } from '../../components';
-import CustomCertificateSelectFieldMaybe from './CustomCertificateSelectFieldMaybe';
+import arrayMutators from 'final-form-arrays';
+import {
+  Form,
+  Button,
+  FieldTextInput,
+  FieldSelectModern,
+  FieldCheckboxGroup,
+  Datepicker,
+  FieldTimeZoneSelect,
+  FieldCurrencyInput,
+} from '../../components';
+import { isOldTotalMismatchStockError } from '../../util/errors';
+import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
+import * as validators from '../../util/validators';
+import { formatMoney } from '../../util/currency';
 import config from '../../config';
 import css from './EditListingDescriptionForm.module.css';
+import { types as sdkTypes } from '../../util/sdkLoader';
 
 const TITLE_MAX_LENGTH = 60;
+
+const { Money } = sdkTypes;
 
 const EditListingDescriptionFormComponent = props => (
   <FinalForm
     {...props}
+    mutators={{ ...arrayMutators }}
     render={formRenderProps => {
       const {
-        certificateOptions,
         className,
         disabled,
         ready,
@@ -36,6 +51,16 @@ const EditListingDescriptionFormComponent = props => (
         updateInProgress,
         fetchErrors,
       } = formRenderProps;
+
+      const unitType = config.bookingUnitType;
+      const isNightly = unitType === LINE_ITEM_NIGHT;
+      const isDaily = unitType === LINE_ITEM_DAY;
+
+      const translationKey = isNightly
+        ? 'EditListingPricingForm.pricePerNight'
+        : isDaily
+        ? 'EditListingPricingForm.pricePerDay'
+        : 'EditListingPricingForm.pricePerUnit';
 
       const titleMessage = intl.formatMessage({ id: 'EditListingDescriptionForm.title' });
       const titlePlaceholderMessage = intl.formatMessage({
@@ -61,8 +86,43 @@ const EditListingDescriptionFormComponent = props => (
       const descriptionRequiredMessage = intl.formatMessage({
         id: 'EditListingDescriptionForm.descriptionRequired',
       });
+      const { updateListingError, createListingDraftError, showListingsError, setStockError } =
+        fetchErrors || {};
+      const stockValidator = validators.numberAtLeast(
+        intl.formatMessage({ id: 'EditListingPricingForm.stockIsRequired' }),
+        0
+      );
+      const stockErrorMessage = isOldTotalMismatchStockError(setStockError)
+        ? intl.formatMessage({ id: 'EditListingPricingForm.oldStockTotalWasOutOfSync' })
+        : intl.formatMessage({ id: 'EditListingPricingForm.stockUpdateFailed' });
+      const pricePerUnitMessage = intl.formatMessage({
+        id: translationKey,
+      });
 
-      const { updateListingError, createListingDraftError, showListingsError } = fetchErrors || {};
+      const pricePlaceholderMessage = intl.formatMessage({
+        id: 'EditListingPricingForm.priceInputPlaceholder',
+      });
+
+      const priceRequired = validators.required(
+        intl.formatMessage({
+          id: 'EditListingPricingForm.priceRequired',
+        })
+      );
+      const priceValidators = config.listingMinimumPriceSubUnits
+        ? validators.composeValidators(priceRequired, minPriceRequired)
+        : priceRequired;
+      const minPrice = new Money(config.listingMinimumPriceSubUnits, config.currency);
+      const minPriceRequired = validators.moneySubUnitAmountAtLeast(
+        intl.formatMessage(
+          {
+            id: 'EditListingPricingForm.priceTooLow',
+          },
+          {
+            minPrice: formatMoney(intl, minPrice),
+          }
+        ),
+        config.listingMinimumPriceSubUnits
+      );
       const errorMessageUpdateListing = updateListingError ? (
         <p className={css.error}>
           <FormattedMessage id="EditListingDescriptionForm.updateFailed" />
@@ -92,6 +152,7 @@ const EditListingDescriptionFormComponent = props => (
           {errorMessageCreateListingDraft}
           {errorMessageUpdateListing}
           {errorMessageShowListing}
+          {/* description section  */}
           <FieldTextInput
             id="title"
             name="title"
@@ -124,6 +185,65 @@ const EditListingDescriptionFormComponent = props => (
             validate={fieldSelectModernRequired('Please select a language')}
             isSearchable={true}
           />
+          {/* features section */}
+          <FieldCheckboxGroup
+            className={css.features}
+            id="yogaStyles"
+            name="yogaStyles"
+            label="Yoga Styles"
+            options={config.custom.workoutTypes}
+          />
+          {/* pricing section  */}
+          <FieldCurrencyInput
+            id="price"
+            name="price"
+            className={css.priceInput}
+            label={pricePerUnitMessage}
+            placeholder={pricePlaceholderMessage}
+            currencyConfig={config.currencyConfig}
+            validate={priceValidators}
+            style={{ marginBottom: '32px' }}
+          />
+          {/* date and availability section */}
+          <FieldTimeZoneSelect
+            id="timezone"
+            name="timezone"
+            label="Time Zone"
+            placeholder="Select time zone"
+            style={{ marginBottom: '32px' }}
+          />
+          <Datepicker
+            className={css.title}
+            id="start_date"
+            name="start_date"
+            label="Start Date"
+            placeholder="Enter start date"
+            minDate={new Date()}
+            style={{ marginBottom: '32px' }}
+            validate={composeValidators(required('Start date is required'))}
+          />
+          <FieldSelectModern
+            className={css.features}
+            id="class_duration"
+            name="class_duration"
+            label="Duration Of Class"
+            options={config.custom.durationOptions}
+            placeholder="Select duration"
+            validate={fieldSelectModernRequired('Please select a duration')}
+            isSearchable={true}
+          />
+          <FieldTextInput
+            className={css.title}
+            id="stock"
+            name="stock"
+            label="Seats"
+            placeholder="Enter No Of Seats"
+            type="number"
+            min={0}
+            validate={stockValidator}
+            onKeyDown={e => (e.keyCode === 189 || e.keyCode === 190) && e.preventDefault()}
+          />
+          {setStockError ? <p className={css.error}>{stockErrorMessage}</p> : null}
           <Button
             className={css.submitButton}
             type="submit"

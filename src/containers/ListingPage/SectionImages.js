@@ -10,6 +10,7 @@ const SectionImages = props => {
     title,
     listing,
     isOwnListing,
+    isListingPage,
     editParams,
     handleViewPhotosClick,
     imageCarouselOpen,
@@ -45,6 +46,7 @@ const SectionImages = props => {
           <ResponsiveImage
             rootClassName={css.rootForImage}
             alt={title}
+            isListingPage={isListingPage}
             image={firstImage}
             variants={[
               'landscape-crop',
@@ -53,21 +55,23 @@ const SectionImages = props => {
               'landscape-crop6x',
             ]}
           />
-          {viewPhotosButton}
+          {isListingPage ? null : viewPhotosButton}
         </div>
       </div>
-      <Modal
-        id="ListingPage.imageCarousel"
-        scrollLayerClassName={css.carouselModalScrollLayer}
-        containerClassName={css.carouselModalContainer}
-        lightCloseButton
-        isOpen={imageCarouselOpen}
-        onClose={onImageCarouselClose}
-        usePortal
-        onManageDisableScrolling={onManageDisableScrolling}
-      >
-        <ImageCarousel images={listing.images} />
-      </Modal>
+      {isListingPage ? null : (
+        <Modal
+          id="ListingPage.imageCarousel"
+          scrollLayerClassName={css.carouselModalScrollLayer}
+          containerClassName={css.carouselModalContainer}
+          lightCloseButton
+          isOpen={imageCarouselOpen}
+          onClose={onImageCarouselClose}
+          usePortal
+          onManageDisableScrolling={onManageDisableScrolling}
+        >
+          <ImageCarousel images={listing.images} />
+        </Modal>
+      )}
     </div>
   );
 };

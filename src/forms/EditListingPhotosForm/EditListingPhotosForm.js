@@ -60,6 +60,7 @@ export class EditListingPhotosFormComponent extends Component {
             saveActionMsg,
             updated,
             updateInProgress,
+            values,
           } = formRenderProps;
 
           const chooseImageText = (
@@ -149,40 +150,41 @@ export class EditListingPhotosFormComponent extends Component {
                 })}
                 onRemoveImage={onRemoveImage}
               >
-                <Field
-                  id="addImage"
-                  name="addImage"
-                  accept={ACCEPT_IMAGES}
-                  form={null}
-                  label={chooseImageText}
-                  type="file"
-                  disabled={imageUploadRequested}
-                >
-                  {fieldprops => {
-                    const { accept, input, label, disabled: fieldDisabled } = fieldprops;
-                    const { name, type } = input;
-                    const onChange = e => {
-                      const file = e.target.files[0];
-                      form.change(`addImage`, file);
-                      form.blur(`addImage`);
-                      onImageUploadHandler(file);
-                    };
-                    const inputProps = { accept, id: name, name, onChange, type };
-                    return (
-                      <div className={css.addImageWrapper}>
-                        <div className={css.aspectRatioWrapper}>
-                          {fieldDisabled ? null : (
-                            <input {...inputProps} className={css.addImageInput} />
-                          )}
-                          <label htmlFor={name} className={css.addImage}>
-                            {label}
-                          </label>
+                {values?.images?.length < 2 && values.images?.length > 0 ? null : (
+                  <Field
+                    id="addImage"
+                    name="addImage"
+                    accept={ACCEPT_IMAGES}
+                    form={null}
+                    label={chooseImageText}
+                    type="file"
+                    disabled={imageUploadRequested}
+                  >
+                    {fieldprops => {
+                      const { accept, input, label, disabled: fieldDisabled } = fieldprops;
+                      const { name, type } = input;
+                      const onChange = e => {
+                        const file = e.target.files[0];
+                        form.change(`addImage`, file);
+                        form.blur(`addImage`);
+                        onImageUploadHandler(file);
+                      };
+                      const inputProps = { accept, id: name, name, onChange, type };
+                      return (
+                        <div className={css.addImageWrapper}>
+                          <div className={css.aspectRatioWrapper}>
+                            {fieldDisabled ? null : (
+                              <input {...inputProps} className={css.addImageInput} />
+                            )}
+                            <label htmlFor={name} className={css.addImage}>
+                              {label}
+                            </label>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  }}
-                </Field>
-
+                      );
+                    }}
+                  </Field>
+                )}
                 <Field
                   component={props => {
                     const { input, meta } = props;

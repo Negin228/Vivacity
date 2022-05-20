@@ -24,19 +24,19 @@ const PrivacyPolicyPageComponent = props => {
 
   const tabs = [
     {
-      text: intl.formatMessage({ id: 'PrivacyPolicyPage.privacyTabTitle' }),
+      text: 'Policies and Procedure',
       selected: true,
       linkProps: {
         name: 'PrivacyPolicyPage',
       },
     },
-    {
-      text: intl.formatMessage({ id: 'PrivacyPolicyPage.tosTabTitle' }),
-      selected: false,
-      linkProps: {
-        name: 'TermsOfServicePage',
-      },
-    },
+    // {
+    //   text: intl.formatMessage({ id: 'PrivacyPolicyPage.tosTabTitle' }),
+    //   selected: false,
+    //   linkProps: {
+    //     name: 'TermsOfServicePage',
+    //   },
+    // },
   ];
   const siteTitle = config.siteTitle;
   const schemaTitle = intl.formatMessage({ id: 'PrivacyPolicyPage.schemaTitle' }, { siteTitle });
@@ -54,9 +54,7 @@ const PrivacyPolicyPageComponent = props => {
         <LayoutWrapperSideNav tabs={tabs} />
         <LayoutWrapperMain>
           <div className={css.content}>
-            <h1 className={css.heading}>
-              <FormattedMessage id="PrivacyPolicyPage.heading" />
-            </h1>
+            <h1 className={css.heading}>Policies and Procedure</h1>
             <PrivacyPolicy />
           </div>
         </LayoutWrapperMain>

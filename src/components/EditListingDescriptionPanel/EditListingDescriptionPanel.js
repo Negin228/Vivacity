@@ -8,7 +8,7 @@ import { LISTING_STATE_DRAFT } from '../../util/types';
 import { ListingLink } from '../../components';
 import { EditListingDescriptionForm } from '../../forms';
 import config from '../../config';
-
+import moment from 'moment';
 import css from './EditListingDescriptionPanel.module.css';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -34,10 +34,12 @@ const EditListingDescriptionPanel = props => {
       dispatch(clearPreviousListingData());
     }
   }, []);
+  const [initialProps, setInitialProps] = React.useState({});
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
-  const { description, title, publicData } = currentListing.attributes;
-
+  const { description, title, price, publicData } = currentListing.attributes;
+  const currentStockRaw = currentListing.currentStock?.attributes?.quantity;
+  const currentStock = typeof currentStockRaw != null ? currentStockRaw : 1;
   const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
   const panelTitle = isPublished ? (
     <FormattedMessage
@@ -55,25 +57,97 @@ const EditListingDescriptionPanel = props => {
   );
 
   // const certificateOptions = findOptionsForSelectFilter('certificate', config.custom.filters);
+  const yogaStyles = publicData && publicData.yogaStyles;
+
+  const initialValues = React.useMemo(() => {
+    if (!initialProps) {
+      return {
+        title,
+        description,
+        languages: publicData.languages,
+        yogaStyles: yogaStyles || [],
+        price: price,
+        timezone: publicData.timezone ? publicData.timezone : undefined,
+        start_date: publicData.startDate ? new Date(publicData.startDate) : undefined,
+        stock: currentStock,
+        class_duration: publicData.classDuration ? publicData.classDuration : undefined,
+      };
+    }
+    return {
+      title,
+      description,
+      languages: publicData.languages,
+      yogaStyles: yogaStyles || [],
+      price: price,
+      timezone: publicData.timezone ? publicData.timezone : undefined,
+      start_date: publicData.startDate ? new Date(publicData.startDate) : undefined,
+      stock: currentStock,
+      class_duration: publicData.classDuration ? publicData.classDuration : undefined,
+      ...initialProps,
+    };
+  }, [initialProps]);
+
   return (
     <div className={classes}>
       <h1 className={css.title}>{panelTitle}</h1>
       <EditListingDescriptionForm
         className={css.form}
-        initialValues={{
-          title,
-          description,
-          languages: publicData.languages,
-        }}
+        initialValues={initialValues}
         saveActionMsg={submitButtonText}
         onSubmit={values => {
-          const { title, description, languages } = values;
+          const {
+            title,
+            description,
+            languages,
+            yogaStyles = [],
+            price,
+            timezone,
+            start_date,
+            stock,
+            class_duration,
+          } = values;
+          const hasStockQuantityChanged = stock && currentStockRaw !== stock;
+          const oldTotal = currentStockRaw != null ? currentStockRaw : null;
+          const stockUpdateMaybe = hasStockQuantityChanged
+            ? {
+                stockUpdate: {
+                  oldTotal,
+                  newTotal: parseInt(stock),
+                },
+              }
+            : {};
+          const startDateISO = start_date.toISOString();
+          const selectedDate = moment(startDateISO).tz(timezone);
+          const unix_time_stamp = selectedDate.unix();
           const updateValues = {
+            ...stockUpdateMaybe,
             title: title,
             description,
-            publicData: { languages: languages, languagesFilter: [languages.key] },
+            price: price,
+            publicData: {
+              languages: languages,
+              languagesFilter: [languages.key],
+              yogaStyles: yogaStyles,
+              timezone: timezone,
+              startDate: start_date.toISOString(),
+              stock: stock,
+              classDuration: class_duration,
+              unixTimeStamp: unix_time_stamp,
+              classDurationFilter: [class_duration.key],
+            },
           };
-
+          setInitialProps({
+            ...updateValues,
+            title,
+            description,
+            languages,
+            yogaStyles,
+            price,
+            timezone,
+            start_date,
+            stock,
+            class_duration,
+          });
           onSubmit(updateValues);
         }}
         onChange={onChange}

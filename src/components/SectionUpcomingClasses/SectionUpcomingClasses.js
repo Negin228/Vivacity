@@ -28,14 +28,21 @@ const SectionUpcomingClasses = ({ loading, error, products, intl }) => {
       </div>
     );
   }
-
+  const someProducts = products?.slice(0, 5);
   return (
     <div className={classNames(css.productsWrapper, 'bg-white')}>
       {products?.length > 0 ? (
         <h3 className={css.title}>{intl.formatMessage({ id: 'SectionUpcomingClasses.title' })}</h3>
-      ) : null}
+      ) : (
+        <>
+          <h3 className={css.title}>
+            {intl.formatMessage({ id: 'SectionUpcomingClasses.title' })}
+          </h3>
+          <p>There are no upcoming classes available, please add classes.</p>
+        </>
+      )}
       <div className={css.container}>
-        {(products ?? []).map(p => (
+        {(someProducts ?? []).map(p => (
           <ProductCard
             id={p.id.uuid}
             key={p.id.uuid}

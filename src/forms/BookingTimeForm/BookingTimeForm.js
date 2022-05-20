@@ -99,6 +99,7 @@ export class BookingTimeFormComponent extends Component {
             fetchLineItemsError,
             startDate,
             seats,
+            isStockZero,
           } = fieldRenderProps;
 
           const startTime = values && values.bookingStartTime ? values.bookingStartTime : null;
@@ -196,17 +197,23 @@ export class BookingTimeFormComponent extends Component {
               {bookingInfoErrorMaybe}
 
               <p className={css.smallPrint}>
-                <FormattedMessage
-                  id={
-                    isOwnListing
-                      ? 'BookingTimeForm.ownListing'
-                      : 'BookingTimeForm.youWontBeChargedInfo'
-                  }
-                />
+                {isStockZero ? null : (
+                  <FormattedMessage
+                    id={
+                      isOwnListing
+                        ? 'BookingTimeForm.ownListing'
+                        : 'BookingTimeForm.youWontBeChargedInfo'
+                    }
+                  />
+                )}
               </p>
               <div className={submitButtonClasses}>
-                <PrimaryButton type="submit">
-                  <FormattedMessage id="BookingTimeForm.requestToBook" />
+                <PrimaryButton type="submit" disabled={isStockZero}>
+                  {isStockZero ? (
+                    'All class tickets are sold!'
+                  ) : (
+                    <FormattedMessage id="BookingTimeForm.requestToBook" />
+                  )}
                 </PrimaryButton>
               </div>
             </Form>

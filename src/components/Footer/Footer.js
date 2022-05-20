@@ -69,7 +69,7 @@ const Footer = props => {
             <div className={css.organization} id="organization">
               <NamedLink name="LandingPage" className={css.logoLink}>
                 <span className={css.logo}>
-                  <Logo format="desktop" />
+                  <Logo format="desktop" from="footer" />
                 </span>
               </NamedLink>
               <div className={css.organizationInfo}>
@@ -97,7 +97,7 @@ const Footer = props => {
                     <FormattedMessage id="Footer.toAboutPage" />
                   </NamedLink>
                 </li>
-                <li className={css.listItem}>
+                {/* <li className={css.listItem}>
                   <NamedLink name="LandingPage" className={css.link}>
                     <FormattedMessage id="Footer.toFAQPage" />
                   </NamedLink>
@@ -106,17 +106,22 @@ const Footer = props => {
                   <NamedLink name="LandingPage" className={css.link}>
                     <FormattedMessage id="Footer.toHelpPage" />
                   </NamedLink>
-                </li>
-                <li className={css.listItem}>
-                  <NamedLink name="AboutPage" to={{ hash: '#contact' }} className={css.link}>
-                    <FormattedMessage id="Footer.toContactPage" />
-                  </NamedLink>
-                </li>
+                </li> */}
               </ul>
             </div>
             <div className={css.searches}>
               <ul className={css.list}>
                 <li className={css.listItem}>
+                  <NamedLink name="HowItWorks" className={css.link}>
+                    How It Works
+                  </NamedLink>
+                </li>
+                <li className={css.listItem}>
+                  <NamedLink name="ContactPage" className={css.link}>
+                    <FormattedMessage id="Footer.toContactPage" />
+                  </NamedLink>
+                </li>
+                {/* <li className={css.listItem}>
                   <NamedLink
                     name="SearchPage"
                     to={{
@@ -175,10 +180,10 @@ const Footer = props => {
                   >
                     <FormattedMessage id="Footer.searchPortland" />
                   </NamedLink>
-                </li>
+                </li> */}
               </ul>
             </div>
-            <div className={css.searchesExtra}>
+            {/* <div className={css.searchesExtra}>
               <ul className={css.list}>
                 <li className={css.listItem}>
                   <NamedLink
@@ -241,36 +246,34 @@ const Footer = props => {
                   </NamedLink>
                 </li>
               </ul>
-            </div>
-            <div className={css.extraLinks}>
+            </div> */}
+            <div className={css.searches}>
               <div className={css.someLinks}>{socialMediaLinks}</div>
-              <div className={css.legalMatters}>
-                <ul className={css.tosAndPrivacy}>
-                  <li>
+              <ul className={css.tosAndPrivacy}>
+                {/* <li>
                     <NamedLink name="TermsOfServicePage" className={css.legalLink}>
                       <FormattedMessage id="Footer.termsOfUse" />
                     </NamedLink>
-                  </li>
-                  <li>
-                    <NamedLink name="PrivacyPolicyPage" className={css.legalLink}>
-                      <FormattedMessage id="Footer.privacyPolicy" />
-                    </NamedLink>
-                  </li>
-                </ul>
-              </div>
+                  </li> */}
+                <li>
+                  <NamedLink name="PrivacyPolicyPage" className={css.legalLink}>
+                    <FormattedMessage id="Footer.privacyPolicy" />
+                  </NamedLink>
+                </li>
+              </ul>
             </div>
           </div>
           <div className={css.copyrightAndTermsMobile}>
-            <NamedLink name="LandingPage" className={css.organizationCopyrightMobile}>
+            {/* <NamedLink name="LandingPage" className={css.organizationCopyrightMobile}>
               <FormattedMessage id="Footer.copyright" />
-            </NamedLink>
+            </NamedLink> */}
             <div className={css.tosAndPrivacyMobile}>
               <NamedLink name="PrivacyPolicyPage" className={css.privacy}>
                 <FormattedMessage id="Footer.privacy" />
               </NamedLink>
-              <NamedLink name="TermsOfServicePage" className={css.terms}>
+              {/* <NamedLink name="TermsOfServicePage" className={css.terms}>
                 <FormattedMessage id="Footer.terms" />
-              </NamedLink>
+              </NamedLink> */}
             </div>
           </div>
         </div>

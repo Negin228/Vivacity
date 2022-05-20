@@ -8,6 +8,7 @@ import {
   LayoutWrapperMain,
   LayoutWrapperFooter,
   Footer,
+  NamedLink,
   ExternalLink,
 } from '../../components';
 
@@ -35,52 +36,46 @@ const AboutPage = () => {
         </LayoutWrapperTopbar>
 
         <LayoutWrapperMain className={css.staticPageWrapper}>
-          <h1 className={css.pageTitle}>Find new depths in your yoga practice</h1>
-          <img className={css.coverImage} src={image} alt="My first ice cream." />
+          {/* <h1 className={css.pageTitle}>Fitness is our passion!</h1> */}
+          {/* <img className={css.coverImage} src={image} alt="My first ice cream." /> */}
 
           <div className={css.contentWrapper}>
-            <div className={css.contentSide}>
+            {/* <div className={css.contentSide}>
               <p>Yoga was listed by UNESCO as an intangible cultural heritage.</p>
-            </div>
+            </div> */}
 
             <div className={css.contentMain}>
               <h2>
-                Each yoga practitioner is an individual, and each one of us needs different care.
-                Working together with an experienced yoga teacher offers the possibility to rise
-                our practise to a whole new level.
+              Fitness is our passion!
               </h2>
 
               <p>
-                Whether it is the alignment of asanas or being able to set the focus of the class,
-                we all have our own struggles and goals. Some of these cannot be addressed in a
-                regular class of twenty yogis. Working together with the experienced yoga teachers
-                from Yogatime, you can together create just the right class for you.
+              The idea of Vivacity came to our minds during the COVID 19 pandemic when we were trapped at home with no access to our gym. 
               </p>
 
-              <h3 className={css.subtitle}>Are you a yoga teacher?</h3>
+              {/* <h3 className={css.subtitle}>Are you a yoga teacher?</h3> */}
 
               <p>
-                Yogatime offers you a platform through which you can reach thousands of yoga
-                practitioners. Offering private yoga classes through Yogatime offers you a
-                possibility to grow your customer base and earn some extra income on top of your
-                regular classes.
+              We missed working out with friends and started attending some classes online with the instructors we knew. However, it was not as easy as it sounds. The number of online classes were very limited and those that were available did not match our schedule. Besides, the classes we were attending were not interactive and it was just a one-way communication that we did not enjoy.
               </p>
 
-              <h3 id="contact" className={css.subtitle}>
+              {/* <h3 id="contact" className={css.subtitle}>
                 Create your own marketplace like Yogatime
-              </h3>
+              </h3> */}
               <p>
-                Yogatime is brought to you by{' '}
-                <ExternalLink href="http://sharetribe.com">Sharetribe</ExternalLink>. Sharetribe
-                offers anyone a possibility to create a marketplace without restricting your own
-                creativity. Do not hesitate to reach out and learn how to best turn your
-                marketplace idea to reality.
+              We created Vivacity to be able to attend high-quality virtual classes with our friends no matter where in the world they are and then decided to expand it so that more people experience the joy of interactive group classes with top-notch instructors. We are glad that you found us, and that you have decided to be part of this journey. 
               </p>
               <p>
+              Our promise to you is to do our best to elevate your experience in this platform and we would always love to hear from you on how we can make things better.
+              </p>
+              <p>
+              <NamedLink name="ContactPage">Write to us</NamedLink> and let us know. Let's get in touch!
+              </p>
+              {/* <p>
                 You can also checkout our{' '}
                 <ExternalLink href={siteFacebookPage}>Facebook</ExternalLink> and{' '}
                 <ExternalLink href={siteTwitterPage}>Twitter</ExternalLink>.
-              </p>
+              </p> */}
             </div>
           </div>
         </LayoutWrapperMain>

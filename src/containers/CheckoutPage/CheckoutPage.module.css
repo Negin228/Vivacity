@@ -45,7 +45,7 @@
 .logoDesktop {
   display: none;
   width: auto;
-  height: 27px;
+  height: 54px;
 
   @media (--viewportLarge) {
     display: block;

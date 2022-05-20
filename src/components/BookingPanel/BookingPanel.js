@@ -9,9 +9,10 @@ import { propTypes, LISTING_STATE_CLOSED, LINE_ITEM_NIGHT, LINE_ITEM_DAY } from 
 import { formatMoney } from '../../util/currency';
 import { parse, stringify } from '../../util/urlHelpers';
 import config from '../../config';
-import { ModalInMobile, Button } from '../../components';
+import { ModalInMobile, Button, ResponsiveImage, AvatarMedium } from '../../components';
 import { BookingTimeForm } from '../../forms';
 import moment from 'moment';
+import { ensureListing, ensureUser } from '../../util/data';
 
 import css from './BookingPanel.module.css';
 
@@ -85,7 +86,15 @@ const BookingPanel = props => {
   const isBook = !!parse(location.search).book;
   const { publicData } = listing.attributes;
   console.log('BookingPanel props', publicData);
-
+  const currentListing = ensureListing(listing);
+  const currentAuthor = ensureUser(currentListing.author);
+  const { quantity } = currentListing?.currentStock?.attributes || {};
+  let isStockZero = false;
+  if (quantity === 0) {
+    isStockZero = true;
+  }
+  const firstImage =
+    currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
   const subTitleText = !!subTitle
     ? subTitle
     : showClosedListingHelpText
@@ -117,7 +126,7 @@ const BookingPanel = props => {
         <div className={css.modalHeading}>
           <h1 className={css.title}>{title}</h1>
         </div>
-        <div className={css.bookingHeading}>
+        {/* <div className={css.bookingHeading}>
           <h3>Price:</h3>
           <div className={css.desktopPriceContainer}>
             <div className={css.desktopPriceValue} title={priceTitle}>
@@ -133,6 +142,30 @@ const BookingPanel = props => {
             <h2 className={titleClasses}>{title}</h2>
             {subTitleText ? <div className={css.bookingHelp}>{subTitleText}</div> : null}
           </div>
+        </div> */}
+
+        <div className={css.detailsContainerDesktop}>
+          <div className={css.detailsAspectWrapper}>
+            <ResponsiveImage
+              rootClassName={css.rootForImage}
+              alt={title}
+              image={firstImage}
+              variants={['landscape-crop', 'landscape-crop2x']}
+            />
+          </div>
+          {/* <div className={css.avatarWrapper}>
+            <AvatarMedium user={currentAuthor} disableProfileLink />
+          </div> */}
+          <div className={css.detailsHeadings}>
+            <h2 className={css.detailsTitle}>{title}</h2>
+            <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
+              <b>Price:</b> {formattedPrice} per person
+            </p>
+            <p className={css.detailsSubtitle}>
+              <b>Start date:</b> {formattedDate}
+            </p>
+          </div>
+          {/* <p style={{ color: 'red' }}></p> */}
         </div>
 
         {showBookingTimeForm ? (
@@ -143,6 +176,7 @@ const BookingPanel = props => {
             unitType={unitType}
             onSubmit={onSubmit}
             price={price}
+            isStockZero={isStockZero}
             startDate={formattedDate}
             seats={publicData.seats}
             listingId={listing.id}
