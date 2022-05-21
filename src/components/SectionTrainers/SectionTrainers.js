@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { bool, string } from 'prop-types';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
@@ -11,9 +11,11 @@ const SectionTrainers = props => {
   const classes = classNames(rootClassName || css.root, className);
   const [scroll, setScroll] = useState(null);
   const [scrollRight, setScrollRight] = useState();
-  const element = document?.getElementById('logocontainer');
-  const numberOfCards = element?.childNodes?.length;
-  const slider = document.getElementById('logocontainer')?.scrollWidth;
+  const logoContainerRef = useRef(null);
+
+  const numberOfCards = logoContainerRef?.current?.childNodes?.length;
+  const slider = logoContainerRef.current?.scrollWidth;
+
   useEffect(() => {
     if (numberOfCards > 7) {
       setScrollRight(false);
@@ -22,16 +24,16 @@ const SectionTrainers = props => {
     }
   }, [numberOfCards]);
   function rightButton() {
-    document.getElementById('logocontainer').scrollLeft += 300;
-    var div = document.getElementById('logocontainer').scrollLeft;
+    logoContainerRef.current.scrollLeft += 300;
+    var div = logoContainerRef.current.scrollLeft;
     setScroll(div);
     if (slider / 3 - 300 <= scroll) {
       setScrollRight(true);
     }
   }
   function leftButton() {
-    document.getElementById('logocontainer').scrollLeft -= 300;
-    var div = (document.getElementById('logocontainer').scrollLeft -= 300);
+    logoContainerRef.current.scrollLeft -= 300;
+    var div = (logoContainerRef.current.scrollLeft -= 300);
     setScroll(div);
     setScrollRight(false);
     if (div === 0 || div < 0) {
@@ -45,7 +47,7 @@ const SectionTrainers = props => {
       <div id="slideLeft" onClick={e => leftButton()} className={css.left}>
         <BsArrowLeftCircle className={scroll === null ? css.logoDisbaled : css.logo} />
       </div>
-      <div className={css.container} id="logocontainer">
+      <div className={css.container} ref={logoContainerRef} id="logocontainer">
         {(trainers ?? [])?.map((trainer, index) => (
           <div key={index}>
             <img
