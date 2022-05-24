@@ -45,7 +45,12 @@ const SectionTrainers = props => {
       <div className={css.title}>Our Trainers</div>
 
       <div className={css.mainContainer}>
-        <div id="slideLeft" onClick={e => leftButton()} className={css.left}>
+        <div
+          id="slideLeft"
+          onClick={e => leftButton()}
+          className={css.left}
+          style={{ marginTop: '40px' }}
+        >
           <BsArrowLeftCircle className={scroll === null ? css.logoDisbaled : css.logo} />
         </div>
         <div className={css.container} ref={logoContainerRef} id="logocontainer">
@@ -61,7 +66,12 @@ const SectionTrainers = props => {
             </div>
           ))}
         </div>
-        <div id="slideRight" onClick={e => rightButton()} className={css.right}>
+        <div
+          id="slideRight"
+          onClick={e => rightButton()}
+          className={css.right}
+          style={{ marginTop: '40px' }}
+        >
           <BsArrowRightCircle className={scrollRight ? css.logoDisbaled : css.logo} />
         </div>
       </div>
