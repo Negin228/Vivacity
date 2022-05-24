@@ -44,24 +44,26 @@ const SectionTrainers = props => {
     <div className={classes}>
       <div className={css.title}>Our Trainers</div>
 
-      <div id="slideLeft" onClick={e => leftButton()} className={css.left}>
-        <BsArrowLeftCircle className={scroll === null ? css.logoDisbaled : css.logo} />
-      </div>
-      <div className={css.container} ref={logoContainerRef} id="logocontainer">
-        {(trainers ?? [])?.map((trainer, index) => (
-          <div key={index}>
-            <img
-              src={trainer.trainerProfileImage ? trainer.trainerProfileImage : image}
-              style={{ width: '180px', borderRadius: '50%', height: '180px' }}
-            />
-            <h2 style={{ marginLeft: '35px' }} className={css.stepTitle}>
-              {trainer.trainerName}
-            </h2>
-          </div>
-        ))}
-      </div>
-      <div id="slideRight" onClick={e => rightButton()} className={css.right}>
-        <BsArrowRightCircle className={scrollRight ? css.logoDisbaled : css.logo} />
+      <div className={css.mainContainer}>
+        <div id="slideLeft" onClick={e => leftButton()} className={css.left}>
+          <BsArrowLeftCircle className={scroll === null ? css.logoDisbaled : css.logo} />
+        </div>
+        <div className={css.container} ref={logoContainerRef} id="logocontainer">
+          {(trainers ?? [])?.map((trainer, index) => (
+            <div key={index} id="logocontainer">
+              <img
+                src={trainer.trainerProfileImage ? trainer.trainerProfileImage : image}
+                style={{ width: '180px', borderRadius: '50%', height: '180px' }}
+              />
+              <h2 style={{ marginLeft: '35px' }} className={css.stepTitle}>
+                {trainer.trainerName}
+              </h2>
+            </div>
+          ))}
+        </div>
+        <div id="slideRight" onClick={e => rightButton()} className={css.right}>
+          <BsArrowRightCircle className={scrollRight ? css.logoDisbaled : css.logo} />
+        </div>
       </div>
     </div>
   );
