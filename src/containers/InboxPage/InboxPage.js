@@ -178,7 +178,7 @@ const BookingInfoMaybe = props => {
 
   return (
     <div className={classNames(css.bookingInfoWrapper, bookingClassName)}>
-      <BookingTimeInfo
+      {/* <BookingTimeInfo
         bookingClassName={bookingClassName}
         isOrder={isOrder}
         intl={intl}
@@ -186,7 +186,7 @@ const BookingInfoMaybe = props => {
         unitType={unitType}
         dateType={DATE_TYPE_DATETIME}
         timeZone={timeZone}
-      />
+      /> */}
     </div>
   );
 };
