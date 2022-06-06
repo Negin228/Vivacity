@@ -19,8 +19,9 @@ const bookingData = tx => {
 const BookingTimeInfo = props => {
   const { bookingClassName, tx, dateType, timeZone } = props;
   const isEnquiry = txIsEnquired(tx);
+  const hasNoBooking = !tx.booking;
 
-  if (isEnquiry) {
+  if (isEnquiry || hasNoBooking) {
     return null;
   }
 

@@ -52,6 +52,7 @@ import PanelHeading, {
 } from './PanelHeading';
 
 import css from './TransactionPanel.module.css';
+import { getZoomFromAPI } from '../../util/api';
 
 // Helper function to get display names for different roles
 const displayNames = (currentUser, currentProvider, currentCustomer, intl) => {
@@ -88,6 +89,10 @@ export class TransactionPanelComponent extends Component {
       sendMessageFormFocused: false,
       isReviewModalOpen: false,
       reviewSubmitted: false,
+      join_url: null,
+      start_url: null,
+      zoomLoading: true,
+      zoomError: null,
     };
     this.isMobSaf = false;
     this.sendMessageFormName = 'TransactionPanel.SendMessageForm';
@@ -98,10 +103,35 @@ export class TransactionPanelComponent extends Component {
     this.onSendMessageFormBlur = this.onSendMessageFormBlur.bind(this);
     this.onMessageSubmit = this.onMessageSubmit.bind(this);
     this.scrollToMessage = this.scrollToMessage.bind(this);
+    this.getZoomLinks = this.getZoomLinks.bind(this);
+  }
+
+  getZoomLinks() {
+    const { transaction } = this.props;
+    const id = transaction.id.uuid;
+    getZoomFromAPI({ id })
+      .then(res => {
+        this.setState({
+          ...res,
+        });
+      })
+      .catch(err => {
+        // console.log(err);
+
+        const error = err?.response?.data?.message ?? err?.message;
+
+        this.setState({
+          zoomError: error,
+        });
+      })
+      .finally(() => {
+        this.setState({ zoomLoading: false });
+      });
   }
 
   componentDidMount() {
     this.isMobSaf = isMobileSafari();
+    this.getZoomLinks();
   }
 
   onOpenReviewModal() {
@@ -401,6 +431,12 @@ export class TransactionPanelComponent extends Component {
               onOpenReviewModal={this.onOpenReviewModal}
               onShowMoreMessages={() => onShowMoreMessages(currentTransaction.id)}
               totalMessagePages={totalMessagePages}
+              isProvider={isProvider}
+              isCustomer={isCustomer}
+              joinUrl={this.state.join_url}
+              startUrl={this.state.start_url}
+              zoomLoading={this.state.zoomLoading}
+              zoomError={this.state.zoomError}
             />
             {showSendMessageForm ? (
               <SendMessageForm

@@ -36,6 +36,8 @@ const StyleguidePage = loadable(() => import(/* webpackChunkName: "StyleguidePag
 const HowItWorks = loadable(() => import(/* webpackChunkName: "HowItWorks" */ './containers/HowItWorks/HowItWorks'));
 const ContactUs = loadable(() => import(/* webpackChunkName: "ContactUs" */ './containers/ContactUs/ContactUs'));
 const SuccessPage = loadable(() => import(/* webpackChunkName: "SuccessPage" */ './containers/ContactUs/SuccessPage'));
+const ZoomErrorPage = loadable(() => import(/* webpackChunkName: "ZoomErrorPage" */ './containers/ZoomErrorPage/ZoomErrorPage'));
+
 export const ACCOUNT_SETTINGS_PAGES = [
   'ContactDetailsPage',
   'PasswordChangePage',
@@ -84,6 +86,13 @@ const routeConfiguration = () => {
       path: '/success',
       name: 'SuccessPage',  
       component: SuccessPage
+    },
+    {
+      path: '/zoom-error',
+      name: 'ZoomErrorPage',
+      component: ZoomErrorPage,
+      auth: true,
+      authPage: 'LoginPage',
     },
     {
       path: '/s',
