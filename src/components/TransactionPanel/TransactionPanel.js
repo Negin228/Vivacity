@@ -505,7 +505,9 @@ export class TransactionPanelComponent extends Component {
               />
 
               {stateData.showSaleButtons ? (
-                <div className={css.desktopActionButtons}>{saleButtons}</div>
+                <div className={css.desktopActionButtons} style={{ marginTop: '50px' }}>
+                  {saleButtons}
+                </div>
               ) : null}
             </div>
           </div>

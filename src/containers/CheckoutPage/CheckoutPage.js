@@ -169,7 +169,7 @@ export class CheckoutPageComponent extends Component {
     const tx = pageData ? pageData.transaction : null;
     const isBookingCreated = tx && tx.booking && tx.booking.id;
 
-    const quantity = pageData.bookingData.quantity;
+    const quantity = pageData?.bookingData?.quantity;
     const quantityMaybe = quantity ? { quantity } : {};
     const shouldFetchSpeculatedTransaction =
       pageData &&
