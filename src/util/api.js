@@ -70,6 +70,35 @@ const post = (path, body) => {
     return res.text();
   });
 };
+const get = (path, params) => {
+  const url = `${apiBaseUrl()}${path}?${params}`;
+  const options = {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/transit+json',
+    },
+  };
+  return window.fetch(url, options).then(res => {
+    const contentTypeHeader = res.headers.get('Content-Type');
+    const contentType = contentTypeHeader ? contentTypeHeader.split(';')[0] : null;
+
+    if (res.status >= 400) {
+      return res.json().then(data => {
+        let e = new Error();
+        e = Object.assign(e, data);
+
+        throw e;
+      });
+    }
+    if (contentType === 'application/transit+json') {
+      return res.text().then(deserialize);
+    } else if (contentType === 'application/json') {
+      return res.json();
+    }
+    return res.text();
+  });
+};
 
 // Fetch transaction line items from the local API endpoint.
 //
@@ -114,4 +143,10 @@ export const transitionPrivileged = body => {
 // be sent in the body.
 export const createUserWithIdp = body => {
   return post('/api/auth/create-user-with-idp', body);
+};
+
+export const confirmPaymentFromAPI = body => post('/api/transition-confirm-payment', body);
+export const getZoomFromAPI = params => {
+  const urlParams = new URLSearchParams(params).toString();
+  return get('/api/zoom', urlParams);
 };

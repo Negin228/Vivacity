@@ -108,6 +108,11 @@ const EditListingDescriptionPanel = props => {
           } = values;
           const hasStockQuantityChanged = stock && currentStockRaw !== stock;
           const oldTotal = currentStockRaw != null ? currentStockRaw : null;
+
+          const timeUpdated =
+            new Date(values.start_date).toISOString() != publicData?.startDate ||
+            publicData?.classDuration?.key != values?.class_duration?.key;
+
           const stockUpdateMaybe = hasStockQuantityChanged
             ? {
                 stockUpdate: {
@@ -134,6 +139,7 @@ const EditListingDescriptionPanel = props => {
               classDuration: class_duration,
               unixTimeStamp: unix_time_stamp,
               classDurationFilter: [class_duration.key],
+              timeUpdated,
             },
           };
           setInitialProps({
@@ -148,6 +154,7 @@ const EditListingDescriptionPanel = props => {
             stock,
             class_duration,
           });
+
           onSubmit(updateValues);
         }}
         onChange={onChange}

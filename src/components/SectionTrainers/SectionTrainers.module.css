@@ -1,10 +1,11 @@
 @import '../../styles/propertySets.css';
 
+
+
 .title {
   @apply --marketplaceH1FontStyles;
   margin-top: 0;
 }
-
 .steps {
   display: flex;
   flex-direction: column;
@@ -16,18 +17,16 @@
 
 .step {
   @media (--viewportMedium) {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
+    width: 324px;
     margin-right: 40px;
   }
 }
 
-/* .step:last-of-type {
+.step:last-of-type {
   @media (--viewportMedium) {
     margin-right: 0;
   }
-} */
+}
 
 .stepTitle {
   margin-top: 18px;
@@ -47,19 +46,51 @@
   }
 }
 
+.image {
+  width: 150px;
+  height: 100px;
+  border-radius: 5px;
+  padding: 0px 10px;
+}
 .container {
-display: flex;
-gap: 4rem;
-scroll-behavior: smooth;
--ms-overflow-style: none; /* for Internet Explorer, Edge */
-scrollbar-width: none; /* for Firefox */
-overflow-y: scroll;
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  overflow: scroll;
+  gap: 54px;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  @media (--viewportMedium) {
+    overflow: hidden;
+  }
+  /* margin: 0rem 3rem; */
 }
 .container::-webkit-scrollbar {
-display: none; /* for Chrome, Safari, and Opera */
+  display: none; /* for Chrome, Safari, and Opera */
 }
-
-
+.mainContainer {
+  display: flex;
+}
+.left {
+  display: none;
+  @media (--viewportMedium) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 0.5rem;
+    height: 100px;
+  }
+}
+.right {
+  display: none;
+  @media (--viewportMedium) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 0.5rem;
+    height: 100px;
+  }
+}
 .logo {
   color: var(--marketplaceColor);
   font-weight: 600;
@@ -68,23 +99,6 @@ display: none; /* for Chrome, Safari, and Opera */
     cursor: pointer;
     color: var(--marketplaceColorDark);
   }
-};
-.left {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-right: 0.5rem;
-  height: 100px;
-};
-.right {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: 0.5rem;
-  height: 100px;
-}; 
-.mainContainer {
-  display: flex;
 }
 .logoDisbaled {
   color: lightgray;

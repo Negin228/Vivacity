@@ -1,6 +1,6 @@
 import pick from 'lodash/pick';
 import config from '../../config';
-import { initiatePrivileged, transitionPrivileged } from '../../util/api';
+import { confirmPaymentFromAPI, initiatePrivileged, transitionPrivileged } from '../../util/api';
 import { denormalisedResponseEntities } from '../../util/data';
 import { storableError } from '../../util/errors';
 import {
@@ -254,8 +254,9 @@ export const confirmPayment = orderParams => (dispatch, getState, sdk) => {
     params: {},
   };
 
-  return sdk.transactions
-    .transition(bodyParams)
+  // return sdk.transactions
+  //   .transition(bodyParams)
+  return confirmPaymentFromAPI({ id: orderParams.transactionId.uuid })
     .then(response => {
       const order = response.data.data;
       dispatch(confirmPaymentSuccess(order.id));

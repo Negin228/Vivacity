@@ -72,7 +72,6 @@ export const fetchTrainerRequest = () => ({ type: TRAINER_FETCH_REQUEST });
 export const fetchTrainerSuccess = payload => ({ type: TRAINER_FETCH_SUCCESS, payload });
 export const fetchTrainerError = error => ({ type: TRAINER_FETCH_ERROR, payload: error });
 
-console.log('hit');
 export const getAllListings = () => async (dispatch, getState, sdk) => {
   dispatch(fetchProductsRequest());
 
@@ -119,7 +118,6 @@ export const getAllTrainers = () => async (dispatch, getState) => {
 };
 
 export const loadData = params => (dispatch, getState, sdk) => {
-  console.log('hit3');
   return Promise.all([dispatch(getAllListings()), dispatch(getAllTrainers())])
     .then(responses => {
       return responses;

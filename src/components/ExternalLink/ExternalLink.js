@@ -8,13 +8,13 @@ import PropTypes from 'prop-types';
 const ExternalLink = props => {
   const { children, ...rest } = props;
   return (
-    <a {...rest} target="_blank" rel="noopener noreferrer">
+    <a {...rest} rel="noopener noreferrer">
       {children}
     </a>
   );
 };
 
-ExternalLink.defaultProps = { children: null };
+ExternalLink.defaultProps = { children: null, target: '_blank' };
 
 const { node } = PropTypes;
 
