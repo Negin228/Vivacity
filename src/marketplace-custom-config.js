@@ -32,6 +32,10 @@
  *         and tie them with correct extended data key
  *         (i.e. pub_<key> or meta_<key>).
  */
+export const typeOptions = [
+  { label: 'Paid', value: 'paid', key: 'paid' },
+  { label: 'Free', value: 'free', key: 'free' },
+];
 export const durationOptions = [
   { key: '30_min', value: '30_min', label: '30 min' },
   { key: '60_min', value: '60_min', label: '1 hour' },

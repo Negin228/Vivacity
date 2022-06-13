@@ -33,7 +33,8 @@ const sortSearchByDistance = false;
 // In a way, 'processAlias' defines which transaction process (or processes)
 // this particular web application is able to handle.
 const bookingProcessAlias = 'flex-hourly-default-process/release-1';
-
+const freeBookingProcessAlias = 'vivacity-free-process/release-1';
+const isPaid = 'paid';
 // The transaction line item code for the main unit type in bookings.
 //
 // Possible values: ['line-item/night', 'line-item/day', 'line-item/units';]
@@ -209,12 +210,14 @@ const config = {
   env,
   dev,
   locale,
+  isPaid,
   bookingProcessAlias,
   bookingUnitType,
   listingManagementType,
   listing,
   enableAvailability,
   dayCountAvailableForBooking,
+  freeBookingProcessAlias,
   i18n,
   sdk: {
     clientId: sdkClientId,

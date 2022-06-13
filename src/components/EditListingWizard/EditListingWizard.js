@@ -98,7 +98,7 @@ const tabCompleted = (tab, listing) => {
       return !!(
         description &&
         title &&
-        price &&
+        // price &&
         publicData &&
         publicData.yogaStyles &&
         publicData.timezone &&

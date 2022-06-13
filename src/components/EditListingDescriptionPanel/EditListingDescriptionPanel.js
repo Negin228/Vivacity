@@ -66,11 +66,12 @@ const EditListingDescriptionPanel = props => {
         description,
         languages: publicData.languages,
         yogaStyles: yogaStyles || [],
-        price: price,
+        price: publicData.type === config.isPaid ? price : null,
         timezone: publicData.timezone ? publicData.timezone : undefined,
         start_date: publicData.startDate ? new Date(publicData.startDate) : undefined,
         stock: currentStock,
         class_duration: publicData.classDuration ? publicData.classDuration : undefined,
+        type: config.custom.typeOptions?.find(option => option.key === publicData.type),
       };
     }
     return {
@@ -78,11 +79,12 @@ const EditListingDescriptionPanel = props => {
       description,
       languages: publicData.languages,
       yogaStyles: yogaStyles || [],
-      price: price,
+      price: publicData.type === config.isPaid ? price : null,
       timezone: publicData.timezone ? publicData.timezone : undefined,
       start_date: publicData.startDate ? new Date(publicData.startDate) : undefined,
       stock: currentStock,
       class_duration: publicData.classDuration ? publicData.classDuration : undefined,
+      type: config.custom.typeOptions?.find(option => option.key === publicData.type),
       ...initialProps,
     };
   }, [initialProps]);
@@ -105,6 +107,7 @@ const EditListingDescriptionPanel = props => {
             start_date,
             stock,
             class_duration,
+            type,
           } = values;
           const hasStockQuantityChanged = stock && currentStockRaw !== stock;
           const oldTotal = currentStockRaw != null ? currentStockRaw : null;
@@ -128,7 +131,7 @@ const EditListingDescriptionPanel = props => {
             ...stockUpdateMaybe,
             title: title,
             description,
-            price: price,
+            price: type?.key === config.isPaid ? price : null,
             publicData: {
               languages: languages,
               languagesFilter: [languages.key],
@@ -140,6 +143,7 @@ const EditListingDescriptionPanel = props => {
               unixTimeStamp: unix_time_stamp,
               classDurationFilter: [class_duration.key],
               timeUpdated,
+              type: type?.key,
             },
           };
           setInitialProps({
@@ -153,6 +157,7 @@ const EditListingDescriptionPanel = props => {
             start_date,
             stock,
             class_duration,
+            type,
           });
 
           onSubmit(updateValues);

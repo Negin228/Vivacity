@@ -50,8 +50,9 @@ const EditListingDescriptionFormComponent = props => (
         updated,
         updateInProgress,
         fetchErrors,
+        values,
       } = formRenderProps;
-
+      console.log({ values });
       const unitType = config.bookingUnitType;
       const isNightly = unitType === LINE_ITEM_NIGHT;
       const isDaily = unitType === LINE_ITEM_DAY;
@@ -193,17 +194,28 @@ const EditListingDescriptionFormComponent = props => (
             label="Yoga Styles"
             options={config.custom.workoutTypes}
           />
-          {/* pricing section  */}
-          <FieldCurrencyInput
-            id="price"
-            name="price"
-            className={css.priceInput}
-            label={pricePerUnitMessage}
-            placeholder={pricePlaceholderMessage}
-            currencyConfig={config.currencyConfig}
-            validate={priceValidators}
-            style={{ marginBottom: '32px' }}
+          <FieldSelectModern
+            className={css.features}
+            id="type"
+            name="type"
+            label="Type"
+            options={config.custom.typeOptions}
+            placeholder="Select a type"
+            validate={fieldSelectModernRequired('Please select a type')}
           />
+          {/* pricing section  */}
+          {values?.type?.key === config.isPaid ? (
+            <FieldCurrencyInput
+              id="price"
+              name="price"
+              className={css.priceInput}
+              label={pricePerUnitMessage}
+              placeholder={pricePlaceholderMessage}
+              currencyConfig={config.currencyConfig}
+              validate={priceValidators}
+              style={{ marginBottom: '32px' }}
+            />
+          ) : null}
           {/* date and availability section */}
           <FieldTimeZoneSelect
             id="timezone"
