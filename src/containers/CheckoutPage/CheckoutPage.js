@@ -57,7 +57,9 @@ import {
 } from './CheckoutPage.duck';
 import { storeData, storedData, clearData } from './CheckoutPageSessionHelpers';
 import css from './CheckoutPage.module.css';
+import { types as sdkTypes } from '../../util/sdkLoader';
 
+const { Money } = sdkTypes;
 const STORAGE_KEY = 'CheckoutPage';
 
 // Stripe PaymentIntent statuses, where user actions are already completed
@@ -188,6 +190,7 @@ export class CheckoutPageComponent extends Component {
       fetchSpeculatedTransaction(
         {
           listingId,
+          bookingType: pageData?.bookingData?.bookingType,
           ...quantityMaybe,
         },
         transactionId
@@ -197,7 +200,7 @@ export class CheckoutPageComponent extends Component {
     this.setState({ pageData: pageData || {}, dataLoaded: true });
   }
 
-  handlePaymentIntent(handlePaymentParams) {
+  handlePaymentIntent(handlePaymentParams, isFree) {
     const {
       currentUser,
       stripeCustomerFetched,
@@ -241,7 +244,7 @@ export class CheckoutPageComponent extends Component {
       // fnParams should be { listingId, bookingStart, bookingEnd }
       const hasPaymentIntents =
         storedTx.attributes.protectedData && storedTx.attributes.protectedData.stripePaymentIntents;
-
+      if (isFree) return onInitiateOrder(fnParams, storedTx.id);
       // If paymentIntent exists, order has been initiated previously.
       return hasPaymentIntents ? Promise.resolve(storedTx) : onInitiateOrder(fnParams, storedTx.id);
     };
@@ -260,47 +263,61 @@ export class CheckoutPageComponent extends Component {
 
       const hasPaymentIntents =
         order.attributes.protectedData && order.attributes.protectedData.stripePaymentIntents;
-
-      if (!hasPaymentIntents) {
-        throw new Error(
-          `Missing StripePaymentIntents key in transaction's protectedData. Check that your transaction process is configured to use payment intents.`
-        );
+      if (!isFree) {
+        if (!hasPaymentIntents) {
+          throw new Error(
+            `Missing StripePaymentIntents key in transaction's protectedData. Check that your transaction process is configured to use payment intents.`
+          );
+        }
       }
 
-      const { stripePaymentIntentClientSecret } = hasPaymentIntents
-        ? order.attributes.protectedData.stripePaymentIntents.default
-        : null;
+      if (!isFree) {
+        const { stripePaymentIntentClientSecret } = hasPaymentIntents
+          ? order.attributes.protectedData.stripePaymentIntents.default
+          : null;
 
-      const { stripe, card, billingDetails, paymentIntent } = handlePaymentParams;
-      const stripeElementMaybe = selectedPaymentFlow !== USE_SAVED_CARD ? { card } : {};
+        const { stripe, card, billingDetails, paymentIntent } = handlePaymentParams;
+        const stripeElementMaybe = selectedPaymentFlow !== USE_SAVED_CARD ? { card } : {};
 
-      // Note: For basic USE_SAVED_CARD scenario, we have set it already on API side, when PaymentIntent was created.
-      // However, the payment_method is save here for USE_SAVED_CARD flow if customer first attempted onetime payment
-      const paymentParams =
-        selectedPaymentFlow !== USE_SAVED_CARD
-          ? {
-              payment_method: {
-                billing_details: billingDetails,
-                card: card,
-              },
-            }
-          : { payment_method: stripePaymentMethodId };
+        // Note: For basic USE_SAVED_CARD scenario, we have set it already on API side, when PaymentIntent was created.
+        // However, the payment_method is save here for USE_SAVED_CARD flow if customer first attempted onetime payment
+        const paymentParams =
+          selectedPaymentFlow !== USE_SAVED_CARD
+            ? {
+                payment_method: {
+                  billing_details: billingDetails,
+                  card: card,
+                },
+              }
+            : { payment_method: stripePaymentMethodId };
 
-      const params = {
-        stripePaymentIntentClientSecret,
-        orderId: order.id,
-        stripe,
-        ...stripeElementMaybe,
-        paymentParams,
-      };
+        const params = {
+          stripePaymentIntentClientSecret,
+          orderId: order.id,
+          stripe,
+          ...stripeElementMaybe,
+          paymentParams,
+        };
 
-      // If paymentIntent status is not waiting user action,
-      // confirmCardPayment has been called previously.
-      const hasPaymentIntentUserActionsDone =
-        paymentIntent && STRIPE_PI_USER_ACTIONS_DONE_STATUSES.includes(paymentIntent.status);
-      return hasPaymentIntentUserActionsDone
-        ? Promise.resolve({ transactionId: order.id, paymentIntent })
-        : onConfirmCardPayment(params);
+        // If paymentIntent status is not waiting user action,
+        // confirmCardPayment has been called previously.
+        const hasPaymentIntentUserActionsDone =
+          paymentIntent && STRIPE_PI_USER_ACTIONS_DONE_STATUSES.includes(paymentIntent.status);
+        return hasPaymentIntentUserActionsDone
+          ? Promise.resolve({ transactionId: order.id, paymentIntent })
+          : onConfirmCardPayment(params);
+      } else {
+        const paymentParams = {};
+
+        const params = {
+          orderId: order.id,
+          paymentParams,
+        };
+
+        const hasPaymentIntentUserActionsDone =
+          paymentIntent && STRIPE_PI_USER_ACTIONS_DONE_STATUSES.includes(paymentIntent.status);
+        return onConfirmCardPayment({ ...params, isFree });
+      }
     };
 
     // Step 3: complete order by confirming payment to Marketplace API
@@ -317,6 +334,7 @@ export class CheckoutPageComponent extends Component {
 
     // Step 5: optionally save card as defaultPaymentMethod
     const fnSavePaymentMethod = fnParams => {
+      if (isFree) return { ...fnParams, paymentMethodSaved: true };
       const pi = createdPaymentIntent || paymentIntent;
 
       if (selectedPaymentFlow === PAY_AND_SAVE_FOR_LATER_USE) {
@@ -367,12 +385,14 @@ export class CheckoutPageComponent extends Component {
         : {};
     const quantity = pageData.bookingData?.quantity;
     const quantityMaybe = quantity ? { quantity } : {};
+    const isFreeBooking = pageData.bookingData?.bookingType === 'free';
     const orderParams = {
       listingId: pageData.listing.id,
+      bookingType: pageData.bookingData?.bookingType,
       ...quantityMaybe,
       ...optionalPaymentParams,
     };
-    return handlePaymentIntentCreation(orderParams);
+    return handlePaymentIntentCreation(orderParams, isFreeBooking);
   }
 
   handleSubmit(values) {
@@ -428,8 +448,9 @@ export class CheckoutPageComponent extends Component {
       selectedPaymentMethod: paymentMethod,
       saveAfterOnetimePayment: !!saveAfterOnetimePayment,
     };
+    const isFree = this.state.pageData?.bookingData?.bookingType === 'free';
 
-    this.handlePaymentIntent(requestPaymentParams)
+    this.handlePaymentIntent(requestPaymentParams, isFree)
       .then(res => {
         const { orderId, messageSuccess, paymentMethodSaved } = res;
         this.setState({ submitting: false });
@@ -496,7 +517,7 @@ export class CheckoutPageComponent extends Component {
       retrievePaymentIntentError,
       stripeCustomerFetched,
     } = this.props;
-
+    const isFreeBooking = this.state.pageData?.bookingData?.bookingType === 'free';
     // Since the listing data is already given from the ListingPage
     // and stored to handle refreshes, it might not have the possible
     // deleted or closed information in it. If the transaction
@@ -718,7 +739,7 @@ export class CheckoutPageComponent extends Component {
       ? 'CheckoutPage.perDay'
       : 'CheckoutPage.perUnit';
 
-    const price = currentListing.attributes.price;
+    const price = currentListing.attributes.price ?? new Money(100, config.currency);
     const formattedPrice = formatMoney(intl, price);
     const detailsSubTitle = `${formattedPrice} ${intl.formatMessage({ id: unitTranslationKey })}`;
 
@@ -801,6 +822,7 @@ export class CheckoutPageComponent extends Component {
                   }
                   paymentIntent={paymentIntent}
                   onStripeInitialized={this.onStripeInitialized}
+                  isFreeBooking={isFreeBooking}
                 />
               ) : null}
               {isPaymentExpired ? (
@@ -828,9 +850,16 @@ export class CheckoutPageComponent extends Component {
             </div>
             <div className={css.detailsHeadings}>
               <h2 className={css.detailsTitle}>{listingTitle}</h2>
-              <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
-                <b>Price:</b> {detailsSubTitle}
-              </p>
+
+              {isFreeBooking ? (
+                <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
+                  Free
+                </p>
+              ) : (
+                <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
+                  <b>Price:</b> {detailsSubTitle}
+                </p>
+              )}
               <p className={css.detailsSubtitle}>
                 <b>Start date:</b> {formattedDate}
               </p>

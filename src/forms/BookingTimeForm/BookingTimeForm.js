@@ -51,10 +51,11 @@ export class BookingTimeFormComponent extends Component {
   }
 
   render() {
-    const { rootClassName, className, price: unitPrice, ...rest } = this.props;
+    const { rootClassName, className, price: unitPrice, bookingType, ...rest } = this.props;
     const classes = classNames(rootClassName || css.root, className);
+    const isFreeBooking = bookingType === 'free';
 
-    if (!unitPrice) {
+    if (!unitPrice && !isFreeBooking) {
       return (
         <div className={classes}>
           <p className={css.error}>
@@ -63,7 +64,7 @@ export class BookingTimeFormComponent extends Component {
         </div>
       );
     }
-    if (unitPrice.currency !== config.currency) {
+    if (unitPrice?.currency !== config?.currency && !isFreeBooking) {
       return (
         <div className={classes}>
           <p className={css.error}>

@@ -85,9 +85,11 @@ const BookingPanel = props => {
   const { formattedPrice, priceTitle } = priceData(price, intl);
   const isBook = !!parse(location.search).book;
   const { publicData } = listing.attributes;
-  console.log('BookingPanel props', publicData);
+  // console.log('BookingPanel props', publicData);
   const currentListing = ensureListing(listing);
   const currentAuthor = ensureUser(currentListing.author);
+  const bookingType = publicData?.type;
+  const isFreeBooking = bookingType === 'free';
   const { quantity } = currentListing?.currentStock?.attributes || {};
   let isStockZero = false;
   if (quantity === 0) {
@@ -158,9 +160,17 @@ const BookingPanel = props => {
           </div> */}
           <div className={css.detailsHeadings}>
             <h2 className={css.detailsTitle}>{title}</h2>
-            <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
-              <b>Price:</b> {formattedPrice} per person
-            </p>
+
+            {isFreeBooking ? (
+              <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
+                Free
+              </p>
+            ) : (
+              <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
+                <b>Price:</b>
+                {formattedPrice} per person
+              </p>
+            )}
             <p className={css.detailsSubtitle}>
               <b>Start date:</b> {formattedDate}
             </p>
@@ -190,6 +200,7 @@ const BookingPanel = props => {
             lineItems={lineItems}
             fetchLineItemsInProgress={fetchLineItemsInProgress}
             fetchLineItemsError={fetchLineItemsError}
+            bookingType={bookingType}
           />
         ) : null}
       </ModalInMobile>

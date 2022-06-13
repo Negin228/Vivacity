@@ -9,7 +9,7 @@ const MIN_LENGTH_FOR_LONG_WORDS_IN_DESCRIPTION = 20;
 
 const SectionDescriptionMaybe = props => {
   const { description, languages } = props;
-  console.log(languages);
+  // console.log(languages);
   return description ? (
     <div className={css.sectionDescription}>
       <h2 className={css.descriptionTitle}>

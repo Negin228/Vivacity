@@ -1,5 +1,6 @@
 const { calculateQuantityFromHours, calculateTotalFromLineItems } = require('./lineItemHelpers');
 const { types } = require('sharetribe-flex-sdk');
+
 const { Money } = types;
 
 // This bookingUnitType needs to be one of the following:
@@ -28,6 +29,8 @@ const PROVIDER_COMMISSION_PERCENTAGE = -10;
  * @returns {Array} lineItems
  */
 exports.transactionLineItems = (listing, bookingData) => {
+  const bookingType = bookingData?.bookingType;
+  const isBookingTypePaid = bookingType === 'paid';
   const unitPrice = listing.attributes.price;
   const hasStockReservationQuantity = bookingData && bookingData.stockReservationQuantity;
   const hasQuantity = bookingData && bookingData.quantity;
@@ -59,7 +62,7 @@ exports.transactionLineItems = (listing, bookingData) => {
 
   const booking = {
     code: bookingUnitType,
-    unitPrice,
+    unitPrice: isBookingTypePaid ? unitPrice : new Money(0, 'USD'),
     quantity: orderQuantity,
     includeFor: ['customer', 'provider'],
   };

@@ -246,8 +246,12 @@ export const retrievePaymentIntent = params => dispatch => {
 export const confirmCardPayment = params => dispatch => {
   // It's required to use the same instance of Stripe as where the card has been created
   // so that's why Stripe needs to be passed here and we can't create a new instance.
-  const { stripe, paymentParams, stripePaymentIntentClientSecret } = params;
+  const { stripe, paymentParams, stripePaymentIntentClientSecret, isFree } = params;
   const transactionId = params.orderId;
+  if (isFree) {
+    dispatch(confirmCardPaymentSuccess({ transactionId }));
+    return { transactionId };
+  }
 
   dispatch(confirmCardPaymentRequest());
 

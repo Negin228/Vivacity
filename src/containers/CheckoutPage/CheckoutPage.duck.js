@@ -166,6 +166,7 @@ export const initiateOrder = (orderParams, transactionId) => (dispatch, getState
 
   // If we already have a transaction ID, we should transition, not
   // initiate.
+
   const isTransition = !!transactionId;
   const transition = isTransition
     ? TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY
@@ -176,7 +177,7 @@ export const initiateOrder = (orderParams, transactionId) => (dispatch, getState
     startDate: orderParams.bookingStart,
     endDate: orderParams.bookingEnd,
   };
-  const { quantity, bookingDates, ...otherOrderParams } = orderParams;
+  const { quantity, bookingType, bookingDates, ...otherOrderParams } = orderParams;
   const quantityMaybe = quantity ? { stockReservationQuantity: quantity } : {};
   const bookingParamsMaybe = bookingDates || {};
   const transitionParams = {
@@ -191,7 +192,10 @@ export const initiateOrder = (orderParams, transactionId) => (dispatch, getState
         params: transitionParams,
       }
     : {
-        processAlias: config.bookingProcessAlias,
+        processAlias:
+          bookingType === config.isPaid
+            ? config.bookingProcessAlias
+            : config.freeBookingProcessAlias,
         transition,
         params: transitionParams,
       };
@@ -311,6 +315,7 @@ export const speculateTransaction = (orderParams, transactionId) => (dispatch, g
 
   // If we already have a transaction ID, we should transition, not
   // initiate.
+  const bookingType = orderParams?.bookingType;
   const isTransition = !!transactionId;
   const transition = isTransition
     ? TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY
@@ -333,7 +338,10 @@ export const speculateTransaction = (orderParams, transactionId) => (dispatch, g
         params: transitionParams,
       }
     : {
-        processAlias: config.bookingProcessAlias,
+        processAlias:
+          bookingType == config.isPaid
+            ? config.bookingProcessAlias
+            : config.freeBookingProcessAlias,
         transition,
         params: transitionParams,
       };

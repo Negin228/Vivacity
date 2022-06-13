@@ -101,13 +101,14 @@ export class ListingPageComponent extends Component {
     } = this.props;
     const listingId = new UUID(params.id);
     const listing = getListing(listingId);
-
+    const bookingType = listing?.attributes?.publicData?.type;
     const { bookingStartTime, bookingEndTime, ...restOfValues } = values;
     const bookingStart = timestampToDate(bookingStartTime);
     const bookingEnd = timestampToDate(bookingEndTime);
 
     const bookingData = {
       quantity: 1,
+      bookingType,
       ...restOfValues,
     };
 
