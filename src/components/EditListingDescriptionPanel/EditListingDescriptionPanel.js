@@ -89,12 +89,15 @@ const EditListingDescriptionPanel = props => {
     };
   }, [initialProps]);
 
+  const hasZoom = currentListing?.attributes?.privateData?.zoom;
+
   return (
     <div className={classes}>
       <h1 className={css.title}>{panelTitle}</h1>
       <EditListingDescriptionForm
         className={css.form}
         initialValues={initialValues}
+        hasZoom={hasZoom}
         saveActionMsg={submitButtonText}
         onSubmit={values => {
           const {
@@ -109,6 +112,7 @@ const EditListingDescriptionPanel = props => {
             class_duration,
             type,
           } = values;
+
           const hasStockQuantityChanged = stock && currentStockRaw !== stock;
           const oldTotal = currentStockRaw != null ? currentStockRaw : null;
 
@@ -136,12 +140,12 @@ const EditListingDescriptionPanel = props => {
               languages: languages,
               languagesFilter: [languages.key],
               yogaStyles: yogaStyles,
-              timezone: timezone,
-              startDate: start_date.toISOString(),
+              timezone: hasZoom ? publicData?.timezone : timezone,
+              startDate: hasZoom ? publicData?.startDate : start_date.toISOString(),
               stock: stock,
-              classDuration: class_duration,
-              unixTimeStamp: unix_time_stamp,
-              classDurationFilter: [class_duration.key],
+              classDuration: hasZoom ? publicData?.classDuration : class_duration,
+              unixTimeStamp: hasZoom ? publicData?.unixTimeStamp : unix_time_stamp,
+              classDurationFilter: hasZoom ? publicData?.classDurationFilter : [class_duration.key],
               timeUpdated,
               type: type?.key,
             },
@@ -153,10 +157,10 @@ const EditListingDescriptionPanel = props => {
             languages,
             yogaStyles,
             price,
-            timezone,
-            start_date,
+            timezone: hasZoom ? publicData?.timezone : timezone,
+            start_date: hasZoom ? new Date(publicData?.startDate) : start_date,
             stock,
-            class_duration,
+            class_duration: hasZoom ? publicData.classDuration : class_duration,
             type,
           });
 

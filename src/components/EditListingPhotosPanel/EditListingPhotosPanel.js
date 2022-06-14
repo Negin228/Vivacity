@@ -100,45 +100,95 @@ class EditListingPhotosPanel extends Component {
     //   </Modal>
     // );
 
+    const doesNotHaveZoom = !currentListing?.attributes?.privateData?.zoom;
+
+    const currentPath = location.pathname;
+
+    const zoomMeetingScheduleContent = (
+      <div>
+        <h1>Zoom Meeting</h1>
+        <p className="leading-snug">
+          In order to proceed further, you need to authorize us via zoom so that we can schedule a
+          meeting on your behalf.
+        </p>
+
+        <ExternalLink
+          href={`https://zoom.us/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_ZOOM_CLIENT_ID}&redirect_uri=http://localhost:3500/api/auth/callback/zoom?backurl=${currentPath}`}
+          target="_self"
+        >
+          Continue with zoom login
+        </ExternalLink>
+      </div>
+    );
+
+    const startUrl = currentListing?.attributes?.privateData?.zoom?.start_url;
+    const joinUrl = currentListing?.attributes?.privateData?.zoom?.join_url;
+
+    const zoomContent = startUrl && joinUrl && (
+      <div className="bg-green-100 mb-8 max-w-lg text-green-700 border border-solid border-green-300 rounded p-4 inline-block">
+        <h2 className="my-0 text-lg">Scheduled zoom meeting</h2>
+        <div className="my-0 text-sm flex gap-3  mt-2">
+          <span>Start URL:</span>{' '}
+          <ExternalLink href={startUrl} className="break-words">
+            {startUrl?.slice(0, 40) + '...'}
+          </ExternalLink>
+        </div>
+        <div className="my-0 text-sm flex gap-3">
+          <span>Join URL:</span>
+          {'  '}
+          <ExternalLink href={joinUrl} className="break-words">
+            {joinUrl?.slice(0, 40) + '...'}
+          </ExternalLink>
+        </div>
+      </div>
+    );
+
     return (
       <div className={classes}>
-        <h1 className={css.title}>{panelTitle}</h1>
-        <EditListingPhotosForm
-          className={css.form}
-          disabled={disabled}
-          ready={ready}
-          fetchErrors={errors}
-          currentListingId={currentListingId}
-          initialValues={{ images }}
-          images={images}
-          onImageUpload={onImageUpload}
-          onSubmit={values => {
-            const { addImage, ...updateValues } = values;
-            // onSubmit(updateValues);
+        {doesNotHaveZoom ? (
+          zoomMeetingScheduleContent
+        ) : (
+          <>
+            <h1 className={css.title}>{panelTitle}</h1>
+            {zoomContent}
+            <EditListingPhotosForm
+              className={css.form}
+              disabled={disabled}
+              ready={ready}
+              fetchErrors={errors}
+              currentListingId={currentListingId}
+              initialValues={{ images }}
+              images={images}
+              onImageUpload={onImageUpload}
+              onSubmit={values => {
+                const { addImage, ...updateValues } = values;
+                // onSubmit(updateValues);
 
-            const shouldShowZoomModal = doesntHaveZoom || timeUpdated;
+                // const shouldShowZoomModal = doesntHaveZoom || timeUpdated;
 
-            if (shouldShowZoomModal) {
-              this.setState({
-                publishData: updateValues,
-                zoomModalOpen: true,
-              });
-            } else {
-              onSubmit(updateValues);
-            }
-          }}
-          onChange={onChange}
-          onUpdateImageOrder={onUpdateImageOrder}
-          onRemoveImage={onRemoveImage}
-          saveActionMsg={submitButtonText}
-          updated={panelUpdated}
-          updateInProgress={updateInProgress}
-        />
+                // if (shouldShowZoomModal) {
+                //   this.setState({
+                //     publishData: updateValues,
+                //     zoomModalOpen: true,
+                //   });
+                // } else {
+                onSubmit(updateValues);
+                // }
+              }}
+              onChange={onChange}
+              onUpdateImageOrder={onUpdateImageOrder}
+              onRemoveImage={onRemoveImage}
+              saveActionMsg={submitButtonText}
+              updated={panelUpdated}
+              updateInProgress={updateInProgress}
+            />
+          </>
+        )}
         {/* {modal} */}
-        <ZoomPopupModal
+        {/* <ZoomPopupModal
           open={this.state.zoomModalOpen}
           onClose={() => this.setState({ zoomModalOpen: false })}
-        />
+        /> */}
       </div>
     );
   }

@@ -15,3 +15,12 @@
 
 .textarea {
 }
+
+.disabled {
+  border-bottom-color: var(--matterColorAnti);
+  color: var(--matterColorAnti);
+  cursor: not-allowed;
+  &:hover {
+    border-bottom-color: var(--matterColorAnti) !important;
+  }
+}

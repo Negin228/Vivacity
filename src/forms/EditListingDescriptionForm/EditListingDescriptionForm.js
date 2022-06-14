@@ -51,8 +51,9 @@ const EditListingDescriptionFormComponent = props => (
         updateInProgress,
         fetchErrors,
         values,
+        hasZoom,
       } = formRenderProps;
-      console.log({ values });
+      // console.log({ values });
       const unitType = config.bookingUnitType;
       const isNightly = unitType === LINE_ITEM_NIGHT;
       const isDaily = unitType === LINE_ITEM_DAY;
@@ -217,33 +218,39 @@ const EditListingDescriptionFormComponent = props => (
             />
           ) : null}
           {/* date and availability section */}
-          <FieldTimeZoneSelect
-            id="timezone"
-            name="timezone"
-            label="Time Zone"
-            placeholder="Select time zone"
-            style={{ marginBottom: '32px' }}
-          />
-          <Datepicker
-            className={css.title}
-            id="start_date"
-            name="start_date"
-            label="Start Date"
-            placeholder="Enter start date"
-            minDate={new Date()}
-            style={{ marginBottom: '32px' }}
-            validate={composeValidators(required('Start date is required'))}
-          />
-          <FieldSelectModern
-            className={css.features}
-            id="class_duration"
-            name="class_duration"
-            label="Duration Of Class"
-            options={config.custom.durationOptions}
-            placeholder="Select duration"
-            validate={fieldSelectModernRequired('Please select a duration')}
-            isSearchable={true}
-          />
+
+          <fieldset disabled={hasZoom} className={css.fieldset}>
+            <FieldTimeZoneSelect
+              id="timezone"
+              name="timezone"
+              label="Time Zone"
+              placeholder="Select time zone"
+              style={{ marginBottom: '32px' }}
+              disabled={hasZoom}
+            />
+            <Datepicker
+              className={css.title}
+              id="start_date"
+              name="start_date"
+              label="Start Date"
+              placeholder="Enter start date"
+              minDate={new Date()}
+              style={{ marginBottom: '32px' }}
+              validate={composeValidators(required('Start date is required'))}
+              disabled={hasZoom}
+            />
+            <FieldSelectModern
+              className={css.features}
+              id="class_duration"
+              name="class_duration"
+              label="Duration Of Class"
+              options={config.custom.durationOptions}
+              placeholder="Select duration"
+              validate={fieldSelectModernRequired('Please select a duration')}
+              isSearchable={true}
+              disabled={hasZoom}
+            />
+          </fieldset>
           <FieldTextInput
             className={css.title}
             id="stock"
