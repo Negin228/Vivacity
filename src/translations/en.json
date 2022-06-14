@@ -1129,5 +1129,6 @@
   "UserNav.contactDetailsPage": "Account settings",
   "TopbarDesktop.yourListingsLink": "Your listings",
   "ManageListingsPage.yourListings": "Your listings",
-  "SectionUpcomingClasses.title": "Upcoming classes"
+  "SectionUpcomingClasses.title": "Upcoming classes",
+  "ListingCard.free": "Free"
 }

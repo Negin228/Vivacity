@@ -56,6 +56,14 @@
   flex-shrink: 0;
   margin-right: 18px;
 }
+.freeText {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: 18px;
+}
 
 .priceValue {
   /* Font */

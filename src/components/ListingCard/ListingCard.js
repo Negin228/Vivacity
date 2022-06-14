@@ -63,6 +63,8 @@ export const ListingCardComponent = props => {
   const slug = createSlug(title);
   const firstImage =
     currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
+  const { type } = publicData ?? {};
+  const isFree = type === 'free';
 
   const certificateOptions = findOptionsForSelectFilter('certificate', filtersConfig);
   const certificate = publicData
@@ -98,14 +100,23 @@ export const ListingCardComponent = props => {
         </div>
       </div>
       <div className={css.info}>
-        <div className={css.price}>
-          <div className={css.priceValue} title={priceTitle}>
-            {formattedPrice}
+        {isFree ? (
+          <div className={css.price}>
+            <div className={css.priceValue} title={priceTitle}>
+              <FormattedMessage id="ListingCard.free" />
+            </div>
+            <div className={css.perUnit}>{/* <FormattedMessage id={unitTranslationKey} /> */}</div>
           </div>
-          <div className={css.perUnit}>
-            <FormattedMessage id={unitTranslationKey} />
+        ) : (
+          <div className={css.price}>
+            <div className={css.priceValue} title={priceTitle}>
+              {formattedPrice}
+            </div>
+            <div className={css.perUnit}>
+              <FormattedMessage id={unitTranslationKey} />
+            </div>
           </div>
-        </div>
+        )}
         <div className={css.mainInfo}>
           <div className={css.title}>
             {richText(title, {
