@@ -24,6 +24,7 @@ function DatepickerComponent(props) {
     inputRef,
     placeholder,
     minDate,
+    disabled = false,
     ...rest
   } = props;
   /* eslint-enable no-unused-vars */
@@ -56,6 +57,7 @@ function DatepickerComponent(props) {
       [css.inputSuccess]: valid,
       [css.inputError]: hasError,
       [css.textarea]: isTextarea,
+      [css.disabled]: disabled,
     });
   const maxLength = CONTENT_MAX_LENGTH;
   const inputProps = isUncontrolled
@@ -85,6 +87,7 @@ function DatepickerComponent(props) {
         timeInputLabel="Time:"
         dateFormat="MM/dd/yyyy h:mm aa"
         showTimeInput
+
         // dateFormat="d-MMMM-yyyy "
       />
 

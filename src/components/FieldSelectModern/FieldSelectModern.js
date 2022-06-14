@@ -25,6 +25,7 @@ class FieldSelectModernComponent extends Component {
       isUncontrolled,
       inputRef,
       subHeading,
+
       ...rest
     } = this.props;
     /* eslint-enable no-unused-vars */
@@ -62,6 +63,7 @@ class FieldSelectModernComponent extends Component {
         [css.inputSuccess]: valid,
         [css.inputError]: hasError,
         [css.textarea]: isTextarea,
+        // [css.disabled]: disabled,
       });
     const maxLength = CONTENT_MAX_LENGTH;
     const inputProps = isTextarea
@@ -88,14 +90,17 @@ class FieldSelectModernComponent extends Component {
 
     const classes = classNames(rootClassName || css.root, className);
     return (
-      <div className={classes} style={disabled ? { pointerEvents: 'none', opacity: '0.4' } : {}}>
+      <div className={classes}>
         {label ? (
           <label htmlFor={id} style={{ marginBottom: '1rem' }}>
             {label}
           </label>
         ) : null}
-        <p className={css.subHeading}>{subHeading}</p>
-        <Select styles={customStyles} {...inputProps} />
+        <div style={disabled ? { pointerEvents: 'none', opacity: '0.4' } : {}}>
+          <p className={css.subHeading}>{subHeading}</p>
+          <Select styles={customStyles} {...inputProps} disabled={true} />
+        </div>
+
         <ValidationError fieldMeta={fieldMeta} />
       </div>
     );
