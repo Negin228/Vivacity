@@ -178,6 +178,7 @@ export const initiateOrder = (orderParams, transactionId) => (dispatch, getState
     endDate: orderParams.bookingEnd,
   };
   const { quantity, bookingType, bookingDates, ...otherOrderParams } = orderParams;
+  console.log({ quantity, bookingType, bookingDates, orderParams });
   const quantityMaybe = quantity ? { stockReservationQuantity: quantity } : {};
   const bookingParamsMaybe = bookingDates || {};
   const transitionParams = {

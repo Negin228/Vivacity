@@ -30,7 +30,7 @@ const PROVIDER_COMMISSION_PERCENTAGE = -10;
  */
 exports.transactionLineItems = (listing, bookingData) => {
   const bookingType = bookingData?.bookingType;
-  const isBookingTypePaid = bookingType === 'paid';
+  const isBookingFree = bookingType === 'free';
   const unitPrice = listing.attributes.price;
   const hasStockReservationQuantity = bookingData && bookingData.stockReservationQuantity;
   const hasQuantity = bookingData && bookingData.quantity;
@@ -62,7 +62,7 @@ exports.transactionLineItems = (listing, bookingData) => {
 
   const booking = {
     code: bookingUnitType,
-    unitPrice: isBookingTypePaid ? unitPrice : new Money(0, 'USD'),
+    unitPrice: isBookingFree ? new Money(0, 'USD') : unitPrice,
     quantity: orderQuantity,
     includeFor: ['customer', 'provider'],
   };
@@ -74,6 +74,6 @@ exports.transactionLineItems = (listing, bookingData) => {
   };
 
   const lineItems = [booking, providerCommission];
-
+  console.log('lineItems', lineItems);
   return lineItems;
 };

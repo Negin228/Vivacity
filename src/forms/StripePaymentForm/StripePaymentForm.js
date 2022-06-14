@@ -363,8 +363,9 @@ class StripePaymentForm extends Component {
       form,
       hasHandledCardPayment,
       defaultPaymentMethod,
+      isFreeBooking,
     } = formRenderProps;
-
+    console.log({ isFreeBooking });
     this.finalFormAPI = form;
 
     const ensuredDefaultPaymentMethod = ensurePaymentMethodCard(defaultPaymentMethod);
@@ -433,7 +434,7 @@ class StripePaymentForm extends Component {
     const hasStripeKey = config.stripe.publishableKey;
     return hasStripeKey ? (
       <Form className={classes} onSubmit={handleSubmit} enforcePagePreloadFor="OrderDetailsPage">
-        {billingDetailsNeeded && !loadingData ? (
+        {billingDetailsNeeded && !loadingData && !isFreeBooking ? (
           <React.Fragment>
             {hasDefaultPaymentMethod ? (
               <PaymentMethodSelector
