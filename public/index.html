@@ -28,6 +28,30 @@
      /**
       * Poppins font is downloaded from Google Fonts but served from sharetribe.com / CDN
       */
+      .rts___tab{
+        padding: 0 !important;
+        margin: 0 !important;  
+        cursor: default !important;
+      } 
+      .rts___btn{
+        border: none !important;
+        border-radius: 4px !important;
+        margin-right: 0px !important;
+      }
+      /* .rts___btn:hover{
+        background-color: none !important;
+        color: #fff !important;
+      } */
+      .rts___nav___btn:hover{
+        background-color: var(--marketplaceColor) !important;
+        color: #fff !important;
+      }
+     .rts___tab___selected{
+       background-color:white !important;
+       cursor: default !important;
+       box-shadow: none !important;
+       color: var(--matterColor) !important;
+     }
 
       @font-face {
         /* 'Poppins-Regular' */
@@ -81,6 +105,7 @@
     <link rel="stylesheet" href="%PUBLIC_URL%/static/react-collapse.css" />
     <link rel="stylesheet" href="%PUBLIC_URL%/static/react-datepicker.css" />
     <link rel="stylesheet" href="%PUBLIC_URL%/static/ReactToastify.css">
+    <link rel="stylesheet" href="%PUBLIC_URL%/static/rts.css" />
   </head>
   <body>
     <div id="root"><!--!body--></div>

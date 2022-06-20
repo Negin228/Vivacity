@@ -28,13 +28,16 @@
   }
 }
 
-.stepTitle {
+.hey {
   margin-top: 18px;
   margin-bottom: 18px;
 
   @media (--viewportMedium) {
     margin-top: 21px;
     margin-bottom: 18px;
+  }
+  & :hover {
+    color: var(--matterColor) !important;
   }
 }
 
@@ -53,55 +56,40 @@
   padding: 0px 10px;
 }
 .container {
-  display: flex;
-  width: 100%;
-  max-width: 100%;
-  overflow: scroll;
-  gap: 54px;
-  overflow-y: hidden;
-  scroll-behavior: smooth;
-  @media (--viewportMedium) {
-    overflow: hidden;
-  }
+  margin: 0 1rem;
   /* margin: 0rem 3rem; */
-}
-.container::-webkit-scrollbar {
-  display: none; /* for Chrome, Safari, and Opera */
 }
 .mainContainer {
   display: flex;
-}
-.left {
-  display: none;
-  @media (--viewportMedium) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-right: 0.5rem;
-    height: 100px;
-  }
-}
-.right {
-  display: none;
-  @media (--viewportMedium) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-left: 0.5rem;
-    height: 100px;
-  }
 }
 .logo {
   color: var(--marketplaceColor);
   font-weight: 600;
   font-size: 2rem;
-  &:hover {
-    cursor: pointer;
-    color: var(--marketplaceColorDark);
-  }
 }
 .logoDisbaled {
   color: lightgray;
   font-weight: 600;
   font-size: 2rem;
+}
+.error {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  margin-top: 1rem;
+  color: red;
+  font-weight: normal;
+  font-size: 1rem;
+}
+
+.loadingContainer {
+  min-height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & p {
+    & svg {
+      height: 40px;
+    }
+  }
 }

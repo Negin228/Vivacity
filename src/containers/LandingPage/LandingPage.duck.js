@@ -110,7 +110,10 @@ export const getAllTrainers = () => async (dispatch, getState) => {
         const denormalisedResponse = denormalisedResponseEntities(res);
         dispatch(fetchTrainerSuccess(denormalisedResponse));
       })
-      .catch(e => console.log('error in trainer duck method: ', e));
+      .catch(e => {
+        console.log('hehhehe');
+        dispatch(fetchTrainerError(storableError(e)));
+      });
   } catch (err) {
     console.log('error in catch for trainers, landing duck: ', err);
     dispatch(fetchTrainerError(storableError(err)));

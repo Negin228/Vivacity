@@ -5,76 +5,35 @@ import { propTypes } from '../../util/types';
 import image from './no-profile-pic.png';
 import css from './SectionTrainers.module.css';
 import { BsArrowLeftCircle, BsArrowRightCircle } from 'react-icons/bs';
+import { IconSpinner } from '../../components';
+import SimpleTabs from './SimpleTabs';
 
 const SectionTrainers = props => {
-  const { rootClassName, className, trainers, trainersLoading, trainersError } = props;
+  const { rootClassName, className, trainers, loading, error } = props;
   const classes = classNames(rootClassName || css.root, className);
-  const [scroll, setScroll] = useState(null);
-  const [scrollRight, setScrollRight] = useState();
-  const logoContainerRef = useRef(null);
-
-  const numberOfCards = logoContainerRef?.current?.childNodes?.length;
-  const slider = logoContainerRef.current?.scrollWidth;
-
-  useEffect(() => {
-    if (numberOfCards > 7) {
-      setScrollRight(false);
-    } else {
-      setScrollRight(true);
-    }
-  }, [numberOfCards]);
-  function rightButton() {
-    logoContainerRef.current.scrollLeft += 300;
-    var div = logoContainerRef.current.scrollLeft;
-    setScroll(div);
-    if (slider / 3 - 300 <= scroll) {
-      setScrollRight(true);
-    }
+  if (error) {
+    return (
+      <div>
+        <span className={css.error}>
+          Failed to load trainers. Please refresh the page to fix the problem.
+        </span>
+      </div>
+    );
   }
-  function leftButton() {
-    logoContainerRef.current.scrollLeft -= 300;
-    var div = (logoContainerRef.current.scrollLeft -= 300);
-    setScroll(div);
-    setScrollRight(false);
-    if (div === 0 || div < 0) {
-      setScroll(null);
-    }
+  if (loading) {
+    return (
+      <div className={css.loadingContainer}>
+        <p>
+          <IconSpinner style={{ style: { height: '50px', width: '50px' } }} />
+        </p>
+      </div>
+    );
   }
+
   return (
     <div className={classes}>
       <div className={css.title}>Our Trainers</div>
-
-      <div className={css.mainContainer}>
-        <div
-          id="slideLeft"
-          onClick={e => leftButton()}
-          className={css.left}
-          style={{ marginTop: '40px' }}
-        >
-          <BsArrowLeftCircle className={scroll === null ? css.logoDisbaled : css.logo} />
-        </div>
-        <div className={css.container} ref={logoContainerRef} id="logocontainer">
-          {(trainers ?? [])?.map((trainer, index) => (
-            <div key={index} id="logocontainer">
-              <img
-                src={trainer.trainerProfileImage ? trainer.trainerProfileImage : image}
-                style={{ width: '180px', borderRadius: '50%', height: '180px' }}
-              />
-              <h2 style={{ marginLeft: '35px' }} className={css.stepTitle}>
-                {trainer.trainerName}
-              </h2>
-            </div>
-          ))}
-        </div>
-        <div
-          id="slideRight"
-          onClick={e => rightButton()}
-          className={css.right}
-          style={{ marginTop: '40px' }}
-        >
-          <BsArrowRightCircle className={scrollRight ? css.logoDisbaled : css.logo} />
-        </div>
-      </div>
+      <SimpleTabs trainers={trainers} image={image} style={css.hey} container={css.container} />
     </div>
   );
 };

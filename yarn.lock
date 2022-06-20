@@ -12436,6 +12436,11 @@ react-select@^5.3.0:
     prop-types "^15.6.0"
     react-transition-group "^4.3.0"
 
+react-tabs-scrollable@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/react-tabs-scrollable/-/react-tabs-scrollable-1.0.8.tgz#a68d15c43d895af057188571e5f04e5463454833"
+  integrity sha512-iWD7UfJQpkI+9KBHRRDgNvkH6Wq10/5oAoctl6g/O86rMiPUUUAhB1sitwuR0Nqp4KGRTlfNp16EZnCBFyhvgQ==
+
 react-test-renderer@^16.0.0-0, react-test-renderer@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.13.1.tgz#de25ea358d9012606de51e012d9742e7f0deabc1"
