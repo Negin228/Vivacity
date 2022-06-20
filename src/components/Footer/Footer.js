@@ -97,6 +97,21 @@ const Footer = props => {
                     <FormattedMessage id="Footer.toAboutPage" />
                   </NamedLink>
                 </li>
+                <li className={css.listItem}>
+                  <NamedLink name="HowItWorks" className={css.link}>
+                    How It Works
+                  </NamedLink>
+                </li>
+                <li className={css.listItem}>
+                  <NamedLink name="ContactPage" className={css.link}>
+                    <FormattedMessage id="Footer.toContactPage" />
+                  </NamedLink>
+                </li>
+                <li className={css.listItem}>
+                  <NamedLink name="PrivacyPolicyPage" className={css.legalLink}>
+                    <FormattedMessage id="Footer.privacyPolicy" />
+                  </NamedLink>
+                </li>
                 {/* <li className={css.listItem}>
                   <NamedLink name="LandingPage" className={css.link}>
                     <FormattedMessage id="Footer.toFAQPage" />
@@ -111,16 +126,6 @@ const Footer = props => {
             </div>
             <div className={css.searches}>
               <ul className={css.list}>
-                <li className={css.listItem}>
-                  <NamedLink name="HowItWorks" className={css.link}>
-                    How It Works
-                  </NamedLink>
-                </li>
-                <li className={css.listItem}>
-                  <NamedLink name="ContactPage" className={css.link}>
-                    <FormattedMessage id="Footer.toContactPage" />
-                  </NamedLink>
-                </li>
                 {/* <li className={css.listItem}>
                   <NamedLink
                     name="SearchPage"
@@ -255,11 +260,6 @@ const Footer = props => {
                       <FormattedMessage id="Footer.termsOfUse" />
                     </NamedLink>
                   </li> */}
-                <li>
-                  <NamedLink name="PrivacyPolicyPage" className={css.legalLink}>
-                    <FormattedMessage id="Footer.privacyPolicy" />
-                  </NamedLink>
-                </li>
               </ul>
             </div>
           </div>
