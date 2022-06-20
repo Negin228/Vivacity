@@ -131,11 +131,13 @@ const EditListingDescriptionPanel = props => {
           const startDateISO = start_date.toISOString();
           const selectedDate = moment(startDateISO).tz(timezone);
           const unix_time_stamp = selectedDate.unix();
+          const priceMaybe = type?.key === config.isPaid ? { price } : {};
           const updateValues = {
             ...stockUpdateMaybe,
             title: title,
             description,
-            price: type?.key === config.isPaid ? price : null,
+            // price: type?.key === config.isPaid ? price : null,
+            ...priceMaybe,
             publicData: {
               languages: languages,
               languagesFilter: [languages.key],
