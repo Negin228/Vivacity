@@ -347,7 +347,7 @@ export const ManageListingCardComponent = props => {
             <FormattedMessage id="ManageListingCard.editListing" />
           </NamedLink>
 
-          {availabilityEnabled ? (
+          {/* {availabilityEnabled ? (
             <React.Fragment>
               <span className={css.manageLinksSeparator}>{' • '}</span>
 
@@ -359,7 +359,7 @@ export const ManageListingCardComponent = props => {
                 <FormattedMessage id="ManageListingCard.manageAvailability" />
               </NamedLink>
             </React.Fragment>
-          ) : null}
+          ) : null} */}
         </div>
       </div>
     </div>

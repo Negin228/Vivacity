@@ -38,6 +38,7 @@ export const typeOptions = [
 ];
 export const durationOptions = [
   { key: '30_min', value: '30_min', label: '30 min' },
+  { key: '45_min', value: '45_min', label: '45 min' },
   { key: '60_min', value: '60_min', label: '1 hour' },
   { key: '90_min', value: '90_min', label: '90 min' },
 ];
@@ -969,7 +970,19 @@ export const languages = [
   },
 ];
 
-export const workoutTypes = [{ key: 'yoga', label: 'Yoga' }, { key: 'stretch', label: 'Stretch' }];
+export const workoutTypes = [
+  { key: 'acroyoga', label: 'Acroyoga' },
+  { key: 'aerobic', label: 'Aerobic' },
+  { key: 'balance_stability', label: 'Balance and Stability' },
+  { key: 'dance', label: 'Dance' },
+  { key: 'flexibility_mobility', label: 'Flexibility and Mobility' },
+  { key: 'hiit', label: 'HIIT' },
+  { key: 'indoor_cycling', label: 'Indoor Cycling' },
+  { key: 'strength', label: 'Strength Training' },
+  { key: 'stretch', label: 'Stretch' },
+  { key: 'yoga', label: 'Yoga' },
+  { key: 'other', label: 'Other' },
+];
 
 export const filters = [
   // {

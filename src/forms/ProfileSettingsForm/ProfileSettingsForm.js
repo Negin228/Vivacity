@@ -245,9 +245,9 @@ class ProfileSettingsFormComponent extends Component {
                     );
                   }}
                 </Field>
-                <div className={css.tip}>
+                {/* <div className={css.tip}>
                   <FormattedMessage id="ProfileSettingsForm.tip" />
-                </div>
+                </div> */}
                 <div className={css.fileInfo}>
                   <FormattedMessage id="ProfileSettingsForm.fileInfo" />
                 </div>

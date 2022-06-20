@@ -50,10 +50,10 @@ const EditListingDescriptionFormComponent = props => (
         updated,
         updateInProgress,
         fetchErrors,
-        values,
         hasZoom,
+        values,
       } = formRenderProps;
-      // console.log({ values });
+
       const unitType = config.bookingUnitType;
       const isNightly = unitType === LINE_ITEM_NIGHT;
       const isDaily = unitType === LINE_ITEM_DAY;
@@ -110,9 +110,6 @@ const EditListingDescriptionFormComponent = props => (
           id: 'EditListingPricingForm.priceRequired',
         })
       );
-      const priceValidators = config.listingMinimumPriceSubUnits
-        ? validators.composeValidators(priceRequired, minPriceRequired)
-        : priceRequired;
       const minPrice = new Money(config.listingMinimumPriceSubUnits, config.currency);
       const minPriceRequired = validators.moneySubUnitAmountAtLeast(
         intl.formatMessage(
@@ -125,6 +122,9 @@ const EditListingDescriptionFormComponent = props => (
         ),
         config.listingMinimumPriceSubUnits
       );
+      const priceValidators = config.listingMinimumPriceSubUnits
+        ? validators.composeValidators(priceRequired, minPriceRequired)
+        : priceRequired;
       const errorMessageUpdateListing = updateListingError ? (
         <p className={css.error}>
           <FormattedMessage id="EditListingDescriptionForm.updateFailed" />
@@ -160,8 +160,8 @@ const EditListingDescriptionFormComponent = props => (
             name="title"
             className={css.title}
             type="text"
-            label="Name Of Class"
-            placeholder="Enter Name Of Class"
+            label="Name of class"
+            placeholder="Enter name of class. e.g. Vinyasa yoga"
             maxLength={TITLE_MAX_LENGTH}
             validate={composeValidators(required(titleRequiredMessage), maxLength60Message)}
             autoFocus
@@ -181,7 +181,7 @@ const EditListingDescriptionFormComponent = props => (
             className={css.features}
             id="languages"
             name="languages"
-            label="Languages"
+            label="Language"
             options={config.custom.languages}
             placeholder="Select a language"
             validate={fieldSelectModernRequired('Please select a language')}
@@ -192,9 +192,10 @@ const EditListingDescriptionFormComponent = props => (
             className={css.features}
             id="yogaStyles"
             name="yogaStyles"
-            label="Yoga Styles"
+            label="Workout Type"
             options={config.custom.workoutTypes}
           />
+          {/* pricing section  */}
           <FieldSelectModern
             className={css.features}
             id="type"
@@ -204,7 +205,6 @@ const EditListingDescriptionFormComponent = props => (
             placeholder="Select a type"
             validate={fieldSelectModernRequired('Please select a type')}
           />
-          {/* pricing section  */}
           {values?.type?.key === config.isPaid ? (
             <FieldCurrencyInput
               id="price"
@@ -218,7 +218,6 @@ const EditListingDescriptionFormComponent = props => (
             />
           ) : null}
           {/* date and availability section */}
-
           <fieldset disabled={hasZoom} className={css.fieldset}>
             <FieldTimeZoneSelect
               id="timezone"
@@ -232,8 +231,8 @@ const EditListingDescriptionFormComponent = props => (
               className={css.title}
               id="start_date"
               name="start_date"
-              label="Start Date"
-              placeholder="Enter start date"
+              label="Date and Time"
+              placeholder="Choose date and time"
               minDate={new Date()}
               style={{ marginBottom: '32px' }}
               validate={composeValidators(required('Start date is required'))}
@@ -243,7 +242,7 @@ const EditListingDescriptionFormComponent = props => (
               className={css.features}
               id="class_duration"
               name="class_duration"
-              label="Duration Of Class"
+              label="Class Duration"
               options={config.custom.durationOptions}
               placeholder="Select duration"
               validate={fieldSelectModernRequired('Please select a duration')}
@@ -255,8 +254,8 @@ const EditListingDescriptionFormComponent = props => (
             className={css.title}
             id="stock"
             name="stock"
-            label="Seats"
-            placeholder="Enter No Of Seats"
+            label="Capacity"
+            placeholder="How many students can attend this class?"
             type="number"
             min={0}
             validate={stockValidator}

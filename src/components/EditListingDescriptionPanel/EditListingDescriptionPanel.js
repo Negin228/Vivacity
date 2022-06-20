@@ -135,7 +135,7 @@ const EditListingDescriptionPanel = props => {
             ...stockUpdateMaybe,
             title: title,
             description,
-            price: type?.key === config.isPaid ? price : null,
+            price: type?.key === config.isPaid ? price : undefined,
             publicData: {
               languages: languages,
               languagesFilter: [languages.key],

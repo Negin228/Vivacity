@@ -4,12 +4,18 @@ import classNames from 'classnames';
 import { FormattedMessage } from '../../util/reactIntl';
 import { propTypes } from '../../util/types';
 import { OwnListingLink } from '../../components';
-
+import { NamedLink } from '../../components';
 import css from './SectionHowItWorks.module.css';
 
 const SectionHowItWorks = props => {
   const { rootClassName, className, currentUserListing, currentUserListingFetched } = props;
-
+  const routeLink = (name, text) => {
+    return (
+      <NamedLink name={name}>
+        <span>{text}</span>
+      </NamedLink>
+    );
+  };
   const classes = classNames(rootClassName || css.root, className);
   return (
     <div className={classes}>
@@ -25,7 +31,9 @@ const SectionHowItWorks = props => {
             <FormattedMessage id="SectionHowItWorks.part1Title" />
           </h2>
           <p>
-            <FormattedMessage id="SectionHowItWorks.part1Text" />
+            Start by signing up {routeLink('SignupPage', '(Link)')} as a student, then, search for a
+            class. Once you find a class you like, simply book it by making a payment. All our
+            classes are live, engaging, and most importantly, fun!
           </p>
         </div>
 
@@ -48,9 +56,8 @@ const SectionHowItWorks = props => {
         </div>
       </div>
       <div className={css.createListingLink}>
-        <OwnListingLink listing={currentUserListing} listingFetched={currentUserListingFetched}>
-          <FormattedMessage id="SectionHowItWorks.createListingLink" />
-        </OwnListingLink>
+        {routeLink('SearchPage', 'Are you an instructor? Schedule a class!')}
+        {/* <FormattedMessage id="SectionHowItWorks.createListingLink" /> */}
       </div>
     </div>
   );
