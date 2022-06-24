@@ -8,6 +8,7 @@ import config from '../../config';
 import routeConfiguration from '../../routeConfiguration';
 import { withViewport } from '../../util/contextHelpers';
 import { parse, stringify } from '../../util/urlHelpers';
+import { isMainSearchTypeKeywords, isOriginInUse } from '../../util/search';
 import { createResourceLocatorString, pathByRouteName } from '../../util/routes';
 import { propTypes } from '../../util/types';
 import {
@@ -93,21 +94,44 @@ class TopbarComponent extends Component {
     redirectToURLWithoutModalState(this.props, 'mobilesearch');
   }
 
+  // handleSubmit(values) {
+  //   const { currentSearchParams } = this.props;
+  //   const { search, selectedPlace } = values.location;
+  //   const { history } = this.props;
+  //   const { origin, bounds } = selectedPlace;
+  //   const originMaybe = config.sortSearchByDistance ? { origin } : {};
+  //   const searchParams = {
+  //     ...currentSearchParams,
+  //     ...originMaybe,
+  //     address: search,
+  //     bounds,
+  //   };
+  //   history.push(createResourceLocatorString('SearchPage', routeConfiguration(), {}, searchParams));
+  // }
   handleSubmit(values) {
     const { currentSearchParams } = this.props;
-    const { search, selectedPlace } = values.location;
     const { history } = this.props;
-    const { origin, bounds } = selectedPlace;
-    const originMaybe = config.sortSearchByDistance ? { origin } : {};
+    const topbarSearchParams = () => {
+      if (isMainSearchTypeKeywords(config)) {
+        return { keywords: values?.keywords };
+      }
+      // topbar search defaults to 'location' search
+      const { search, selectedPlace } = values?.location;
+      const { origin, bounds } = selectedPlace;
+      const originMaybe = isOriginInUse(config) ? { origin } : {};
+
+      return {
+        ...originMaybe,
+        address: search,
+        bounds,
+      };
+    };
     const searchParams = {
       ...currentSearchParams,
-      ...originMaybe,
-      address: search,
-      bounds,
+      ...topbarSearchParams(),
     };
     history.push(createResourceLocatorString('SearchPage', routeConfiguration(), {}, searchParams));
   }
-
   handleLogout() {
     const { onLogout, history } = this.props;
     onLogout().then(() => {
@@ -152,11 +176,11 @@ class TopbarComponent extends Component {
       showGenericError,
     } = this.props;
 
-    const { mobilemenu, mobilesearch, address, origin, bounds } = parse(location.search, {
+    const { mobilemenu, mobilesearch, keywords, address, origin, bounds } = parse(location.search, {
       latlng: ['origin'],
       latlngBounds: ['bounds'],
     });
-
+    console.log('keyword', keywords);
     const notificationDot = notificationCount > 0 ? <div className={css.notificationDot} /> : null;
 
     const isMobileLayout = viewport.width < MAX_MOBILE_SCREEN_WIDTH;
@@ -180,14 +204,26 @@ class TopbarComponent extends Component {
     const locationFieldsPresent = config.sortSearchByDistance
       ? address && origin && bounds
       : address && bounds;
-    const initialSearchFormValues = {
-      location: locationFieldsPresent
-        ? {
-            search: address,
-            selectedPlace: { address, origin, bounds },
-          }
-        : null,
+
+    const topbarSearcInitialValues = () => {
+      if (isMainSearchTypeKeywords(config)) {
+        return { keywords };
+      }
+
+      // Only render current search if full place object is available in the URL params
+      const locationFieldsPresent = isOriginInUse(config)
+        ? address && origin && bounds
+        : address && bounds;
+      return {
+        location: locationFieldsPresent
+          ? {
+              search: address,
+              selectedPlace: { address, origin, bounds },
+            }
+          : null,
+      };
     };
+    const initialSearchFormValues = topbarSearcInitialValues();
 
     const classes = classNames(rootClassName || css.root, className);
 
@@ -238,6 +274,7 @@ class TopbarComponent extends Component {
             notificationCount={notificationCount}
             onLogout={this.handleLogout}
             onSearchSubmit={this.handleSubmit}
+            appConfig={config}
           />
         </div>
         <Modal
@@ -262,6 +299,7 @@ class TopbarComponent extends Component {
               onSubmit={this.handleSubmit}
               initialValues={initialSearchFormValues}
               isMobile
+              appConfig={config}
             />
             <p className={css.mobileHelp}>
               <FormattedMessage id="Topbar.mobileSearchHelp" />

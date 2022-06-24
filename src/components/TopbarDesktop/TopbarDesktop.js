@@ -16,11 +16,14 @@ import {
   ListingLink,
   OwnListingLink,
 } from '../../components';
+import { compose } from 'redux';
+import { withRouter } from 'react-router-dom';
+import { injectIntl } from '../../util/reactIntl';
 import { TopbarSearchForm } from '../../forms';
 
 import css from './TopbarDesktop.module.css';
 
-const TopbarDesktop = props => {
+const TopbarDesktopComponent = props => {
   const {
     className,
     currentUser,
@@ -33,9 +36,10 @@ const TopbarDesktop = props => {
     intl,
     isAuthenticated,
     onLogout,
+    history,
     onSearchSubmit,
-    initialSearchFormValues,
     isCurrentUserClient,
+    appConfig,
   } = props;
   const [mounted, setMounted] = useState(false);
 
@@ -47,13 +51,16 @@ const TopbarDesktop = props => {
   const isAuthenticatedOrJustHydrated = isAuthenticated || !mounted;
 
   const classes = classNames(rootClassName || css.root, className);
-
+  const initialSearchFormValues = {
+    searchkeyword: '',
+  };
   const search = (
     <TopbarSearchForm
       className={css.searchLink}
       desktopInputRoot={css.topbarSearchWithLeftPadding}
       onSubmit={onSearchSubmit}
       initialValues={initialSearchFormValues}
+      appConfig={appConfig}
     />
   );
 
@@ -182,7 +189,7 @@ const TopbarDesktop = props => {
   );
 };
 
-TopbarDesktop.defaultProps = {
+TopbarDesktopComponent.defaultProps = {
   rootClassName: null,
   className: null,
   currentUser: null,
@@ -193,7 +200,7 @@ TopbarDesktop.defaultProps = {
   currentUserListingFetched: false,
 };
 
-TopbarDesktop.propTypes = {
+TopbarDesktopComponent.propTypes = {
   rootClassName: string,
   className: string,
   currentUserHasListings: bool.isRequired,
@@ -209,4 +216,8 @@ TopbarDesktop.propTypes = {
   intl: intlShape.isRequired,
 };
 
+const TopbarDesktop = compose(
+  withRouter,
+  injectIntl
+)(TopbarDesktopComponent);
 export default TopbarDesktop;

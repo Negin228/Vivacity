@@ -18,7 +18,7 @@ const i18n = {
   */
   firstDayOfWeek: 0,
 };
-
+const mainSearchType = 'keywords';
 // Should search results be ordered by distance to origin.
 // NOTE: If this is set to true add parameter 'origin' to every location in default-location-searches.js
 // Without the 'origin' parameter, search will not work correctly
@@ -224,6 +224,7 @@ const config = {
     baseUrl: sdkBaseUrl,
     transitVerbose: sdkTransitVerbose,
   },
+  mainSearchType,
   sortSearchByDistance,
   currency,
   currencyConfig,

@@ -18,6 +18,9 @@ export const parseSelectFilterOptions = uriComponentValue => {
 /**
  * Check if any of the filters (defined by filterIds) have currently active query parameter in URL.
  */
+export const isMainSearchTypeKeywords = config => config?.mainSearchType === 'keywords';
+export const isOriginInUse = config =>
+  config.mainSearchType === 'location' && config.sortSearchByDistance;
 export const isAnyFilterActive = (filterIds, urlQueryParams, filterConfigs) => {
   const getQueryParamKeysOfGivenFilters = (keys, config) => {
     const isFilterIncluded = filterIds.includes(config.id);

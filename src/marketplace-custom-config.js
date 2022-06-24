@@ -1079,7 +1079,7 @@ export const filters = [
       // "label" is set here for this web app's UI only.
       // Note: label is not added through the translation files
       // to make filter customizations a bit easier.
-      options: [{ key: 'yoga', label: 'Yoga' }, { key: 'stretch', label: 'Stretch' }],
+      options: [...workoutTypes],
     },
   },
 ];

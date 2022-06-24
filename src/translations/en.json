@@ -1044,7 +1044,7 @@
   "Topbar.genericError": "Oh no, something went wrong. Please check your network connection and try again.",
   "Topbar.logoIcon": "Go to homepage",
   "Topbar.menuIcon": "Open menu",
-  "Topbar.mobileSearchHelp": "Tip: You can also search teachers by zip code, for example \"10012\" or city district – \"Manhattan\".",
+  "Topbar.mobileSearchHelp": "Tip: You can do a keyword seach by typing in the search box.",
   "Topbar.searchIcon": "Open search",
   "TopbarDesktop.accountSettingsLink": "Account settings",
   "TopbarDesktop.createListing": "+ Add a class",
