@@ -11,10 +11,13 @@ import SimpleTabs from './SimpleTabs';
 const SectionTrainers = props => {
   const { rootClassName, className, trainers, loading, error } = props;
   const classes = classNames(rootClassName || css.root, className);
-  if (error) {
+  if (error || trainers?.length === 0) {
     return (
       <div>
-        <span className={css.error}>
+        <div className={css.title} style={{ marginBottom: '30px' }}>
+          Our Trainers
+        </div>
+        <span style={{ color: '#4a4a4a' }}>
           Failed to load trainers. Please refresh the page to fix the problem.
         </span>
       </div>
