@@ -1,0 +1,35 @@
+@import '../../styles/customMediaQueries.css';
+
+.heading {
+  margin: 5px 0 18px 0;
+
+  @media (--viewportMedium) {
+    margin: 8px 0 24px 0;
+  }
+}
+
+.content {
+  @media (--viewportLarge) {
+    max-width: 563px;
+  }
+}
+
+.figure {
+  margin: 0;
+}
+
+.image {
+  max-width: 400px;
+  object-fit: contain;
+}
+
+.usageList,
+.revokeList {
+  & li {
+    margin-bottom: 1rem;
+  }
+}
+
+.sectionTitle {
+  margin: 2rem 0;
+}

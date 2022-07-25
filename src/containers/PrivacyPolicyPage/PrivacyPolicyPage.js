@@ -30,6 +30,13 @@ const PrivacyPolicyPageComponent = props => {
         name: 'PrivacyPolicyPage',
       },
     },
+    {
+      text: 'Zoom Usage',
+      selected: false,
+      linkProps: {
+        name: 'ZoomUsagePage',
+      },
+    },
     // {
     //   text: intl.formatMessage({ id: 'PrivacyPolicyPage.tosTabTitle' }),
     //   selected: false,
