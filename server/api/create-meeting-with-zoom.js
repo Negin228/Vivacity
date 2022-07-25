@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
 
   try {
     const resD = await fetch(
-      `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=http://localhost:3500/api/auth/callback/zoom?backurl=${backURL}`,
+      `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${ROOT_URL}/api/auth/callback/zoom?backurl=${backURL}`,
       {
         method: 'POST',
         headers: {
