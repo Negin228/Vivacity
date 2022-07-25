@@ -28,10 +28,10 @@ const SectionUpcomingClasses = ({ loading, error, products, intl }) => {
       </div>
     );
   }
-  const someProducts = products?.slice(0, 5);
+  let someProducts = products?.slice(0, 5);
   return (
     <div className={classNames(css.productsWrapper, 'bg-white')}>
-      {products?.length > 0 ? (
+      {someProducts.length > 0 ? (
         <h3 className={css.title}>{intl.formatMessage({ id: 'SectionUpcomingClasses.title' })}</h3>
       ) : (
         <>

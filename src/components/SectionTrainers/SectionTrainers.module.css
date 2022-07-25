@@ -48,7 +48,9 @@
     margin-top: 24px;
   }
 }
-
+.title {
+  @apply --marketplaceH1FontStyles;
+}
 .image {
   width: 150px;
   height: 100px;
