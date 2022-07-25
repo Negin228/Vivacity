@@ -113,7 +113,7 @@ class EditListingPhotosPanel extends Component {
         </p>
 
         <ExternalLink
-          href={`https://zoom.us/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_ZOOM_CLIENT_ID}&redirect_uri=http://localhost:3500/api/auth/callback/zoom?backurl=${currentPath}`}
+          href={`https://zoom.us/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_ZOOM_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_CANONICAL_ROOT_URL}/api/auth/callback/zoom?backurl=${currentPath}`}
           target="_self"
         >
           Continue with zoom login
