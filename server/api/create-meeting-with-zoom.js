@@ -14,9 +14,13 @@ module.exports = async (req, res) => {
   const sdk = getSdk(req, res);
   const integrationSdk = getIntegrationSdk();
 
+  console.log({ paramsMissing });
+
   if (paramsMissing) return res.redirect(ERROR_PAGE_URL);
 
   const listingId = backURL.split('/')?.[3];
+
+  console.log({ listingId });
 
   if (!listingId) return res.redirect(ERROR_PAGE_URL);
 
@@ -33,6 +37,8 @@ module.exports = async (req, res) => {
         },
       }
     );
+
+    console.dir({ resD }, { depth: 420 });
 
     const data = await resD.json();
     if (resD.status >= 400) {
@@ -72,6 +78,8 @@ module.exports = async (req, res) => {
       },
     });
 
+    console.dir({ resp }, { depth: 420 });
+
     const respData = await resp.json();
     if (respData.status >= 400) {
       let e = new Error();
@@ -97,6 +105,8 @@ module.exports = async (req, res) => {
         Authorization: `Bearer ${access_token}`,
       },
     });
+
+    console.dir({ meetingRespData }, { depth: 420 });
 
     const meetingData = await meetingRespData.json();
 
@@ -124,6 +134,7 @@ module.exports = async (req, res) => {
     if (backURL) return res.redirect(`${ROOT_URL}${backURL}`);
     return res.redirect(ROOT_URL);
   } catch (err) {
+    console.dir({ err }, { depth: 420 });
     return res.redirect(ERROR_PAGE_URL);
   }
 };
