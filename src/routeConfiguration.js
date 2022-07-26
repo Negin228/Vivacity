@@ -37,6 +37,7 @@ const HowItWorks = loadable(() => import(/* webpackChunkName: "HowItWorks" */ '.
 const ContactUs = loadable(() => import(/* webpackChunkName: "ContactUs" */ './containers/ContactUs/ContactUs'));
 const SuccessPage = loadable(() => import(/* webpackChunkName: "SuccessPage" */ './containers/ContactUs/SuccessPage'));
 const ZoomErrorPage = loadable(() => import(/* webpackChunkName: "ZoomErrorPage" */ './containers/ZoomErrorPage/ZoomErrorPage'));
+const ZoomUsagePage = loadable(() => import(/* webpackChunkName: "ZoomUsagePage" */ './containers/ZoomUsagePage/ZoomUsagePage'));
 
 export const ACCOUNT_SETTINGS_PAGES = [
   'ContactDetailsPage',
@@ -93,6 +94,11 @@ const routeConfiguration = () => {
       component: ZoomErrorPage,
       auth: true,
       authPage: 'LoginPage',
+    },
+    {
+      path: '/zoom-usage',
+      name: 'ZoomUsagePage',
+      component: ZoomUsagePage,
     },
     {
       path: '/s',

@@ -188,6 +188,27 @@ const noCacheHeaders = {
 // for setting up new TCP connections.
 const httpAgent = new http.Agent({ keepAlive: true });
 const httpsAgent = new https.Agent({ keepAlive: true });
+
+app.get('/zoomverify/verifyzoom.html', (req, res) => {
+  const filePath = path.join(__dirname, 'verifyzoom.html');
+  return res.sendFile(filePath);
+});
+
+const middlewares = [
+  express.json(),
+  express.urlencoded({ extended: true }),
+  bodyParser.raw({ type: 'application/json' }),
+];
+
+app.post('/deauthorize-zoom/:key', middlewares, async (req, res) => {
+  const key = req.params?.key;
+  const endpointKey = 'c0fa1bc00531bd78ef38c628449c5102aeabd49b5dc3a2a516ea6ea959d6658e';
+  if (key != endpointKey) return res.status(403).end();
+  console.log(req.body);
+
+  return res.status(200).end();
+});
+
 app.post('*', async (req, res) => {
   if (req.url.startsWith('/contact')) {
     const { name, email, userType, message } = req.body;

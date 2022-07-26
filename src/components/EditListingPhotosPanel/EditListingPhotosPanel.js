@@ -12,6 +12,11 @@ import { withRouter } from 'react-router-dom';
 import ExternalLink from '../ExternalLink/ExternalLink';
 import ZoomPopupModal from './ZoomPopupModal';
 
+const ROOT_API_URL =
+  process.env.REACT_APP_CANONICAL_ROOT_URL === 'http://localhost:3000'
+    ? 'http://localhost:3500'
+    : process.env.REACT_APP_CANONICAL_ROOT_URL;
+
 class EditListingPhotosPanel extends Component {
   constructor(props) {
     super(props);
@@ -113,7 +118,7 @@ class EditListingPhotosPanel extends Component {
         </p>
 
         <ExternalLink
-          href={`https://zoom.us/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_ZOOM_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_CANONICAL_ROOT_URL}/api/auth/callback/zoom?backurl=${currentPath}`}
+          href={`https://zoom.us/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_ZOOM_CLIENT_ID}&redirect_uri=${ROOT_API_URL}/api/auth/callback/zoom?backurl=${currentPath}`}
           target="_self"
         >
           Continue with zoom login

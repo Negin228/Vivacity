@@ -7,6 +7,8 @@ const zoomClientSecret = process.env.ZOOM_CLIENT_SECRET;
 const ROOT_URL = process.env.REACT_APP_CANONICAL_ROOT_URL;
 const ERROR_PAGE_URL = `${ROOT_URL}/zoom-error?error=true`;
 
+const ROOT_API_URL = ROOT_URL === 'http://localhost:3000' ? 'http://localhost:3500' : ROOT_URL;
+
 module.exports = async (req, res) => {
   const { code, backurl: backURL } = req.query;
 
@@ -14,13 +16,13 @@ module.exports = async (req, res) => {
   const sdk = getSdk(req, res);
   const integrationSdk = getIntegrationSdk();
 
-  console.log({ paramsMissing });
+  // console.log({ paramsMissing });
 
   if (paramsMissing) return res.redirect(ERROR_PAGE_URL);
 
   const listingId = backURL.split('/')?.[3];
 
-  console.log({ listingId });
+  // console.log({ listingId });
 
   if (!listingId) return res.redirect(ERROR_PAGE_URL);
 
@@ -29,7 +31,7 @@ module.exports = async (req, res) => {
 
   try {
     const resD = await fetch(
-      `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${ROOT_URL}/api/auth/callback/zoom?backurl=${backURL}`,
+      `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${ROOT_API_URL}/api/auth/callback/zoom?backurl=${backURL}`,
       {
         method: 'POST',
         headers: {
@@ -38,7 +40,7 @@ module.exports = async (req, res) => {
       }
     );
 
-    console.dir({ resD }, { depth: 420 });
+    // console.dir({ resD }, { depth: 420 });
 
     const data = await resD.json();
     if (resD.status >= 400) {
@@ -78,7 +80,7 @@ module.exports = async (req, res) => {
       },
     });
 
-    console.dir({ resp }, { depth: 420 });
+    // console.dir({ resp }, { depth: 420 });
 
     const respData = await resp.json();
     if (respData.status >= 400) {
@@ -106,7 +108,7 @@ module.exports = async (req, res) => {
       },
     });
 
-    console.dir({ meetingRespData }, { depth: 420 });
+    // console.dir({ meetingRespData }, { depth: 420 });
 
     const meetingData = await meetingRespData.json();
 
