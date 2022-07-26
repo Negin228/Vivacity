@@ -189,6 +189,11 @@ const noCacheHeaders = {
 const httpAgent = new http.Agent({ keepAlive: true });
 const httpsAgent = new https.Agent({ keepAlive: true });
 
+app.get('/zoomverify/verifyzoom.html', (req, res) => {
+  const filePath = path.join(__dirname, 'verifyzoom.html');
+  return res.sendFile(filePath);
+});
+
 const middlewares = [
   express.json(),
   express.urlencoded({ extended: true }),
