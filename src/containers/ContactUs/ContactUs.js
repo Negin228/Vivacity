@@ -94,14 +94,10 @@ function ContactUs() {
                       </h1>
                       <div className="col-span-2">
                         <p>
-                          We are proud of you as a member of our team and we definitely love to hear
-                          from you!
+                          We are proud of you as a member of the Vivacity family and we’d love to hear from you! We are glad that you have chosen Vivacity to do your workout sessions or to lead your classes. Let us know what we’re doing well and how we can improve your experience at our virtual studio. 
                         </p>
                         <p>
-                          Let us know who your favorite instructor is and what classes you enjoy the
-                          most! Tell us what kind of workouts you would like us to add and how we
-                          can improve your experience at our virtual studio. We appreciate your
-                          feedback! Please don't hesitate to write to us!
+                          Your feedback matters. Together, we can level-up the world of virtual fitness. 
                         </p>
                       </div>
                       <Form onSubmit={handleSubmit}>
