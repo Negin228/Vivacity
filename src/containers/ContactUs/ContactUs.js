@@ -90,7 +90,7 @@ function ContactUs() {
                         className="text-3xl m-0 mb-6 font-extrabold tracking-normal sm:text-4xl text-center text-gray-500 uppercase "
                         style={{ color: 'var(--marketplaceColor)' }}
                       >
-                        Contact
+                        Contact Us
                       </h1>
                       <div className="col-span-2">
                         <p>
