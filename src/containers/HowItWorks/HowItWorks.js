@@ -42,34 +42,68 @@ const HowItWorks = () => {
               <p>Yoga was listed by UNESCO as an intangible cultural heritage.</p>
             </div> */}
             <div className={css.contentMain}>
-            <p>Thanks for joining Vivacity family! Here is the instruction on how to join Vivacity classes.</p>
+            <p>We welcome you to join the Vivacity team as a student or trainer! Vivacity brings people together to create a supportive community that motivates individuals to do not only more but also better quality workouts! Our goal is to make virtual fitness interactive, convenient, empowering, and – most importantly – fun!</p>
+            <p>With Vivacity’s live online fitness classes you get the benefits and insights of a fitness expert without having to go to the gym. We connect you with Vivacity trainers and help you reach your fitness goals on your time from anywhere you are.
+            </p>
               <h2>
-              For Students:
+              For Vivacity Students: 
+              </h2>
+              <h2>4 Easy Steps to Personal Fitness
+              </h2>
+              <p>1. Create your Vivacity profile and sign up as a student.
+              </p>
+              <p>2. Set your time-zone and browse the Vivacity online fitness class calendar or search for your preferred Vivacity trainer. Then, book a class that suits your schedule and interests.
+              </p>
+              <p>3. Join the session and if possible keep your camera on during the live online fitness class. 
+              </p>
+              <p>4. Exercise efficiently as your trainer corrects your movement and form in real time. 
+              </p>
+              <p>Be sure to leave a review and let your trainers know what they did well and what could be improved. 
+              </p>
+
+              <h2>
+              For Vivacity Trainers: 
+              </h2>
+              <h2>4 Easy Steps to Success
               </h2>
 
-              <p>
-              It could not get easier than this! Create an account, set your time-zone, choose a class that matches your schedule and interests, click on class to register, proceed with the payment, and you are done! You will receive an email with the link to join the class via Zoom. Make sure that your video is on when you join the class so that the instructor can see you and correct you if necessary. You can unmute yourself if you have questions from the instructors. You can use the same link to go back to the class if you get disconnected.
+              <p>1. sign up as a trainer and create your Vivacity profile. Fill in profile details and present who you are as a Vivacity virtual trainer and what you offer to potential clients!
               </p>
+              <p>2. Create a class. Optimize your class description with keywords and clear reader-friendly language. Set the price, time & date, class duration, and class subject (personal training, HIIT training, Pilates, etc.). To receive payments, you will need to enter your checking account and routing numbers. This information can be provided by your bank or found at the bottom of your personal checks. If you do not have this information, please contact us so we can explore other forms of payments.
+              </p>
+              <p>3. Once you put all the information in, your class will be published to the Vivacity online fitness class calendar for any student to book. Share the link to your class and spread the word! 
+              </p>
+              <p>4. Be on time and professional. Deliver what you promise in your class description. 
+              </p>
+              <br>
+              <p>Some Tips to Keep in Mind:</p>
+              <ul>
+                <li>Try to join the session 5 to 10 minutes before your class starts. Once the class starts, mute everyone so they can hear you clearly, but engage with your students and create a fun, welcoming group fitness environment. Ask students to unmute themselves if they have questions.</li>
+                <li>Read reviews to see what’s going well and how you can grow as a Vivacity trainer! </li>
+                <li>Ask the students to pin you in Zoom to make sure they see you all the time and can follow your instructions.</li>
+                <li>If you get disconnected during a session, please use the same link to join again. Tell your students to do the same in case their connection gets interrupted.</li>
+              </ul>
+        
+
 
               {/* <h3 className={css.subtitle}>Are you a yoga teacher?</h3> */}
                 <h2>
-                For Instructors:
+                Additional Notes:
                 </h2>
-              <p>
-              Please read our policies carefully before starting to schedule your classes.
-              </p>
-                <p>
-                How to schedule classes: After you create an account, you click on “List a Class” and enter the information about your class. You will list each class separately. You would also need to create a Zoom account to host your classes. We highly suggest you purchase a premium account with Zoom. After you finish setting up your class, it will show up in “My Classes”. Please join the Zoom session 5 to 10 min prior to the start of your classes. It is better to mute everyone once the class starts. Student can unmute themselves to ask questions. Ask the students to pin you in Zoom, to make sure they see you all the time. If you get disconnected during a session, please use the same link to join again. Regardless of the size of each class, please pay attention to all students. And last but not least, have fun!
-                </p>
+                <ul>
+	                <li>Vivacity is excited to connect trainers and trainees and make physical health and wellbeing accessible to more people! In order to maintain the Vivacity platform, we collect 20% of commissions as a hosting fee.</li>
+	                <li>As a Vivacity student, it’s up to you to participate in the classes you book. If you miss a class, Vivacity trainers are happy to catch you up and keep you on your path to personal fitness. However, credit for missed classes cannot be given.</li>
+                	<li>In the rare event that your Vivacity trainer is unable to attend a class session, all registration fees will be refunded in full.</li>
+	                <li>To host as many classes and sessions as you please without interruption, we strongly encourage our trainers to purchase a Zoom Pro account ($14.99/month) so that they can offer flexibility and improved functionality to clients.</li>
+                	<li>Have questions? Contact us at contact@vivacity.studio</li>
+                 </ul>
+
+
+
               {/* <h3 id="contact" className={css.subtitle}>
                 Create your own marketplace like Yogatime
               </h3> */}
-              <p>
-                  - <b>Method of Payment</b>: You would need to enter a routing number and an account number to receive payments. You can find this information through your online bank account. If you have a check, the routing number is the nine-digit number printed in the bottom left corner of each check. Your account number (usually 10 to 12 digits) is printed on the bottom of your checks.  
-              </p>
-              <p>
-                  - <b>Payment</b>: Vivacity will make a payment equal to 80% of the proceedings from your training classes to your account. We would use the remaining 20% for promoting our classes and other expenses.
-              </p>
+
               {/* <p>
               <a href="mailto:">Write to us</a> and let us know. Let's get in touch!
               </p> */}
