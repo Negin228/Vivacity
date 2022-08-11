@@ -61,7 +61,7 @@
 .heroMainTitle {
   @apply --marketplaceHeroTitleFontStyles;
   color: var(--matterColor);
-  background-color: green; 
+  background-color: rgba (234,240,246,0.5); 
   composes: animation;
   animation-delay: 0.5s;
 
@@ -75,7 +75,7 @@
 
   color: var(--matterColor);
   margin: 0 0 32px 0;
-
+  background-color: rgba (234,240,246,0.5); 
   composes: animation;
   animation-delay: 0.65s;
 
