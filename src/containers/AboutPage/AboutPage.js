@@ -50,26 +50,38 @@ const AboutPage = () => {
               </h2>
 
               <p>
-              The idea of Vivacity came to our minds during the COVID 19 pandemic when we were trapped at home with no access to our gym. 
+              We created Vivacity for us, and for you! We understand how a busy life can get in the way of self-care. Between work, family, and friends, it might be hard to find time in your day to go to the gym or studio to fit in exercise.
               </p>
 
               {/* <h3 className={css.subtitle}>Are you a yoga teacher?</h3> */}
 
               <p>
-              We missed working out with friends and started attending some classes online with the instructors we knew. However, it was not as easy as it sounds. The number of online classes were very limited and those that were available did not match our schedule. Besides, the classes we were attending were not interactive and it was just a one-way communication that we did not enjoy.
+              That’s why we’ve created a platform that merges the convenience of virtual fitness with the community and motivation of live group fitness classes. 
               </p>
 
               {/* <h3 id="contact" className={css.subtitle}>
                 Create your own marketplace like Yogatime
               </h3> */}
+              <h2>
+              How We Started  
+              </h2>
               <p>
-              We created Vivacity to be able to attend high-quality virtual classes with our friends no matter where in the world they are and then decided to expand it so that more people experience the joy of interactive group classes with top-notch instructors. We are glad that you found us, and that you have decided to be part of this journey. 
+              The inspiration for Vivacity virtual fitness emerged during the outbreak of the COVID-19 pandemic. During isolation, we had no access to gyms and fitness facilities. We missed our fitness buddies and gym partners. In the early stages, online fitness was not easy. Class varieties were incredibly limited, making it harder to find classes that fit our schedule and interest. On top of that, we lost the motivating engagement of live feedback from trainers because online fitness classes were not interactive. They were either pre-recorded or one-way streams. It was a lonely experience! 
               </p>
               <p>
-              Our promise to you is to do our best to elevate your experience in this platform and we would always love to hear from you on how we can make things better.
-              </p>
+              <h2>
+              No more doing it alone!
+              </h2>
               <p>
-              <NamedLink name="ContactPage">Write to us</NamedLink> and let us know. Let's get in touch!
+                We believe in the power of human connection and in the strength of communities and that’s why we created Vivacity. Our goal was to change the imperfect experience of working out at home alone with a motivating fun one. We want you to bring your friends to our classes and meet new people from around the world. We want you to inspire and get inspired! We want to do this together as we believe together is easier! 
+              </p>
+              <h2>
+              Get in touch!
+              </h2>
+              <p>
+              We want to hear from you on how we can make Vivacity better together. Our commitment to you is that we will always look for ways to improve your Vivacity experience. 
+              </p>    
+              <NamedLink name="ContactPage">Let's get in touch!</NamedLink>
               </p>
               {/* <p>
                 You can also checkout our{' '}
