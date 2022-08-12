@@ -83,22 +83,22 @@ const HowItWorks = () => {
               </div>
               <div>
               <h2>Some Tips to Keep in Mind:</h2>
-              <ul style=“list-style-type:disc”>
-                <li>Try to join the session 5 to 10 minutes before your class starts. Once the class starts, mute everyone so they can hear you clearly, but engage with your students and create a fun, welcoming group fitness environment. Ask students to unmute themselves if they have questions.</li>
-                <li>Read reviews to see what’s going well and how you can grow as a Vivacity trainer! </li>
-                <li>Ask the students to pin you in Zoom to make sure they see you all the time and can follow your instructions.</li>
-                <li>If you get disconnected during a session, please use the same link to join again. Tell your students to do the same in case their connection gets interrupted.</li>
+              <ul>
+                <li>&#x2022; Try to join the session 5 to 10 minutes before your class starts. Once the class starts, mute everyone so they can hear you clearly, but engage with your students and create a fun, welcoming group fitness environment. Ask students to unmute themselves if they have questions.</li>
+                <li>&#x2022; Read reviews to see what’s going well and how you can grow as a Vivacity trainer! </li>
+                <li>A&#x2022; sk the students to pin you in Zoom to make sure they see you all the time and can follow your instructions.</li>
+                <li>&#x2022; If you get disconnected during a session, please use the same link to join again. Tell your students to do the same in case their connection gets interrupted.</li>
               </ul>
               </div>
               {/* <h3 className={css.subtitle}>Are you a yoga teacher?</h3> */}
                 <div>
                 <h2>Additional Notes:</h2>
-                <ul style=“list-style-type:disc”>
-	                <li>Vivacity is excited to connect trainers and trainees and make physical health and wellbeing accessible to more people! In order to maintain the Vivacity platform, we collect 20% of commissions as a hosting fee.</li>
-	                <li>As a Vivacity student, it’s up to you to participate in the classes you book. If you miss a class, Vivacity trainers are happy to catch you up and keep you on your path to personal fitness. However, credit for missed classes cannot be given.</li>
-                	<li>In the rare event that your Vivacity trainer is unable to attend a class session, all registration fees will be refunded in full.</li>
-	                <li>To host as many classes and sessions as you please without interruption, we strongly encourage our trainers to purchase a Zoom Pro account ($14.99/month) so that they can offer flexibility and improved functionality to clients.</li>
-                	<li>Have questions? Contact us at contact@vivacity.studio</li>
+                <ul>
+	                <li>&#x2022; Vivacity is excited to connect trainers and trainees and make physical health and wellbeing accessible to more people! In order to maintain the Vivacity platform, we collect 20% of commissions as a hosting fee.</li>
+	                <li>&#x2022; As a Vivacity student, it’s up to you to participate in the classes you book. If you miss a class, Vivacity trainers are happy to catch you up and keep you on your path to personal fitness. However, credit for missed classes cannot be given.</li>
+                	<li>&#x2022; In the rare event that your Vivacity trainer is unable to attend a class session, all registration fees will be refunded in full.</li>
+	                <li>&#x2022; To host as many classes and sessions as you please without interruption, we strongly encourage our trainers to purchase a Zoom Pro account ($14.99/month) so that they can offer flexibility and improved functionality to clients.</li>
+                	<li>&#x2022; Have questions? Contact us at contact@vivacity.studio</li>
                  </ul>
                  </div>
 
