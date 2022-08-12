@@ -42,40 +42,33 @@ const HowItWorks = () => {
               <p>Yoga was listed by UNESCO as an intangible cultural heritage.</p>
             </div> */}
             <div className={css.contentMain}>
-            <p>We welcome you to join the Vivacity team as a student or trainer! Vivacity brings people together to create a supportive community that motivates individuals to do not only more but also better quality workouts! Our goal is to make virtual fitness interactive, convenient, empowering, and – most importantly – fun!</p>
-            <p>With Vivacity’s live online fitness classes you get the benefits and insights of a fitness expert without having to go to the gym. We connect you with Vivacity trainers and help you reach your fitness goals on your time from anywhere you are.
-            </p>
+              <p>We welcome you to join the Vivacity team as a student or trainer! Vivacity brings people together to create a supportive community that motivates individuals to do not only more but also better quality workouts! Our goal is to make virtual fitness interactive, convenient, empowering, and – most importantly – fun!</p>
+              <p>With Vivacity’s live online fitness classes you get the benefits and insights of a fitness expert without having to go to the gym. We connect you with Vivacity trainers and help you reach your fitness goals on your time from anywhere you are.</p>
               <h2>
-              For Vivacity Students: 
+                For Vivacity Students: 
               </h2>
-              <h2>4 Easy Steps to Personal Fitness
-              </h2>
-              <p>1. Create your Vivacity profile and sign up as a student.
-              </p>
-              <p>2. Set your time-zone and browse the Vivacity online fitness class calendar or search for your preferred Vivacity trainer. Then, book a class that suits your schedule and interests.
-              </p>
-              <p>3. Join the session and if possible keep your camera on during the live online fitness class. 
-              </p>
-              <p>4. Exercise efficiently as your trainer corrects your movement and form in real time. 
-              </p>
-              <p>Be sure to leave a review and let your trainers know what they did well and what could be improved. 
-              </p>
-
               <h2>
-              For Vivacity Trainers: 
+                4 Easy Steps to Personal Fitness
               </h2>
-              <h2>4 Easy Steps to Success
+              <ol>
+                <li>Create your Vivacity profile and sign up as a student.</li>
+                <li>Set your time-zone and browse the Vivacity online fitness class calendar or search for your preferred Vivacity trainer. Then, book a class that suits your schedule and interests.</li>
+                <li>Join the session and if possible keep your camera on during the live online fitness class.</li>
+                <li>Exercise efficiently as your trainer corrects your movement and form in real time.</li>
+              </ol>
+              <p>Be sure to leave a review and let your trainers know what they did well and what could be improved.</p>
+              <h2>
+                For Vivacity Trainers: 
               </h2>
-
-              <p>1. sign up as a trainer and create your Vivacity profile. Fill in profile details and present who you are as a Vivacity virtual trainer and what you offer to potential clients!
-              </p>
-              <p>2. Create a class. Optimize your class description with keywords and clear reader-friendly language. Set the price, time & date, class duration, and class subject (personal training, HIIT training, Pilates, etc.). To receive payments, you will need to enter your checking account and routing numbers. This information can be provided by your bank or found at the bottom of your personal checks. If you do not have this information, please contact us so we can explore other forms of payments.
-              </p>
-              <p>3. Once you put all the information in, your class will be published to the Vivacity online fitness class calendar for any student to book. Share the link to your class and spread the word! 
-              </p>
-              <p>4. Be on time and professional. Deliver what you promise in your class description. 
-              </p>
-              <br>
+              <h2>
+                4 Easy Steps to Success
+              </h2>
+              <ol>
+                <li>Sign up as a trainer and create your Vivacity profile. Fill in profile details and present who you are as a Vivacity virtual trainer and what you offer to potential clients!</li>
+                <li>Create a class. Optimize your class description with keywords and clear reader-friendly language. Set the price, time & date, class duration, and class subject (personal training, HIIT training, Pilates, etc.). To receive payments, you will need to enter your checking account and routing numbers. This information can be provided by your bank or found at the bottom of your personal checks. If you do not have this information, please contact us so we can explore other forms of payments.</li>
+                <li>Once you put all the information in, your class will be published to the Vivacity online fitness class calendar for any student to book. Share the link to your class and spread the word! </li>
+                <li>Be on time and professional. Deliver what you promise in your class description.</li>
+              </ol>
               <p>Some Tips to Keep in Mind:</p>
               <ul>
                 <li>Try to join the session 5 to 10 minutes before your class starts. Once the class starts, mute everyone so they can hear you clearly, but engage with your students and create a fun, welcoming group fitness environment. Ask students to unmute themselves if they have questions.</li>
@@ -84,12 +77,8 @@ const HowItWorks = () => {
                 <li>If you get disconnected during a session, please use the same link to join again. Tell your students to do the same in case their connection gets interrupted.</li>
               </ul>
         
-
-
               {/* <h3 className={css.subtitle}>Are you a yoga teacher?</h3> */}
-                <h2>
-                Additional Notes:
-                </h2>
+                <h2>Additional Notes:</h2>
                 <ul>
 	                <li>Vivacity is excited to connect trainers and trainees and make physical health and wellbeing accessible to more people! In order to maintain the Vivacity platform, we collect 20% of commissions as a hosting fee.</li>
 	                <li>As a Vivacity student, it’s up to you to participate in the classes you book. If you miss a class, Vivacity trainers are happy to catch you up and keep you on your path to personal fitness. However, credit for missed classes cannot be given.</li>
