@@ -77,7 +77,7 @@ const HowItWorks = () => {
               </h2>
               <ol>
                 <li>Sign up as a trainer and create your Vivacity profile. Fill in profile details and present who you are as a Vivacity virtual trainer and what you offer to potential clients!</li>
-                <li>Create a class. Optimize your class description with keywords and clear reader-friendly language. Set the price, time & date, class duration, and class subject (personal training, HIIT training, Pilates, etc.). To receive payments, you will need to enter your checking account and routing numbers. This information can be provided by your bank or found at the bottom of your personal checks. If you do not have this information, please contact us so we can explore other forms of payments.</li>
+                <li>Create a class. Optimize your class description with keywords and clear reader-friendly language. Set the price, time & date, class duration, and class subject (personal training, HIIT training, Pilates, etc.). To receive payments, you will need to enter your checking account and routing numbers. This information can be provided by your bank or found at the bottom of your personal checks. If you do not have this information, please contact us so we can explore other forms of payment.</li>
                 <li>Once you put all the information in, your class will be published to the Vivacity online fitness class calendar for any student to book. Share the link to your class and spread the word! </li>
                 <li>Be on time and professional. Deliver what you promise in your class description.</li>
               </ol>
