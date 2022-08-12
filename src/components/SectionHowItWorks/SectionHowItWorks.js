@@ -39,11 +39,10 @@ const SectionHowItWorks = props => {
           <h2 className={css.stepTitle}>
             <FormattedMessage id="SectionHowItWorks.part2Title" />
           </h2>
-        </div>
           <p>
             <FormattedMessage id="SectionHowItWorks.part2Text" />
           </p>
-       
+        </div>
 
         <div className={css.step}>
           <h2 className={css.stepTitle}>
