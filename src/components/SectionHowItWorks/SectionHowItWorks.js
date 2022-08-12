@@ -31,9 +31,7 @@ const SectionHowItWorks = props => {
             <FormattedMessage id="SectionHowItWorks.part1Title" />
           </h2>
           <p>
-            Start by signing up {routeLink('SignupPage', '(Link)')} as a student, then, search for a
-            class. Once you find a class you like, simply book it by making a payment. All our
-            classes are live, engaging, and most importantly, fun!
+            Start by {routeLink('SignupPage', 'signing up')} as a student. Then browse our catalogue and find the perfect live online workout class that fits in your schedule. Simply book the session and enjoy! All our classes are live, engaging, and most importantly, fun!
           </p>
         </div>
 
@@ -41,10 +39,11 @@ const SectionHowItWorks = props => {
           <h2 className={css.stepTitle}>
             <FormattedMessage id="SectionHowItWorks.part2Title" />
           </h2>
+        </div>
           <p>
             <FormattedMessage id="SectionHowItWorks.part2Text" />
           </p>
-        </div>
+       
 
         <div className={css.step}>
           <h2 className={css.stepTitle}>
