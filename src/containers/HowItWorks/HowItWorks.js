@@ -42,6 +42,13 @@ const HowItWorks = () => {
               <p>Yoga was listed by UNESCO as an intangible cultural heritage.</p>
             </div> */}
             <div className={css.contentMain}>
+              <h1 className="text-3xl m-0 mb-6 font-extrabold tracking-normal sm:text-4xl text-center text-gray-500 uppercase " style={{ color: 'var(--marketplaceColor)' }}>
+                How it works
+              </h1>
+
+              
+              
+              
               <p>We welcome you to join the Vivacity team as a student or trainer! Vivacity brings people together to create a supportive community that motivates individuals to do not only more but also better quality workouts! Our goal is to make virtual fitness interactive, convenient, empowering, and – most importantly – fun!</p>
               <p>With Vivacity’s live online fitness classes you get the benefits and insights of a fitness expert without having to go to the gym. We connect you with Vivacity trainers and help you reach your fitness goals on your time from anywhere you are.</p>
               <h2>
