@@ -74,7 +74,6 @@ const AboutPage = () => {
               <p>
               The inspiration for Vivacity virtual fitness emerged during the outbreak of the COVID-19 pandemic. During isolation, we had no access to gyms and fitness facilities. We missed our fitness buddies and gym partners. In the early stages, online fitness was not easy. Class varieties were incredibly limited, making it harder to find classes that fit our schedule and interest. On top of that, we lost the motivating engagement of live feedback from trainers because online fitness classes were not interactive. They were either pre-recorded or one-way streams. It was a lonely experience! 
               </p>
-              <p>
               <h2>
               No more doing it alone!
               </h2>
