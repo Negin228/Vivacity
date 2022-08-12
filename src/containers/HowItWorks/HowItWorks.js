@@ -91,6 +91,15 @@ const HowItWorks = () => {
                 <li>&#x2022; Ask the students to pin you in Zoom to make sure they see you all the time and can follow your instructions.</li>
                 <li>&#x2022; If you get disconnected during a session, please use the same link to join again. Tell your students to do the same in case their connection gets interrupted.</li>
               </ul>
+
+              <ul className={css.list}>
+                <li>&#x2022; Try to join the session 5 to 10 minutes before your class starts.</li>
+                <li>&#x2022; Once the class starts, mute everyone so they can hear you clearly, but engage with your students and create a fun, welcoming group fitness environment. Ask students to unmute themselves if they have questions.</li>
+                <li>&#x2022; Read reviews to see what’s going well and how you can grow as a Vivacity trainer! </li>
+                <li>&#x2022; Ask the students to pin you in Zoom to make sure they see you all the time and can follow your instructions.</li>
+                <li>&#x2022; If you get disconnected during a session, please use the same link to join again. Tell your students to do the same in case their connection gets interrupted.</li>
+              </ul>
+
               </div>
               {/* <h3 className={css.subtitle}>Are you a yoga teacher?</h3> */}
                 <div>
