@@ -38,7 +38,13 @@ const AboutPage = () => {
         <LayoutWrapperMain className={css.staticPageWrapper}>
           {/* <h1 className={css.pageTitle}>Fitness is our passion!</h1> */}
           {/* <img className={css.coverImage} src={image} alt="My first ice cream." /> */}
-
+          <div className="bg-white">
+          <div className="mx-auto max-w-3xl w-full my-2 sm:my-4 md:my-8 p-8">
+          <h1 className="text-3xl m-0 mb-6 font-extrabold tracking-normal sm:text-4xl text-center text-gray-500 uppercase " style={{ color: 'var(--marketplaceColor)' }}>
+          ABOUT US
+          </h1>
+          </div>
+          </div>
           <div className={css.contentWrapper}>
             {/* <div className={css.contentSide}>
               <p>Yoga was listed by UNESCO as an intangible cultural heritage.</p>
