@@ -85,9 +85,7 @@ const AboutPage = () => {
               Get in touch!
               </h2>
               <p>
-              We want to hear from you on how we can make Vivacity better together. Our commitment to you is that we will always look for ways to improve your Vivacity experience. 
-              </p>    
-              <NamedLink name="ContactPage">Let's get in touch!</NamedLink>
+              We want to hear from you on how we can make Vivacity better together. Our commitment to you is that we will always look for ways to improve your Vivacity experience. <NamedLink name="ContactPage">Let's get in touch!</NamedLink>
               </p>
               {/* <p>
                 You can also checkout our{' '}
