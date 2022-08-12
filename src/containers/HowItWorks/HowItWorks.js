@@ -70,7 +70,7 @@ const HowItWorks = () => {
                 <li>Be on time and professional. Deliver what you promise in your class description.</li>
               </ol>
               <p>Some Tips to Keep in Mind:</p>
-              <ul>
+              <ul style=“list-style-type:disc”>
                 <li>Try to join the session 5 to 10 minutes before your class starts. Once the class starts, mute everyone so they can hear you clearly, but engage with your students and create a fun, welcoming group fitness environment. Ask students to unmute themselves if they have questions.</li>
                 <li>Read reviews to see what’s going well and how you can grow as a Vivacity trainer! </li>
                 <li>Ask the students to pin you in Zoom to make sure they see you all the time and can follow your instructions.</li>
@@ -79,7 +79,7 @@ const HowItWorks = () => {
         
               {/* <h3 className={css.subtitle}>Are you a yoga teacher?</h3> */}
                 <h2>Additional Notes:</h2>
-                <ul>
+                <ul style=“list-style-type:disc”>
 	                <li>Vivacity is excited to connect trainers and trainees and make physical health and wellbeing accessible to more people! In order to maintain the Vivacity platform, we collect 20% of commissions as a hosting fee.</li>
 	                <li>As a Vivacity student, it’s up to you to participate in the classes you book. If you miss a class, Vivacity trainers are happy to catch you up and keep you on your path to personal fitness. However, credit for missed classes cannot be given.</li>
                 	<li>In the rare event that your Vivacity trainer is unable to attend a class session, all registration fees will be refunded in full.</li>
