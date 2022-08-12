@@ -97,7 +97,7 @@ function ContactUs() {
                           We are proud of you as a member of the Vivacity family and we’d love to hear from you! We are glad that you have chosen Vivacity to do your workout sessions or to lead your classes. Let us know what we’re doing well and how we can improve your experience at our virtual studio. 
                         </p>
                         <p>
-                          Your feedback matters. Together, we can level-up the world of virtual fitness. 
+                          Your feedback matters. Together, we can level up the world of virtual fitness. 
                         </p>
                       </div>
                       <Form onSubmit={handleSubmit}>
