@@ -48,9 +48,11 @@ const HowItWorks = () => {
 
               
               
-              
+              <div>
               <p>We welcome you to join the Vivacity team as a student or trainer! Vivacity brings people together to create a supportive community that motivates individuals to do not only more but also better quality workouts! Our goal is to make virtual fitness interactive, convenient, empowering, and – most importantly – fun!</p>
               <p>With Vivacity’s live online fitness classes you get the benefits and insights of a fitness expert without having to go to the gym. We connect you with Vivacity trainers and help you reach your fitness goals on your time from anywhere you are.</p>
+              </div>
+              <div>
               <h2>
                 For Vivacity Students: 
               </h2>
@@ -64,6 +66,8 @@ const HowItWorks = () => {
                 <li>Exercise efficiently as your trainer corrects your movement and form in real time.</li>
               </ol>
               <p>Be sure to leave a review and let your trainers know what they did well and what could be improved.</p>
+              </div>
+              <div>
               <h2>
                 For Vivacity Trainers: 
               </h2>
@@ -76,15 +80,18 @@ const HowItWorks = () => {
                 <li>Once you put all the information in, your class will be published to the Vivacity online fitness class calendar for any student to book. Share the link to your class and spread the word! </li>
                 <li>Be on time and professional. Deliver what you promise in your class description.</li>
               </ol>
-              <p>Some Tips to Keep in Mind:</p>
+              </div>
+              <div>
+              <h2>Some Tips to Keep in Mind:</h2>
               <ul style=“list-style-type:disc”>
                 <li>Try to join the session 5 to 10 minutes before your class starts. Once the class starts, mute everyone so they can hear you clearly, but engage with your students and create a fun, welcoming group fitness environment. Ask students to unmute themselves if they have questions.</li>
                 <li>Read reviews to see what’s going well and how you can grow as a Vivacity trainer! </li>
                 <li>Ask the students to pin you in Zoom to make sure they see you all the time and can follow your instructions.</li>
                 <li>If you get disconnected during a session, please use the same link to join again. Tell your students to do the same in case their connection gets interrupted.</li>
               </ul>
-        
+              </div>
               {/* <h3 className={css.subtitle}>Are you a yoga teacher?</h3> */}
+                <div>
                 <h2>Additional Notes:</h2>
                 <ul style=“list-style-type:disc”>
 	                <li>Vivacity is excited to connect trainers and trainees and make physical health and wellbeing accessible to more people! In order to maintain the Vivacity platform, we collect 20% of commissions as a hosting fee.</li>
@@ -93,6 +100,7 @@ const HowItWorks = () => {
 	                <li>To host as many classes and sessions as you please without interruption, we strongly encourage our trainers to purchase a Zoom Pro account ($14.99/month) so that they can offer flexibility and improved functionality to clients.</li>
                 	<li>Have questions? Contact us at contact@vivacity.studio</li>
                  </ul>
+                 </div>
 
 
 
