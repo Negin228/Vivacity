@@ -58,7 +58,7 @@
   We also need to add flex-basis value so that Safari will show the
   whole form correctly.  */
   flex-grow: 0;
-  flex-basis: 260px;
+  flex-basis: 340;
 
   @media (--viewportMedium) {
     flex-basis: 330px;
