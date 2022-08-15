@@ -263,8 +263,9 @@
 .privacy,
 .terms {
   /* Font */
-  @apply --marketplaceTinyFontStyles;
-  color: var(--matterColorAnti);
+  @apply --marketplaceH5FontStyles;
+  line-height: 20px;
+  color: var(--matterColor);
   transition: var(--transitionStyleButton);
 
   margin-top: 0;
