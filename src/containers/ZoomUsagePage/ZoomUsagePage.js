@@ -37,7 +37,7 @@ const ZoomUsagePageComponent = props => {
       text: 'Policies and Procedure',
       selected: false,
       linkProps: {
-        name: 'PrivacyPolicyPage',
+        name: 'TermsOfServicePage',
       },
     },
     {

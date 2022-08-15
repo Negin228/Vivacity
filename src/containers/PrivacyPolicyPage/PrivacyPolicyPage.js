@@ -24,10 +24,10 @@ const PrivacyPolicyPageComponent = props => {
 
   const tabs = [
     {
-      text: 'Policies and Procedure',
+      text: 'Terms of Service',
       selected: true,
       linkProps: {
-        name: 'PrivacyPolicyPage',
+        name: 'TermsOfServicePage',
       },
     },
     {
@@ -61,7 +61,7 @@ const PrivacyPolicyPageComponent = props => {
         <LayoutWrapperSideNav tabs={tabs} />
         <LayoutWrapperMain>
           <div className={css.content}>
-            <h1 className={css.heading}>Policies and Procedure</h1>
+            {/* <h1 className={css.heading}>Policies and Procedure</h1> */}
             <PrivacyPolicy />
           </div>
         </LayoutWrapperMain>

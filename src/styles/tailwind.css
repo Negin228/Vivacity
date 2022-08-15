@@ -198,16 +198,16 @@
   margin-top: 0.5rem
 }
 
+.mb-6 {
+  margin-bottom: 1.5rem
+}
+
 .mr-4 {
   margin-right: 1rem
 }
 
 .mt-4 {
   margin-top: 1rem
-}
-
-.mb-6 {
-  margin-bottom: 1.5rem
 }
 
 .mb-2 {
@@ -475,14 +475,14 @@
   line-height: 1.25rem
 }
 
-.text-base {
-  font-size: 1rem;
-  line-height: 1.5rem
-}
-
 .text-3xl {
   font-size: 1.875rem;
   line-height: 2.25rem
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem
 }
 
 .text-xl {
@@ -490,12 +490,12 @@
   line-height: 1.75rem
 }
 
-.font-semibold {
-  font-weight: 600
-}
-
 .font-extrabold {
   font-weight: 800
+}
+
+.font-semibold {
+  font-weight: 600
 }
 
 .uppercase {
@@ -518,17 +518,22 @@
   line-height: 1.375
 }
 
-.tracking-wide {
-  letter-spacing: 0.025em
-}
-
 .tracking-normal {
   letter-spacing: 0em
+}
+
+.tracking-wide {
+  letter-spacing: 0.025em
 }
 
 .text-green-700 {
   --tw-text-opacity: 1;
   color: rgb(21 128 61 / var(--tw-text-opacity))
+}
+
+.text-gray-500 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity))
 }
 
 .text-red-500 {
@@ -539,11 +544,6 @@
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity))
-}
-
-.text-gray-500 {
-  --tw-text-opacity: 1;
-  color: rgb(107 114 128 / var(--tw-text-opacity))
 }
 
 .text-red-400 {

@@ -113,8 +113,8 @@ const Footer = props => {
                   </NamedLink>
                 </li>
                 <li className={css.listItem}>
-                  <NamedLink name="PrivacyPolicyPage" className={css.legalLink}>
-                    <FormattedMessage id="Footer.privacyPolicy" />
+                  <NamedLink name="TermsOfServicePage" className={css.legalLink}>
+                    <FormattedMessage id="Footer.termsOfUse" />
                   </NamedLink>
                 </li>
 
@@ -274,8 +274,8 @@ const Footer = props => {
               <FormattedMessage id="Footer.copyright" />
             </NamedLink> */}
             <div className={css.tosAndPrivacyMobile}>
-              <NamedLink name="PrivacyPolicyPage" className={css.privacy}>
-                <FormattedMessage id="Footer.privacy" />
+              <NamedLink name="TermsOfServicePage" className={css.privacy}>
+                <FormattedMessage id="Footer.terms" />
               </NamedLink>
               {/* <NamedLink name="TermsOfServicePage" className={css.terms}>
                 <FormattedMessage id="Footer.terms" />

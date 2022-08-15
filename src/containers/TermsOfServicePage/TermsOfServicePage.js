@@ -27,7 +27,7 @@ const TermsOfServicePageComponent = props => {
       text: intl.formatMessage({ id: 'TermsOfServicePage.privacyTabTitle' }),
       selected: false,
       linkProps: {
-        name: 'PrivacyPolicyPage',
+        name: 'TermsOfServicePage',
       },
     },
     {
