@@ -31,7 +31,7 @@
   flex-grow: 1;
   justify-content: flex-end;
   padding-bottom: 32px;
-  padding-left:20%;
+  
   @media (--viewportMedium) {
     padding-bottom: 83px;
   }
