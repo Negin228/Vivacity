@@ -32,7 +32,7 @@ const SectionHowItWorks = props => {
             <FormattedMessage id="SectionHowItWorks.part1Title" />
           </h2>
           <p>
-            Start by {routeLink('SignupPage', 'signing up')} as a student. Then browse our catalogue and find the perfect live online workout class that fits in your schedule. Simply book the session and enjoy! All our classes are live, engaging, and most importantly, fun!
+            Start by {routeLink('SignupPage', 'signing up')} as a student. Then browse our catalogue and find the live online workout class that fits in your schedule. Simply book the session and enjoy! All our classes are live, engaging, and most importantly, fun!
           </p>
         </div>
 
