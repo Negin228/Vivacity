@@ -109,7 +109,7 @@ const Footer = props => {
                 </li>
                 <li className={css.listItem}>
                   <NamedLink name="ZoomUsagePage" className={css.link}>
-                    <span>Zoom Usage</span>
+                    <span>ZOOM Usage</span>
                   </NamedLink>
                 </li>
                 <li className={css.listItem}>

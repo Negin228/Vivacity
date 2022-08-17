@@ -31,7 +31,7 @@ const PrivacyPolicyPageComponent = props => {
       },
     },
     {
-      text: 'Zoom Usage',
+      text: 'ZOOM Usage',
       selected: false,
       linkProps: {
         name: 'ZoomUsagePage',

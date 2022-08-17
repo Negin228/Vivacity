@@ -111,9 +111,9 @@ class EditListingPhotosPanel extends Component {
 
     const zoomMeetingScheduleContent = (
       <div>
-        <h1>Zoom Meeting</h1>
+        <h1>ZOOM Meeting</h1>
         <p className="leading-snug">
-          In order to proceed further, you need to authorize us via zoom so that we can schedule a
+          In order to proceed further, you need to authorize us via ZOOM so that we can schedule a
           meeting on your behalf.
         </p>
 
@@ -121,7 +121,7 @@ class EditListingPhotosPanel extends Component {
           href={`https://zoom.us/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_ZOOM_CLIENT_ID}&redirect_uri=${ROOT_API_URL}/api/auth/callback/zoom?backurl=${currentPath}`}
           target="_self"
         >
-          Continue with zoom login
+          Continue with ZOOM login
         </ExternalLink>
       </div>
     );
