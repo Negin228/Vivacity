@@ -17,7 +17,7 @@ import {
 } from '../../components';
 import config from '../../config';
 import first from '../../assets/zoom/usage/1.png';
-import second from '../../assets/zoom/usage/2.png';
+import second from '../../assets/zoom/usage/second.png';
 import third from '../../assets/zoom/usage/3.png';
 import fourth from '../../assets/zoom/usage/4.png';
 
@@ -41,7 +41,7 @@ const ZoomUsagePageComponent = props => {
       },
     },
     {
-      text: 'Zoom Usage',
+      text: 'ZOOM Usage',
       selected: true,
       linkProps: {
         name: 'ZoomUsagePage',
@@ -71,7 +71,7 @@ const ZoomUsagePageComponent = props => {
         <LayoutWrapperSideNav tabs={tabs} />
         <LayoutWrapperMain>
           <div className={css.content}>
-            <h1 className={css.heading}>Zoom Usage</h1>
+            <h1 className={css.heading}>ZOOM Usage</h1>
             <section>
               <h2 className={css.sectionTitle}>Adding &amp; Usage:</h2>
               <ol type="1" className={css.usageList}>
@@ -85,13 +85,13 @@ const ZoomUsagePageComponent = props => {
                   </figure>
                 </li>
                 <li>
-                  Click on <strong>Next: Zoom &amp; Photos</strong> Button to continue to the next
+                  Click on <strong>Next: ZOOM &amp; Photos</strong> Button to continue to the next
                   tab.
                 </li>
                 <li>
                   <figure className={css.figure}>
                     <img className={css.image} src={second} />
-                    <figcaption>Click on Continue with zoom login link.</figcaption>
+                    <figcaption>Click on Continue with ZOOM login link.</figcaption>
                   </figure>
                 </li>
                 <li>
@@ -157,7 +157,7 @@ const ZoomUsagePageComponent = props => {
                   <figure className={css.figure}>
                     <img className={css.image} src={rFourth} />
                     <figcaption>
-                      You will see a list of all apps that you have authorized to access your Zoom
+                      You will see a list of all apps that you have authorized to access your ZOOM
                       Information/Account. There will be a remove button next to each app on right
                       side.
                     </figcaption>
