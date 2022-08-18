@@ -34,7 +34,7 @@ const ZoomUsagePageComponent = props => {
 
   const tabs = [
     {
-      text: 'Policies and Procedure',
+      text: 'Terms of Service',
       selected: false,
       linkProps: {
         name: 'TermsOfServicePage',
