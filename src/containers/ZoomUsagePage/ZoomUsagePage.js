@@ -101,7 +101,7 @@ const ZoomUsagePageComponent = props => {
                     <figcaption>Click on Continue with ZOOM login link.</figcaption>
                   </figure>
                 </li>
-                <li>
+                {/* <li>
                   <figure className={css.figure}>
                     <img className={css.image} src={third} />
 
@@ -109,7 +109,7 @@ const ZoomUsagePageComponent = props => {
                       Check the option <em>Allow this app to use my shared access permissions.</em>
                     </figcaption>
                   </figure>
-                </li>
+                </li> */}
                 <li>
                   <figure className={css.figure}>
                     <img className={css.image} src={third} />
