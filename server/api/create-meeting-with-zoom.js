@@ -77,7 +77,7 @@ module.exports = async (req, res) => {
         break;
     }
 
-    const resp = await fetch(`https://api.zoom.us/v2/users`, {
+    const resp = await fetch(`https://api.zoom.us/v2/users/me`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${access_token}`,
@@ -96,7 +96,7 @@ module.exports = async (req, res) => {
     console.dir(respData, { depth: 333 });
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> USER FETCH END >>>>>>>>>>>>>>>>>>>>>>>>');
 
-    const zoomUserId = respData?.users?.[0]?.id;
+    const zoomUserId = respData?.id;
 
     const meetingParams = JSON.stringify({
       start_time: new Date(startDate).toISOString(),
