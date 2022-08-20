@@ -49,6 +49,10 @@ module.exports = async (req, res) => {
       throw e;
     }
 
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> AUTHORIZATION START >>>>>>>>>>>>>>>>>>>>>>>>');
+    console.dir(data, { depth: 333 });
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> AUTHORIZATION END >>>>>>>>>>>>>>>>>>>>>>>>');
+
     const { access_token } = data;
 
     let listingResponse = await sdk.ownListings.show({
@@ -88,6 +92,9 @@ module.exports = async (req, res) => {
       e = Object.assign(e, respData);
       throw e;
     }
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> USER FETCH START >>>>>>>>>>>>>>>>>>>>>>>>');
+    console.dir(respData, { depth: 333 });
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> USER FETCH END >>>>>>>>>>>>>>>>>>>>>>>>');
 
     const zoomUserId = respData?.users?.[0]?.id;
 
@@ -117,21 +124,26 @@ module.exports = async (req, res) => {
       e = Object.assign(e, meetingData);
       throw e;
     }
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MEETING CREATE START >>>>>>>>>>>>>>>>>>>>>>>>');
+    console.dir(meetingData, { depth: 333 });
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MEETING CREATE END >>>>>>>>>>>>>>>>>>>>>>>>');
 
     const { start_url, join_url } = meetingData;
 
-    await integrationSdk.listings.update({
-      id: listingId,
-      privateData: {
-        zoom: {
-          start_url,
-          join_url,
+    if (start_url && join_url) {
+      await integrationSdk.listings.update({
+        id: listingId,
+        privateData: {
+          zoom: {
+            start_url,
+            join_url,
+          },
         },
-      },
-      publicData: {
-        timeUpdated: false,
-      },
-    });
+        publicData: {
+          timeUpdated: false,
+        },
+      });
+    }
 
     if (backURL) return res.redirect(`${ROOT_URL}${backURL}`);
     return res.redirect(ROOT_URL);

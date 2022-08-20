@@ -62,7 +62,6 @@ const TermsOfServicePageComponent = props => {
         <LayoutWrapperSideNav tabs={tabs} />
         <LayoutWrapperMain>
           <div className={css.content}>
-            <h1 className={css.heading}>Policies and Procedure</h1>
             <PrivacyPolicy />
           </div>
         </LayoutWrapperMain>
