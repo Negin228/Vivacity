@@ -113,11 +113,15 @@ const Footer = props => {
                   </NamedLink>
                 </li>
                 <li className={css.listItem}>
+                  <NamedLink name="PrivacyPolicyPage" className={css.privacy}>
+                    <FormattedMessage id="Footer.privacy" />
+                  </NamedLink>
+                </li>
+                <li className={css.listItem}>
                   <NamedLink name="TermsOfServicePage" className={css.legalLink}>
                     <FormattedMessage id="Footer.termsOfUse" />
                   </NamedLink>
                 </li>
-
                 {/* <li className={css.listItem}>
                   <NamedLink name="LandingPage" className={css.link}>
                     <FormattedMessage id="Footer.toFAQPage" />
@@ -260,13 +264,7 @@ const Footer = props => {
             </div> */}
             <div className={css.searches}>
               {/* <div className={css.someLinks}>{socialMediaLinks}</div> */}
-              <ul className={css.tosAndPrivacy}>
-                {/* <li>
-                    <NamedLink name="TermsOfServicePage" className={css.legalLink}>
-                      <FormattedMessage id="Footer.termsOfUse" />
-                    </NamedLink>
-                  </li> */}
-              </ul>
+              <ul className={css.tosAndPrivacy}></ul>
             </div>
           </div>
           <div className={css.copyrightAndTermsMobile}>
@@ -274,12 +272,12 @@ const Footer = props => {
               <FormattedMessage id="Footer.copyright" />
             </NamedLink> */}
             <div className={css.tosAndPrivacyMobile}>
-              <NamedLink name="TermsOfServicePage" className={css.privacy}>
+              <NamedLink name="PrivacyPolicyPage" className={css.privacy}>
+                <FormattedMessage id="Footer.privacy" />
+              </NamedLink>
+              <NamedLink name="TermsOfServicePage" className={css.terms}>
                 <FormattedMessage id="Footer.terms" />
               </NamedLink>
-              {/* <NamedLink name="TermsOfServicePage" className={css.terms}>
-                <FormattedMessage id="Footer.terms" />
-              </NamedLink> */}
             </div>
           </div>
         </div>

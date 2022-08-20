@@ -13,6 +13,7 @@ import {
   LayoutWrapperTopbar,
   LayoutWrapperFooter,
   PrivacyPolicy,
+  TermsOfService,
   Footer,
 } from '../../components';
 import config from '../../config';
@@ -24,7 +25,7 @@ const PrivacyPolicyPageComponent = props => {
 
   const tabs = [
     {
-      text: 'Terms of Service',
+      text: 'Privacy Policy',
       selected: true,
       linkProps: {
         name: 'TermsOfServicePage',
@@ -37,13 +38,13 @@ const PrivacyPolicyPageComponent = props => {
         name: 'ZoomUsagePage',
       },
     },
-    // {
-    //   text: intl.formatMessage({ id: 'PrivacyPolicyPage.tosTabTitle' }),
-    //   selected: false,
-    //   linkProps: {
-    //     name: 'TermsOfServicePage',
-    //   },
-    // },
+    {
+      text: 'Terms Of Service',
+      selected: false,
+      linkProps: {
+        name: 'TermsOfServicePage',
+      },
+    },
   ];
   const siteTitle = config.siteTitle;
   const schemaTitle = intl.formatMessage({ id: 'PrivacyPolicyPage.schemaTitle' }, { siteTitle });
@@ -61,8 +62,8 @@ const PrivacyPolicyPageComponent = props => {
         <LayoutWrapperSideNav tabs={tabs} />
         <LayoutWrapperMain>
           <div className={css.content}>
-            {/* <h1 className={css.heading}>Policies and Procedure</h1> */}
-            <PrivacyPolicy />
+            <h1 className={css.heading}>Vivacity’s Privacy Policy</h1>
+            <TermsOfService />
           </div>
         </LayoutWrapperMain>
         <LayoutWrapperFooter>

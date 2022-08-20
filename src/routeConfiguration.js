@@ -319,13 +319,13 @@ const routeConfiguration = () => {
     {
       path: '/terms-of-service',
       name: 'TermsOfServicePage',
+      component: TermsOfServicePage,
+    },
+    {
+      path: '/privacy-policy',
+      name: 'PrivacyPolicyPage',
       component: PrivacyPolicyPage,
     },
-    // {
-    //   path: '/privacy-policy',
-    //   name: 'PrivacyPolicyPage',
-    //   component: PrivacyPolicyPage,
-    // },
     {
       path: '/styleguide',
       name: 'Styleguide',

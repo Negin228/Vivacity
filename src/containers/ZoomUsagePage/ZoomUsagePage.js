@@ -34,10 +34,10 @@ const ZoomUsagePageComponent = props => {
 
   const tabs = [
     {
-      text: 'Terms of Service',
+      text: 'Privacy Policy',
       selected: false,
       linkProps: {
-        name: 'TermsOfServicePage',
+        name: 'PrivacyPolicyPage',
       },
     },
     {
@@ -45,6 +45,13 @@ const ZoomUsagePageComponent = props => {
       selected: true,
       linkProps: {
         name: 'ZoomUsagePage',
+      },
+    },
+    {
+      text: 'Terms Of Service',
+      selected: false,
+      linkProps: {
+        name: 'TermsOfServicePage',
       },
     },
     // {

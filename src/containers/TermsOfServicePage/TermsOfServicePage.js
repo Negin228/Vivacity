@@ -14,6 +14,7 @@ import {
   LayoutWrapperFooter,
   Footer,
   TermsOfService,
+  PrivacyPolicy,
 } from '../../components';
 import config from '../../config';
 
@@ -24,14 +25,21 @@ const TermsOfServicePageComponent = props => {
 
   const tabs = [
     {
-      text: intl.formatMessage({ id: 'TermsOfServicePage.privacyTabTitle' }),
+      text: 'Privacy Policy',
       selected: false,
       linkProps: {
-        name: 'TermsOfServicePage',
+        name: 'PrivacyPolicyPage',
       },
     },
     {
-      text: intl.formatMessage({ id: 'TermsOfServicePage.tosTabTitle' }),
+      text: 'ZOOM Usage',
+      selected: false,
+      linkProps: {
+        name: 'ZoomUsagePage',
+      },
+    },
+    {
+      text: 'Terms Of Service',
       selected: true,
       linkProps: {
         name: 'TermsOfServicePage',
@@ -54,10 +62,8 @@ const TermsOfServicePageComponent = props => {
         <LayoutWrapperSideNav tabs={tabs} />
         <LayoutWrapperMain>
           <div className={css.content}>
-            <h1 className={css.heading}>
-              <FormattedMessage id="TermsOfServicePage.heading" />
-            </h1>
-            <TermsOfService />
+            <h1 className={css.heading}>Policies and Procedure</h1>
+            <PrivacyPolicy />
           </div>
         </LayoutWrapperMain>
         <LayoutWrapperFooter>

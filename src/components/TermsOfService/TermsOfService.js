@@ -11,51 +11,218 @@ const TermsOfService = props => {
   // prettier-ignore
   return (
     <div className={classes}>
-      <p className={css.lastUpdated}>Last updated: November 22, 2019</p>
+      {/* <p className={css.lastUpdated}>Last updated: November 22, 2019</p> */}
 
+      <h2>Introduction</h2>
       <p>
-        Thank you for using Yogatime! Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-        voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+This privacy statement (“Statement”) applies to Vivacity Inc. and/or any of its current or future subsidiaries and affiliates (together the “Company”, “we,” or “us”) which operates this website and the Vivacity marketplace (the “Website”). If you are using Vivacity, you are doing so under and subject to Vivacity’s Terms of Service (“Vivacity’s Terms”) as a Student (trainee) Member or Teacher (trainer) Member. In that case, the data we collect regarding you as a Member of Vivacity will be processed and stored by us in accordance with this Statement and Vivacity’s Terms. If you are just visiting out website without being a Member, we still might collect some data regarding your use and experience in our website as detailed below.
+
+ 
       </p>
 
-      <h2>1 Lorem ipsum dolor sit amet</h2>
+      <h2>Contacting Us
+
+</h2>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-        voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        
+You can contact us via email at contact@vivacity.studio
+
+While you are visiting our website or using Vivacity, your information might be collected and processed as set forth by this Statement.
+
+ 
+
+Questions, comments, requests and complaints regarding this Statement and the information we hold are welcome and should be addressed to us by using the contact details above. All requests will be dealt with promptly and efficiently.
       </p>
 
-      <h2>2 Sed ut perspiciatis unde</h2>
+      <h2>Data Controller / Data Processor</h2>
       <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-        laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
-        architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
-        aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
-        voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet,
-        consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et
-        dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum
-        exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
-        consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil
-        molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+      “Personal Data”, or personal information, means any information about an individual from which that person can be identified.
+
+Under the European General Data Protection Regulation (”GDPR”), we are the Data Controller of your Personal Data. Similarly, under the CCPA which is relevant for California residents when it's applicable, we are a Business.
       </p>
 
-      <h2>3 At vero eos et accusamus</h2>
+      <h2>Information we may collect from you</h2>
       <p>
-        At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
-        voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati
-        cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id
-        est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam
-        libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod
-        maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.
-        Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut
-        et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a
-        sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis
-        doloribus asperiores repellat
+      We collect Personal Data from you voluntarily when you provide such Personal Data to us, when you register or use our services and websites with which you voluntarily interact. We may also obtain such Personal Data about you as may be provided to us in the course of our legitimate business activities.
+
+You do not have to provide us with your information, but in some cases, if you do not, it may mean that you are unable to use our services. For example, any Member who wishes to use Vivacity for purchasing a course is required to provide us with some account and billing information, otherwise we can’t allow them to use Vivacity as a Member. Similarly, we may be unable to complete a requested “contact form” inquiry, unless you provide us with your contact details.
+
+When you use our Website and choose voluntarily to provide us with your information, we might collect and process the following types of information:
+<ol>
+  <li>
+    Identity Data – including full name, username or any similar identifier, title, date of birth and gender and any other information provided by you upon your sole discretion.
+  </li>
+  <li>
+    Contact Data – including email address and telephone numbers.
+  </li>
+  <li>
+    Vivacity’s  Members’ Data  – in case you are a Member of Vivacity, profile and contact details, login information, any Listing or lesson published or acquired through Vivacity, etc.
+  </li>
+  <li>
+    Usage Data – includes information about how you use our website and services, including a record of your use in some cases.
+  </li>
+  <li>
+    Technical Data – includes internet protocol (IP) address, the device you are using, browser type and version, screen resolution, time zone setting and location, browser plug-in types and versions, operating system and platform and other technology on the devices you use to access this website.
+  </li>
+  <li>
+ Marketing and Communications Data – includes your preferences in receiving marketing from us and our third parties and your communication preferences.
+  </li>
+</ol>
+
+We also collect, use and share Aggregated Data such as statistical or demographic data for any purpose. Aggregated Data may be derived from your Personal Data but does not reveal your identity.
+
+
       </p>
+      <h2>How is your Personal Data Collected</h2>
+      <p>We use different methods to collect data from and about you, including through:
+    <ol>
+      <li>
+Direct interactions – You may give us your Identity, Contact and other Personal Data by registering as a Member or by filling in forms (e.g. “Contact Us”, “sign up Form” etc.) or by corresponding with us by email.        
+      </li>
+      <li>
+Automated technologies or interactions – As you interact with our Website, we may automatically collect Personal Data through the use of our features and tools or Cookies (please refer to the description below, under “Cookies Usage”).
+
+      </li>
+      <li>
+Third parties or publicly available sources – In our Website we may receive Personal Data about you from various third parties and public sources, e.g.: advertising and social networks, analytics providers, search information providers.
+
+      </li>
+    </ol>
+ </p>
+ <h2>Cookies Usage</h2>
+ <p>Like many other websites, the Website uses cookies to improve your experience while you navigate through the website. We may use various types of Cookies:
+<ol>
+  <li>
+    Essential Cookies – which are necessary for the site to work properly (usually appears under Vivacity cookie tag).
+  </li>
+  <li>
+Functional Cookies – designated to save your settings on the site – your language preference or other view preferences.
+  </li>
+  <li>
+Session Cookies – used to support the functionality of the website – such Cookies are stored only temporarily during a browsing session and are deleted from your device when you close the browser.
+  </li>
+  <li>
+Targeting Cookies – these cookies are used to collect information from you to help us to improve our products and services as well as serve you with targeted advertisements that we believe will be relevant to you (e.g. Google’s Cookies).
+  </li>
+  <li>
+Social networks Cookies – Social Plug-In Cookies (e.g. Facebook, Twitter, Instagram Cookies) enabling the sharing of your usage information with your social networks accounts.
+  </li>
+  <li>
+Analytics Cookies – give us aggregated information which enables us to improve the way our website works, e.g. Google analytics.
+  </li>
+  <li>
+Please note that the data collected by use of Cookies may be linked to and combined with any other data, including Personal Data.
+  </li>
+  <li>
+Managing cookies and opting out: aside from the Essential Cookies described above, you can always configure your browser or use the “cookies bar” installed in our Website to reject all cookies or notify you when a cookie is set, but sometimes in that case, certain services, features, and functionality in our website may not be available to you.
+  </li>
+</ol>
+</p>
+    <h2>The purposes of the processing    </h2>
+    <p>We might use your data in order to: enable you to use Vivacity and our Website in the most effective way, including the personalization of your experience by presenting content tailored to your interests; Enable you the use of our website on behalf of our Customer who is the Account owner; Provide our customers and Vivacity Members with Services they have purchased from us; meet or comply with any applicable rules, laws, regulations, codes of practice or guidelines issued by any legal or regulatory body; assess or evaluate the effectiveness of our services, as well as any technical and organizational measures designated for the protection of your Personal Data; Improve and secure our services; protect our rights and legitimate interests, as well as defend against any lawsuit, legal claim or complaint; to conduct any other activities that are required to provide our services.
+    </p>
+    <h2>The Legal Basis for the processing of your Personal Data</h2>
+    <p>We will only process and use your Personal Data when the law allows us to, i.e. when we have a Lawful Basis for such usage. Such lawful and legal basis can be any of the following:
+<ol>
+  <li> Processing actions which are allowed to us as part of a contract we have between us and any Member as a customer of Vivacity.</li>
+  <li>Processing actions which are related to your reservations and/or requests, any Listing or to carry out our obligations arising from any contracts entered between you and us. For example, contacting you per “Contact” form filled by you. Another example is providing our members with Virtual training Services as detailed in Vivacity’s Terms.</li>
+  <li>Our use of your information is necessary to meet responsibilities we have to our regulators, tax officials, law enforcement, or otherwise meet our legal responsibilities.</li>
+  <li>Our use of your information is in our legitimate interest as a commercial organization. For example, to operate and improve our services and to keep people informed about our products and services. In these cases, we will look after your information at all times in a way that is proportionate and respects your privacy rights, making sure our legitimate interest is not overridden by your interests or fundamental rights and freedoms.</li>
+</ol>
+In general, and as detailed above, we do not rely on consent as a legal basis for processing your Personal Data. Yet, in any case in which you have provided your consent to our processing of your information, you can withdraw this consent at any time by contacting us through the contact details provided above.
+</p>
+    <h2>Processing of anonymized or statistical data</h2>
+    <p>In some circumstances we may anonymize the Personal Data which is being collected and managed through the use of our Website, so that it can no longer be associated with any identified person. Such anonymized or aggregated data, might be used by us as part of our Services, including for research or statistical purposes, without further notice to you.</p>
+    <h2>Data Recipients</h2>
+    <p>We may disclose your Personal Data to third parties in a variety of circumstances in the ordinary course of operating our business, such as:
+  <ol>
+    <li>
+  Disclosure of Personal Data to persons authorized to process personal data, in our organization, or third-party service providers, qualified as data processors or sub-processors, providing us with services supporting our services and ordinary course of business, e.g. storage and computing services, as well as marketing efforts, in accordance with applicable law.
+    </li>
+    <li>
+Indirectly, and in connection with the use of Cookies through a third party services as explained above;
+    </li>
+    <li>
+When we have a legal obligation to do so, or when we are allowed to do so under our legitimate interests.
+    </li>
+  </ol>
+
+  In any such communication we will take steps to make sure such transfer is carefully managed to protect your privacy rights:
+
+<ol>
+  <li>
+  transfers within our group and affiliates, will be subject to an agreement / policies and procedures made to ensure that your data receives an adequate and consistent level of protection as required by applicable law.
+  </li>
+  <li>
+  transfers to any subcontractor or processor will be subject to contractual terms ensuring the security and protection of any Personal Data under any such sub-processor, in accordance with applicable law provisions.
+
+any requests for information we receive from law enforcement or regulators will be carefully validated before the disclosure of any Personal Data.
+  </li>
+</ol>
+</p>
+<h2>
+Data Processing Location
+</h2>
+<p>
+Any transfer of data which originates in the European Union (“EU”) to a country outside of the European Economic Area (EEA), shall be made in compliance with the provisions of chapter 5 of the GDPR. Such transfer can be made to countries which are recognized as providing an adequate level of legal protection or where we can be satisfied that alternative arrangements are in place to protect your privacy rights, e.g. the EU-US Privacy Shield.
+</p>
+<h2>
+Links to other sites
+</h2>
+<p>Our Website may include links to third-party websites, plug-ins and applications. Clicking on those links or enabling those connections may allow third parties to collect or share data about you. We do not control these third-party websites and are not responsible for their privacy statements. When you leave our website, we encourage you to read the privacy notice of every website you visit.</p>
+<h2>How we secure your information</h2>
+<p>We are committed to protecting the security of your Personal Data. We use a variety of security technologies and procedures to help protect your Personal Data from unauthorized access and use. However, the collection, transmission and storage of information can never be guaranteed to be completely secure. Yet, we take steps to ensure that appropriate security safeguards are in place to protect your information, and we will continue to revise our policies and implement additional security features.</p>
+<h2>Data Subjects' rights under EU data protection laws and the CCPA</h2>
+<p>
+Under EU law, EU residents and individuals, have certain rights to apply to us to provide information or make amendments to how we process data relating to them. Similarly, under the California Consumer Privacy Act (“CCPA”), California residents have similar rights. Those rights might include:
+<ol>
+  <li>
+Right to access your Personal Data – You can ask us to confirm whether or not we have and use your Personal Data, and if so, you can ask for a copy of your data.
+  </li>
+  <li>
+Right to correct your Personal Data – You can ask us to correct any of your Personal Data which is incorrect, after verifying the accuracy of the data first;
+  </li>
+  <li> Right to erase your Personal Data – You can ask us to erase your Personal Data if you think we no longer need to use it for the purpose we collected it from you. You can also ask for such erasure in any case in which the process of your data was based on your consent, or where we have used it unlawfully or where we are subject to a legal obligation to erase your Personal Data. any request for such erasure will be subject to our obligations under the law (e.g. our obligation to keep some records for tax or customs purposes).
+  </li>
+  <li>
+Right to restrict our use in your Personal Data –  You can ask us to restrict our use of your Personal Data in certain circumstances.
+
+  </li>
+  <li>
+Right to object to how we use your Personal Data – You can object to any use of your Personal Data which we have justified by our legitimate interest if you believe your fundamental rights and freedoms to data protection outweigh our legitimate interest in using the information.
+
+  </li>
+  <li>
+  You can always require us to refrain from using your data for direct marketing purposes;
+
+  </li>
+  <li>
+  You can ask us to transfer your information to another organization and/or provide you with a copy of your Personal Data (Portability Right).
+
+  </li>
+  <li>
+ You have the right to lodge a complaint at any time before the relevant supervisory authority for data protection issues. However, we will appreciate the chance to deal with your concerns before you approach the authorities, so please feel free to contact us in the first instance. 
+
+  </li>
+</ol>
+
+We may not always be able to do what you have asked. In addition, not all of those rights apply in every jurisdiction. For example, if it would impact the duty of confidentiality we owe to others, or if we are otherwise legally entitled to deal with the request in a different way. In addition, the Portability Right doesn’t apply under the CCPA. So not always we will be able or obliged to provide you with those rights.  However, we encourage you to contact us with any such request, and we will be happy to assist you.
+</p>
+<h2>Special Notification for California Residents
+</h2>
+<p>
+We do not sell your personal information for the intentions and purposes of the CCPA. We can use your personal data for our purposes, but only as described above or after the anonymization of such data, including aggregate data which can no longer be associated with you.
+</p>
+<h2>
+Changes to this Privacy Statement
+</h2>
+<p>
+We reserve the right to change this statement from time to time at our sole discretion. If we make any changes, we will post those changes here so that you can see what information we gather, how we might use that information and in what circumstances we may disclose it. By continuing to use our site or our services or otherwise provide data after we post any such changes, you accept and agree to this statement as modified.
+</p>
+<p>
+The information on this page was last updated on 08/18/2022.
+</p>
     </div>
   );
 };
