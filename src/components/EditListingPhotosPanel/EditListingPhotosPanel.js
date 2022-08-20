@@ -131,7 +131,7 @@ class EditListingPhotosPanel extends Component {
 
     const zoomContent = startUrl && joinUrl && (
       <div className="bg-green-100 mb-8 max-w-lg text-green-700 border border-solid border-green-300 rounded p-4 inline-block">
-        <h2 className="my-0 text-lg">Scheduled zoom meeting</h2>
+        <h2 className="my-0 text-lg">Scheduled ZOOM meeting</h2>
         <div className="my-0 text-sm flex gap-3  mt-2">
           <span>Start URL:</span>{' '}
           <ExternalLink href={startUrl} className="break-words">
