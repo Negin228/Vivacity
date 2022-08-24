@@ -1,6 +1,7 @@
 const fetch = require('cross-fetch');
 const { getSdk, getIntegrationSdk } = require('../api-util/sdk');
 const { denormalizeResponseData } = require('./utils');
+const moment = require('moment-timezone');
 const zoomClientId = process.env.REACT_APP_ZOOM_CLIENT_ID;
 const zoomClientSecret = process.env.ZOOM_CLIENT_SECRET;
 
