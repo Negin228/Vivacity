@@ -99,7 +99,7 @@ module.exports = async (req, res) => {
     const zoomUserId = respData?.id;
 
     const meetingParams = JSON.stringify({
-      start_time: new Date(startDate).toISOString(),
+      start_time: moment(new Date(startDate)).format('YYYY-MM-DDTHH:mm:ss'),
       timezone: timezone,
       type: 2,
       duration,
