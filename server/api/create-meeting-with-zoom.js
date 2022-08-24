@@ -116,7 +116,7 @@ module.exports = async (req, res) => {
       timezone: timezone,
       type: 2,
       duration,
-      topic: listing.attributes.title.slice(0, 2000),
+      topic: listing.attributes.title.slice(0, 199),
     });
 
     const meetingRespData = await fetch(`https://api.zoom.us/v2/users/${zoomUserId}/meetings`, {
