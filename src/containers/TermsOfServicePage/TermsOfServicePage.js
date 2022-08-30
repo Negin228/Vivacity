@@ -32,7 +32,7 @@ const TermsOfServicePageComponent = props => {
       },
     },
     {
-      text: 'ZOOM Usage',
+      text: 'Zoom Usage',
       selected: false,
       linkProps: {
         name: 'ZoomUsagePage',

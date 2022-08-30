@@ -7,9 +7,9 @@ function ZoomPopupModal({ open, onClose }) {
   const currentPath = location.pathname;
   const modalContent = (
     <div>
-      <h2>ZOOM Meeting</h2>
+      <h2>Zoom Meeting</h2>
       <p className="leading-snug">
-        In order to publish this listing, you need to authorize us via ZOOM so that we can schedule
+        In order to publish this listing, you need to authorize us via Zoom so that we can schedule
         a meeting on your behalf.
       </p>
 
@@ -17,7 +17,7 @@ function ZoomPopupModal({ open, onClose }) {
         href={`https://zoom.us/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_ZOOM_CLIENT_ID}&redirect_uri=http://localhost:3500/api/auth/callback/zoom?backurl=${currentPath}`}
         target="_self"
       >
-        Continue with ZOOM login
+        Continue with Zoom login
       </ExternalLink>
     </div>
   );

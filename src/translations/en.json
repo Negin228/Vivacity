@@ -10,8 +10,8 @@
   "ActivityFeed.ownTransitionReview": "You left a review for { displayName }.",
   "ActivityFeed.showOlderMessages": "Show older",
   "ActivityFeed.today": "Today",
-  "ZoomErrorPage.schemaTitle": "ZOOM Error",
-  "ZoomErrorPage.schemaDescription": "An error occurred while creating the ZOOM meeting.",
+  "ZoomErrorPage.schemaTitle": "Zoom Error",
+  "ZoomErrorPage.schemaDescription": "An error occurred while creating the Zoom meeting.",
   "ActivityFeed.transitionAccept": "{ displayName } accepted the booking request.",
   "ActivityFeed.transitionCancel": "The booking was cancelled.",
   "ActivityFeed.transitionComplete": "The booking was completed. { reviewLink }",
@@ -303,7 +303,7 @@
   "EditListingWizard.saveEditPhotos": "Save photos",
   "EditListingWizard.saveEditPolicies": "Save policies",
   "EditListingWizard.saveEditPricing": "Save pricing",
-  "EditListingWizard.saveNewDescription": "Next: ZOOM & Photos",
+  "EditListingWizard.saveNewDescription": "Next: Zoom & Photos",
   "EditListingWizard.saveNewFeatures": "Next: Pricing",
   "EditListingWizard.saveNewLocation": "Next: Pricing",
   "EditListingWizard.saveNewAvailability": "Next: Photos",
@@ -1131,5 +1131,5 @@
   "ManageListingsPage.yourListings": "Your listings",
   "SectionUpcomingClasses.title": "Upcoming classes",
   "ListingCard.free": "Free",
-  "ZoomUsagePage.schemaTitle": "ZOOM Usage"
+  "ZoomUsagePage.schemaTitle": "Zoom Usage"
 }

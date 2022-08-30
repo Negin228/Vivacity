@@ -66,7 +66,7 @@ export const ZoomErrorPageComponent = props => {
                 Sorry something went wrong
               </h1>
               <p className="m-0 text-base text-black">
-                There was an error while creating the ZOOM meeting, please refresh the page and try
+                There was an error while creating the Zoom meeting, please refresh the page and try
                 again. If the problem persists, please contact the marketplace administrator. Please{' '}
                 <NamedLink name="LandingPage">click here</NamedLink> to go back to the homepage.
               </p>
