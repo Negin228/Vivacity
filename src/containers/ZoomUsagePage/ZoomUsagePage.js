@@ -20,7 +20,7 @@ import first from '../../assets/zoom/usage/1.png';
 import second from '../../assets/zoom/usage/second.png';
 import third from '../../assets/zoom/usage/3.png';
 // import fourth from '../../assets/zoom/usage/4.png';
-import fifth from '../../assets/zoom/usage/5.png';
+import fifth from '../../assets/zoom/usage/fifth.png';
 
 import rFirst from '../../assets/zoom/revoking/1.png';
 import rSecond from '../../assets/zoom/revoking/2.png';
