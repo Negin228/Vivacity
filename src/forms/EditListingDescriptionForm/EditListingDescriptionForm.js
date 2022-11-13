@@ -254,7 +254,7 @@ const EditListingDescriptionFormComponent = props => (
             className={css.title}
             id="stock"
             name="stock"
-            label="Capacity"
+            label="Maximum Capacity"
             placeholder="How many students can attend this class?"
             type="number"
             min={0}
