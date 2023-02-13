@@ -17,9 +17,7 @@ const SectionTrainers = props => {
         <div className={css.title} style={{ marginBottom: '30px' }}>
           Our Trainers
         </div>
-        <span style={{ color: '#4a4a4a' }}>
-          Failed to load trainers. Please refresh the page to fix the problem.
-        </span>
+        <span style={{ color: '#4a4a4a' }}>No trainers to show.</span>
       </div>
     );
   }
