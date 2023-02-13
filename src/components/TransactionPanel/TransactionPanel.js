@@ -317,9 +317,8 @@ export class TransactionPanelComponent extends Component {
     const listingTitle = currentListing.attributes.deleted
       ? deletedListingTitle
       : currentListing.attributes.title;
-    const formattedDate = moment
-      .unix(currentListing.attributes.publicData.unixTimeStamp)
-      .format('dddd, MMMM Do YYYY, h:mm a');
+    const formattedDate = moment.tz(currentListing.attributes.publicData.startDate, currentListing.attributes.publicData.timezone).format('dddd, MMMM Do YYYY, h:mm a');
+    
     const unitType = config.bookingUnitType;
     const isNightly = unitType === LINE_ITEM_NIGHT;
     const isDaily = unitType === LINE_ITEM_DAY;

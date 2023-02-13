@@ -762,9 +762,8 @@ export class CheckoutPageComponent extends Component {
     // e.g. {country: 'FI'}
 
     const initalValuesForStripePayment = { name: userName };
-    const formattedDate = moment
-      .unix(currentListing.attributes.publicData.unixTimeStamp)
-      .format('dddd, MMMM Do YYYY, h:mm a');
+    const formattedDate = moment.tz(currentListing.attributes.publicData.startDate, currentListing.attributes.publicData.timezone).format('dddd, MMMM Do YYYY, h:mm a');
+    
     return (
       <Page {...pageProps}>
         {topbar}

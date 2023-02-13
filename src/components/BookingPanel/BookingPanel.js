@@ -114,7 +114,7 @@ const BookingPanel = props => {
 
   const classes = classNames(rootClassName || css.root, className);
   const titleClasses = classNames(titleClassName || css.bookingTitle);
-  const formattedDate = moment.unix(publicData.unixTimeStamp).format('dddd, MMMM Do YYYY, h:mm a');
+  const formattedDate = moment.tz(publicData.startDate, publicData.timezone).format('dddd, MMMM Do YYYY, h:mm a');
   return (
     <div className={classes}>
       <ModalInMobile

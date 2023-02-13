@@ -13,7 +13,7 @@ const SectionFeaturesMaybe = props => {
   }
   const selectedOptions = publicData && publicData.yogaStyles ? publicData.yogaStyles : [];
   const selectedConfigOptions = options.filter(o => selectedOptions.find(s => s === o.key));
-  const formattedDate = moment.unix(publicData.unixTimeStamp).format('dddd, MMMM Do YYYY, h:mm a');
+  const formattedDate = moment.tz(publicData.startDate, publicData.timezone).format('dddd, MMMM Do YYYY, h:mm a');
   return (
     <div className={css.sectionFeatures}>
       <h2 className={css.featuresTitle}>
