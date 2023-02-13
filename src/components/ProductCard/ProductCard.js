@@ -42,7 +42,7 @@ function ProductCard({ title, id, timeZone, startDate, images, teacherName }) {
 
         <div>
           <h3>
-            {formattedDate} at {formattedTime} GMT {timezoneOffset}
+            {formattedDate} at {formattedTime}
           </h3>
           <p className={css.price}>
             {title} with {teacherName}
