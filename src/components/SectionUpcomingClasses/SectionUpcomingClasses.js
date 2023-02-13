@@ -29,7 +29,6 @@ const SectionUpcomingClasses = ({ loading, error, products, intl }) => {
     );
   }
   let someProducts = products?.slice(0, 5);
-  let dateMsg = '';
   return (
     <div className={classNames(css.productsWrapper, 'bg-white')}>
       {someProducts?.length > 0 ? (
@@ -44,12 +43,6 @@ const SectionUpcomingClasses = ({ loading, error, products, intl }) => {
       )}
       <div className={css.container}>
         {(someProducts ?? []).map(p => {
-          const dateStart = new Date(p?.attributes?.publicData?.unixTimeStamp);
-          let diff = new Date().getTime() - dateStart.getTime();
-          if (diff > 0) {
-            dateMsg = 'Upcoming classes will show here!';
-            return;
-          }
           return (
             <ProductCard
               id={p.id.uuid}
@@ -57,7 +50,7 @@ const SectionUpcomingClasses = ({ loading, error, products, intl }) => {
               metadata={p?.attributes?.metadata}
               title={p?.attributes?.title}
               teacherName={p?.author?.attributes?.profile?.displayName}
-              startDate={p?.attributes?.publicData?.unixTimeStamp}
+              startDate={p?.attributes?.publicData?.startDate}
               timeZone={p?.attributes?.publicData?.timezone}
               description={p?.attributes?.description}
               publicData={p?.attributes?.publicData}
@@ -67,7 +60,6 @@ const SectionUpcomingClasses = ({ loading, error, products, intl }) => {
             />
           );
         })}
-        {dateMsg}
       </div>
     </div>
   );

@@ -146,11 +146,14 @@ const mapStateToProps = state => {
     trainerData,
     trainersError,
   } = state.LandingPage;
-  const products = productIds?.map(t => {
+  const productArr = productIds?.map((t, i) => {
     const ref = { id: t, type: 'listing' };
     const listings = getMarketplaceEntities(state, [ref]);
     return listings.length === 1 ? listings[0] : null;
   });
+  const products = productArr?.filter(
+    l => new Date(l.attributes.publicData.startDate) > new Date()
+  );
   const trainers = trainerData?.map(trainer => {
     return {
       trainerName: trainer.attributes?.profile?.displayName,
