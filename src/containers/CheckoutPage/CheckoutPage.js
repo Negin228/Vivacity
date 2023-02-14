@@ -762,7 +762,10 @@ export class CheckoutPageComponent extends Component {
     // e.g. {country: 'FI'}
 
     const initalValuesForStripePayment = { name: userName };
-    const formattedDate = moment.tz(currentListing.attributes.publicData.startDate, currentListing.attributes.publicData.timezone).format('dddd, MMMM Do YYYY, h:mm a');
+
+    const {publicData} = currentListing.attributes;
+
+    const formattedDate = moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
     
     return (
       <Page {...pageProps}>
