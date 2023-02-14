@@ -157,7 +157,7 @@ const mapStateToProps = state => {
       moment(l.attributes.publicData.startDate)
         .tz(l.attributes.publicData.timezone, true)
         .local()
-        .format('dddd, MMMM Do YYYY, H:mm a') > new Date()
+        .format() > moment().format()
   );
   const trainers = trainerData?.map(trainer => {
     return {
