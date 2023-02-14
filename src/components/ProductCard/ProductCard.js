@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment, { utc } from 'moment';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
@@ -15,9 +15,15 @@ function ProductCard({ title, id, timeZone, startDate, images, teacherName }) {
     history.push({
       pathname: `/l/${createSlug(title)}/${id}`,
     });
-  const formattedDate = moment.tz(startDate, timeZone).format('dddd, MMMM Do');
-  const formattedTime = moment.tz(startDate, timeZone).format('h:mm a');
-  const timezoneOffset = mt.tz(timeZone).format('Z');
+
+  const formattedDate = moment(startDate)
+    .tz(timeZone, true)
+    .local()
+    .format('dddd, MMMM Do YYYY');
+  const formattedTime = moment(startDate)
+    .tz(timeZone, true)
+    .local()
+    .format('H:mm a');
   return (
     <div className={css.product} onClick={handleClick}>
       {/* <div className="px-3 flex items-center justify-between">
