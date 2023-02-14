@@ -7,6 +7,7 @@ import { injectIntl, intlShape } from '../../util/reactIntl';
 import { isScrollingDisabled } from '../../ducks/UI.duck';
 import { propTypes } from '../../util/types';
 import config from '../../config';
+import moment from 'moment';
 import {
   Page,
   SectionHero,
@@ -152,7 +153,11 @@ const mapStateToProps = state => {
     return listings.length === 1 ? listings[0] : null;
   });
   const products = productArr?.filter(
-    l => new Date(l.attributes.publicData.startDate) > new Date()
+    l =>
+      moment(l.attributes.publicData.startDate)
+        .tz(l.attributes.publicData.timezone, true)
+        .local()
+        .format('dddd, MMMM Do YYYY, H:mm a') > new Date()
   );
   const trainers = trainerData?.map(trainer => {
     return {
