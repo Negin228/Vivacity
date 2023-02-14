@@ -99,14 +99,15 @@ module.exports = async (req, res) => {
 
     const zoomUserId = respData?.id;
 
-    const dateFormat = moment(new Date(startDate))
-      .tz(timezone)
-      .format('YYYY-MM-DD');
-    const timeFormat = moment(new Date(startDate))
-      .tz(timezone)
-      .format('HH:mm:ss');
+    // const dateFormat = moment(new Date(startDate))
+    //   .tz(timezone)
+    //   .format('YYYY-MM-DD');
+    // const timeFormat = moment(new Date(startDate))
+    //   .tz(timezone)
+    //   .format('HH:mm:ss');
 
-    const start_time = `${dateFormat}T${timeFormat}`;
+
+    const start_time = moment(startDate).format('YYYY-MM-DDThh:mm:ss');
 
     const meetingParams = JSON.stringify({
       // start_time: moment(new Date(startDate))
