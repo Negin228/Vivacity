@@ -23,7 +23,7 @@ function ProductCard({ title, id, timeZone, startDate, images, teacherName }) {
   const formattedTime = moment(startDate)
     .tz(timeZone, true)
     .local()
-    .format('H:mm a');
+    .format('h:mm a');
   return (
     <div className={css.product} onClick={handleClick}>
       {/* <div className="px-3 flex items-center justify-between">
