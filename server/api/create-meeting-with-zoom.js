@@ -62,7 +62,7 @@ module.exports = async (req, res) => {
 
     listingResponse = denormalizeResponseData(listingResponse);
     const listing = listingResponse.data;
-    const { startDate, timezone, classDuration } = listing?.attributes?.publicData ?? {};
+    const { startDate, listingTimezone, classDuration } = listing?.attributes?.publicData ?? {};
     // console.log({ timezone, startDate });
 
     let duration;
@@ -99,6 +99,8 @@ module.exports = async (req, res) => {
 
     const zoomUserId = respData?.id;
 
+    const zoomTimezone = respData?.timezone;
+
     // const dateFormat = moment(new Date(startDate))
     //   .tz(timezone)
     //   .format('YYYY-MM-DD');
@@ -107,14 +109,13 @@ module.exports = async (req, res) => {
     //   .format('HH:mm:ss');
 
 
-    const start_time = moment(startDate).format('YYYY-MM-DDThh:mm:ss');
+    const start_time = moment(startDate).tz(listingTimezone,true).tz(zoomTimezone).format('YYYY-MM-DDTHH:mm:ss');
 
     const meetingParams = JSON.stringify({
       // start_time: moment(new Date(startDate))
       //   .tz(timezone)
       //   .format('YYYY-MM-DDTHH:mm:ss'),
       start_time,
-      timezone: timezone,
       type: 2,
       duration,
       topic: listing.attributes.title.slice(0, 199),
