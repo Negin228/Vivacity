@@ -109,7 +109,7 @@ module.exports = async (req, res) => {
     //   .format('HH:mm:ss');
 
 
-    const start_time = moment(startDate).tz(listingTimezone,true).tz(zoomTimezone).format('YYYY-MM-DDTHH:mm:ss');
+    const start_time = moment(startDate).tz(zoomTimezone).tz(listingTimezone,true).tz(zoomTimezone).format('YYYY-MM-DDTHH:mm:ss');
 
 
     console.log({startDate,listingTimezone,zoomTimezone,start_time})
