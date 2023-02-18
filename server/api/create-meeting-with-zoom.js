@@ -111,6 +111,9 @@ module.exports = async (req, res) => {
 
     const start_time = moment(startDate).tz(listingTimezone,true).tz(zoomTimezone).format('YYYY-MM-DDTHH:mm:ss');
 
+
+    console.log({startDate,listingTimezone,zoomTimezone,start_time})
+
     const meetingParams = JSON.stringify({
       // start_time: moment(new Date(startDate))
       //   .tz(timezone)
