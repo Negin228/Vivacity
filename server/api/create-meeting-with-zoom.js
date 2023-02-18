@@ -62,7 +62,7 @@ module.exports = async (req, res) => {
 
     listingResponse = denormalizeResponseData(listingResponse);
     const listing = listingResponse.data;
-    const { startDate, listingTimezone, classDuration } = listing?.attributes?.publicData ?? {};
+    const { startDate, timezone: listingTimezone, classDuration } = listing?.attributes?.publicData ?? {};
     // console.log({ timezone, startDate });
 
     let duration;
