@@ -195,6 +195,17 @@ const EditListingDescriptionFormComponent = props => (
             label="Workout Type"
             options={config.custom.workoutTypes}
           />
+          {values?.yogaStyles?.includes('other') ? (
+            <FieldTextInput
+              id="otherWorkoutType"
+              name="otherWorkoutType"
+              className={css.title}
+              type="text"
+              label="Other Workout Type"
+              placeholder="Enter other workout type"
+              validate={required('Please enter other workout type')}
+            />
+          ) : null}
           {/* pricing section  */}
           <FieldSelectModern
             className={css.features}

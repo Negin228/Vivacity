@@ -983,6 +983,18 @@ export const workoutTypes = [
   { key: 'yoga', label: 'Yoga' },
   { key: 'other', label: 'Other' },
 ];
+export const workoutTypesListing = [
+  { key: 'acroyoga', label: 'Acroyoga' },
+  { key: 'aerobic', label: 'Aerobic' },
+  { key: 'balance_stability', label: 'Balance and Stability' },
+  { key: 'dance', label: 'Dance' },
+  { key: 'flexibility_mobility', label: 'Flexibility and Mobility' },
+  { key: 'hiit', label: 'HIIT' },
+  { key: 'indoor_cycling', label: 'Indoor Cycling' },
+  { key: 'strength', label: 'Strength Training' },
+  { key: 'stretch', label: 'Stretch' },
+  { key: 'yoga', label: 'Yoga' },
+];
 
 export const filters = [
   // {
@@ -1079,7 +1091,7 @@ export const filters = [
       // "label" is set here for this web app's UI only.
       // Note: label is not added through the translation files
       // to make filter customizations a bit easier.
-      options: [...workoutTypes],
+      options: [...workoutTypesListing],
     },
   },
 ];

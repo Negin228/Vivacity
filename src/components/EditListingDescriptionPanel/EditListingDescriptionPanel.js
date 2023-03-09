@@ -72,6 +72,7 @@ const EditListingDescriptionPanel = props => {
         stock: currentStock,
         class_duration: publicData.classDuration ? publicData.classDuration : undefined,
         type: config.custom.typeOptions?.find(option => option.key === publicData.type),
+        otherWorkoutType: publicData.otherWorkoutType,
       };
     }
     return {
@@ -85,6 +86,7 @@ const EditListingDescriptionPanel = props => {
       stock: currentStock,
       class_duration: publicData.classDuration ? publicData.classDuration : undefined,
       type: config.custom.typeOptions?.find(option => option.key === publicData.type),
+      otherWorkoutType: publicData.otherWorkoutType,
       ...initialProps,
     };
   }, [initialProps]);
@@ -111,6 +113,7 @@ const EditListingDescriptionPanel = props => {
             stock,
             class_duration,
             type,
+            otherWorkoutType,
           } = values;
 
           const hasStockQuantityChanged = stock && currentStockRaw !== stock;
@@ -150,6 +153,7 @@ const EditListingDescriptionPanel = props => {
               classDurationFilter: hasZoom ? publicData?.classDurationFilter : [class_duration.key],
               timeUpdated,
               type: type?.key,
+              otherWorkoutType: yogaStyles?.includes('other') ? otherWorkoutType : null,
             },
           };
           setInitialProps({
@@ -164,6 +168,7 @@ const EditListingDescriptionPanel = props => {
             stock,
             class_duration: hasZoom ? publicData.classDuration : class_duration,
             type,
+            otherWorkoutType,
           });
 
           onSubmit(updateValues);

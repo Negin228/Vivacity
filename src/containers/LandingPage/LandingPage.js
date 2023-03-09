@@ -85,11 +85,11 @@ export const LandingPageComponent = props => {
             </li> */}
             <li className={css.section}>
               <div className={css.sectionContent}>
-                <SectionUpcomingClasses
+                {/* <SectionUpcomingClasses
                   loading={productsLoading}
                   error={productsError}
                   products={products}
-                />
+                /> */}
               </div>
             </li>
             <li className={css.section}>
@@ -152,15 +152,18 @@ const mapStateToProps = state => {
     const listings = getMarketplaceEntities(state, [ref]);
     return listings.length === 1 ? listings[0] : null;
   });
-  const products = productArr?.filter(
-    l =>
-      moment(l.attributes.publicData.startDate)
-        .tz(l.attributes.publicData.timezone, true)
-        .local()
-        .format() > moment().format()
-  );
+  const products =
+    productArr ??
+    []?.filter(
+      l =>
+        moment(l.attributes.publicData.startDate)
+          .tz(l.attributes.publicData.timezone, true)
+          .local()
+          .format() > moment().format()
+    );
   const trainers = trainerData?.map(trainer => {
     return {
+      id: trainer.id,
       trainerName: trainer.attributes?.profile?.displayName,
       trainerProfileImage: trainer.profileImage?.attributes?.variants?.default?.url,
     };

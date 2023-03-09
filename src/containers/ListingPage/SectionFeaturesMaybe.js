@@ -5,6 +5,7 @@ import moment from 'moment';
 import css from './ListingPage.module.css';
 import { CgGym } from 'react-icons/cg';
 import { MdDateRange, MdAccessTime } from 'react-icons/md';
+import config from '../../config';
 
 const SectionFeaturesMaybe = props => {
   const { options, publicData } = props;
@@ -12,8 +13,12 @@ const SectionFeaturesMaybe = props => {
     return null;
   }
   const selectedOptions = publicData && publicData.yogaStyles ? publicData.yogaStyles : [];
-  const selectedConfigOptions = options.filter(o => selectedOptions.find(s => s === o.key));
+  const otherWorkoutType = publicData?.otherWorkoutType;
+  const selectedConfigOptions = config.custom.workoutTypesListing.filter(o =>
+    selectedOptions.find(s => s === o.key)
+  );
 
+  // prettier-ignore
 
   const formattedDate = moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
 
@@ -25,8 +30,16 @@ const SectionFeaturesMaybe = props => {
       </h2>
       <PropertyGroup
         id="ListingPage.yogaStyles"
-        options={selectedConfigOptions}
-        selectedOptions={selectedOptions}
+        options={[
+          ...selectedConfigOptions,
+          otherWorkoutType
+            ? {
+                key: 'other',
+                label: otherWorkoutType,
+              }
+            : {},
+        ]}
+        selectedOptions={[...selectedOptions, otherWorkoutType ? 'other' : '']}
         twoColumns={selectedConfigOptions.length > 5}
       />
       <h2 className={css.featuresTitle} style={{ marginTop: '16px' }}>
