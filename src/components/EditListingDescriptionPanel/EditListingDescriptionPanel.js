@@ -8,7 +8,7 @@ import { LISTING_STATE_DRAFT } from '../../util/types';
 import { ListingLink } from '../../components';
 import { EditListingDescriptionForm } from '../../forms';
 import config from '../../config';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import css from './EditListingDescriptionPanel.module.css';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';

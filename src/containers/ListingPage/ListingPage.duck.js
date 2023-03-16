@@ -226,6 +226,7 @@ export const showListing = (listingId, isOwn = false) => (dispatch, getState, sd
 
   return show
     .then(data => {
+      // console.log('data', data);
       dispatch(addMarketplaceEntities(data));
       return data;
     })

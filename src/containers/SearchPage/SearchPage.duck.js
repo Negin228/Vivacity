@@ -191,6 +191,7 @@ export const searchListings = searchParams => (dispatch, getState, sdk) => {
   return sdk.listings
     .query(params)
     .then(response => {
+      // console.log(response);
       dispatch(addMarketplaceEntities(response));
       dispatch(searchListingsSuccess(response));
       return response;
@@ -233,6 +234,7 @@ export const loadData = (params, search) => {
     latlng: ['origin'],
     latlngBounds: ['bounds'],
   });
+
   const { page = 1, address, origin, ...rest } = queryParams;
   const originMaybe = config.sortSearchByDistance && origin ? { origin } : {};
   return searchListings({
@@ -240,6 +242,9 @@ export const loadData = (params, search) => {
     ...originMaybe,
     page,
     perPage: RESULT_PAGE_SIZE,
+    // availability: 'time-partial',
+    // start: new Date().toISOString(),
+    // end: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
     include: ['author', 'images'],
     'fields.listing': ['title', 'geolocation', 'price', 'publicData'],
     'fields.user': ['profile.displayName', 'profile.abbreviatedName'],

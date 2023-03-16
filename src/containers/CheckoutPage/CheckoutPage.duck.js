@@ -10,6 +10,7 @@ import {
   isPrivileged,
 } from '../../util/transaction';
 import * as log from '../../util/log';
+import { getDefaultTimeZoneOnBrowser } from '../../util/dates';
 import { fetchCurrentUserHasOrdersSuccess, fetchCurrentUser } from '../../ducks/user.duck';
 
 // ================ Action types ================ //
@@ -180,11 +181,13 @@ export const initiateOrder = (orderParams, transactionId) => (dispatch, getState
   const { quantity, bookingType, bookingDates, ...otherOrderParams } = orderParams;
   console.log({ quantity, bookingType, bookingDates, orderParams });
   const quantityMaybe = quantity ? { stockReservationQuantity: quantity } : {};
+  const customerTimezone = getDefaultTimeZoneOnBrowser();
   const bookingParamsMaybe = bookingDates || {};
   const transitionParams = {
     ...quantityMaybe,
     ...bookingParamsMaybe,
     ...otherOrderParams,
+    customerTimezone,
   };
   const bodyParams = isTransition
     ? {
@@ -313,7 +316,7 @@ export const sendMessage = params => (dispatch, getState, sdk) => {
  */
 export const speculateTransaction = (orderParams, transactionId) => (dispatch, getState, sdk) => {
   dispatch(speculateTransactionRequest());
-
+  const customerTimezone = getDefaultTimeZoneOnBrowser();
   // If we already have a transaction ID, we should transition, not
   // initiate.
   const bookingType = orderParams?.bookingType;
@@ -331,6 +334,7 @@ export const speculateTransaction = (orderParams, transactionId) => (dispatch, g
     ...bookingParamsMaybe,
     ...otherOrderParams,
     cardToken: 'CheckoutPage_speculative_card_token',
+    customerTimezone,
   };
   const bodyParams = isTransition
     ? {

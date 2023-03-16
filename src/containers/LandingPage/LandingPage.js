@@ -85,11 +85,11 @@ export const LandingPageComponent = props => {
             </li> */}
             <li className={css.section}>
               <div className={css.sectionContent}>
-                {/* <SectionUpcomingClasses
+                <SectionUpcomingClasses
                   loading={productsLoading}
                   error={productsError}
                   products={products}
-                /> */}
+                />
               </div>
             </li>
             <li className={css.section}>

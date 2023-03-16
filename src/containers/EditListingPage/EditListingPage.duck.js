@@ -11,7 +11,7 @@ import {
 } from '../../ducks/stripeConnectAccount.duck';
 import { fetchCurrentUser } from '../../ducks/user.duck';
 import * as log from '../../util/log';
-
+import moment from 'moment';
 const { UUID } = sdkTypes;
 
 const requestAction = actionType => params => ({ type: actionType, payload: { params } });
@@ -480,20 +480,39 @@ export function requestCreateListingDraft(data) {
   };
 }
 
-export const requestPublishListingDraft = listingId => (dispatch, getState, sdk) => {
-  dispatch(publishListing(listingId));
+export const requestPublishListingDraft = listingId => async (dispatch, getState, sdk) => {
+  try {
+    dispatch(publishListing(listingId));
+    // requestAddAvailabilityException()
+    const listing = await sdk.ownListings.show({ id: listingId });
+    const { publicData } = listing.data.data.attributes;
 
-  return sdk.ownListings
-    .publishDraft({ id: listingId }, { expand: true })
-    .then(response => {
-      // Add the created listing to the marketplace data
-      dispatch(addMarketplaceEntities(response));
-      dispatch(publishListingSuccess(response));
-      return response;
-    })
-    .catch(e => {
-      dispatch(publishListingError(storableError(e)));
-    });
+    const params = {
+      listingId,
+      start: new Date(publicData.startDate).toISOString(),
+      end: moment(publicData.startDate)
+        .add(+publicData?.classDuration?.key?.split('_')[0], 'm')
+        .toDate()
+        .toISOString(),
+      seats: 1,
+    };
+    await dispatch(requestAddAvailabilityException(params));
+    const response = await sdk.ownListings.publishDraft({ id: listingId }, { expand: true });
+    await dispatch(addMarketplaceEntities(response));
+    await dispatch(publishListingSuccess(response));
+    return response;
+    // .then(response => {
+    //   // Add the created listing to the marketplace data
+    //   dispatch(addMarketplaceEntities(response));
+    //   dispatch(publishListingSuccess(response));
+    //   return response;
+    // })
+    // .catch(e => {
+    //   dispatch(publishListingError(storableError(e)));
+    // });
+  } catch (e) {
+    dispatch(publishListingError(storableError(e)));
+  }
 };
 
 // Images return imageId which we need to map with previously generated temporary id
@@ -544,6 +563,7 @@ export const requestAddAvailabilityException = params => (dispatch, getState, sd
     .create(params, { expand: true })
     .then(response => {
       const availabilityException = response.data.data;
+      console.log('availabilityException', availabilityException);
       return dispatch(addAvailabilityExceptionSuccess({ data: availabilityException }));
     })
     .catch(e => {
@@ -574,6 +594,7 @@ export const requestFetchAvailabilityExceptions = fetchParams => (dispatch, getS
     .query(fetchParams, { expand: true })
     .then(response => {
       const availabilityExceptions = denormalisedResponseEntities(response);
+      console.log('fetch', availabilityExceptions);
       return dispatch(fetchAvailabilityExceptionsSuccess({ data: availabilityExceptions }));
     })
     .catch(e => {
@@ -656,6 +677,7 @@ export const loadData = params => (dispatch, getState, sdk) => {
           start,
           end,
         };
+        // console.log('params', params);
         dispatch(requestFetchAvailabilityExceptions(params));
       }
 
