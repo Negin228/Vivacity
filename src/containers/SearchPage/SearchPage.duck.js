@@ -180,10 +180,23 @@ export const searchListings = searchParams => (dispatch, getState, sdk) => {
   const { perPage, price, dates, minDuration, ...rest } = searchParams;
   const priceMaybe = priceSearchParams(price);
   // const availabilityMaybe = availabilityParams(dates, minDuration);
+  // availability: 'time-partial',
+  // start: new Date().toISOString(),
+  // end: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
+  const availabilityFilterMaybe = {
+    start: new Date(new Date().toUTCString()).toISOString(),
+    end: new Date(
+      new Date(new Date().setMonth(new Date().getMonth() + 1)).toUTCString()
+    ).toISOString(),
+    // start: new Date(new Date(Number(splitted[0])).toUTCString()).toISOString(),
+    // end: new Date(new Date(Number(splitted[1])).toUTCString()).toISOString(),
+    availability: 'time-partial',
+  };
 
   const params = {
     ...rest,
     ...priceMaybe,
+    // ...availabilityFilterMaybe,
     // ...availabilityMaybe,
     per_page: perPage,
   };
@@ -242,9 +255,7 @@ export const loadData = (params, search) => {
     ...originMaybe,
     page,
     perPage: RESULT_PAGE_SIZE,
-    // availability: 'time-partial',
-    // start: new Date().toISOString(),
-    // end: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
+
     include: ['author', 'images'],
     'fields.listing': ['title', 'geolocation', 'price', 'publicData'],
     'fields.user': ['profile.displayName', 'profile.abbreviatedName'],
