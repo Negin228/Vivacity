@@ -138,66 +138,61 @@ export const searchListings = searchParams => (dispatch, getState, sdk) => {
       : {};
   };
 
-  // const availabilityParams = (datesParam, minDurationParam) => {
-  //   const dateValues = datesParam ? datesParam.split(',') : [];
-  //   const hasDateValues = datesParam && dateValues.length === 2;
-  //   const startDate = hasDateValues ? dateValues[0] : null;
-  //   const endDate = hasDateValues ? dateValues[1] : null;
+  const availabilityParams = (datesParam, minDurationParam) => {
+    const dateValues = datesParam ? datesParam.split(',') : [];
+    const hasDateValues = datesParam && dateValues.length === 2;
+    const startDate = hasDateValues ? dateValues[0] : null;
+    const endDate = hasDateValues ? dateValues[1] : null;
 
-  //   const minDurationMaybe =
-  //     minDurationParam && Number.isInteger(minDurationParam) && hasDateValues
-  //       ? { minDuration: minDurationParam }
-  //       : {};
+    const minDurationMaybe =
+      minDurationParam && Number.isInteger(minDurationParam) && hasDateValues
+        ? { minDuration: minDurationParam }
+        : {};
 
-  //   // Find configs for 'dates-length' filter
-  //   // (type: BookingDateRangeLengthFilter)
-  //   const filterConfigs = config.custom.filters;
-  //   const idOfBookingDateRangeLengthFilter = 'dates-length';
-  //   const dateLengthFilterConfig = filterConfigs.find(
-  //     f => f.id === idOfBookingDateRangeLengthFilter
-  //   );
-  //   // Extract time zone
-  //   const timeZone = dateLengthFilterConfig.config.searchTimeZone;
+    // Find configs for 'dates-length' filter
+    // (type: BookingDateRangeLengthFilter)
+    const filterConfigs = config.custom.filters;
+    const idOfBookingDateRangeLengthFilter = 'dates-length';
+    const dateLengthFilterConfig = filterConfigs.find(
+      f => f.id === idOfBookingDateRangeLengthFilter
+    );
+    // Extract time zone
+    const timeZone = dateLengthFilterConfig?.config?.searchTimeZone;
 
-  //   return hasDateValues
-  //     ? {
-  //         start: formatDateStringToTz(startDate, timeZone),
-  //         end: getExclusiveEndDateWithTz(endDate, timeZone),
+    return hasDateValues
+      ? {
+          start: formatDateStringToTz(startDate, timeZone),
+          end: getExclusiveEndDateWithTz(endDate, timeZone),
 
-  //         // When we have `time-partial` value in the availability, the
-  //         // API returns listings that don't necessarily have the full
-  //         // start->end range available, but enough that the minDuration
-  //         // (in minutes) can be fulfilled.
-  //         //
-  //         // See: https://www.sharetribe.com/api-reference/marketplace.html#availability-filtering
-  //         availability: 'time-partial',
+          // When we have `time-partial` value in the availability, the
+          // API returns listings that don't necessarily have the full
+          // start->end range available, but enough that the minDuration
+          // (in minutes) can be fulfilled.
+          //
+          // See: https://www.sharetribe.com/api-reference/marketplace.html#availability-filtering
+          availability: 'time-partial',
 
-  //         ...minDurationMaybe,
-  //       }
-  //     : {};
-  // };
+          ...minDurationMaybe,
+        }
+      : {};
+  };
 
   const { perPage, price, dates, minDuration, ...rest } = searchParams;
   const priceMaybe = priceSearchParams(price);
-  // const availabilityMaybe = availabilityParams(dates, minDuration);
-  // availability: 'time-partial',
-  // start: new Date().toISOString(),
-  // end: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
+  const availabilityMaybe = availabilityParams(dates, minDuration);
   const availabilityFilterMaybe = {
     start: new Date(new Date().toUTCString()).toISOString(),
     end: new Date(
       new Date(new Date().setMonth(new Date().getMonth() + 1)).toUTCString()
     ).toISOString(),
-    // start: new Date(new Date(Number(splitted[0])).toUTCString()).toISOString(),
-    // end: new Date(new Date(Number(splitted[1])).toUTCString()).toISOString(),
     availability: 'time-partial',
   };
-
+  console.log('hihi', availabilityFilterMaybe);
   const params = {
     ...rest,
     ...priceMaybe,
-    // ...availabilityFilterMaybe,
-    // ...availabilityMaybe,
+    ...availabilityFilterMaybe,
+    ...availabilityMaybe,
     per_page: perPage,
   };
 

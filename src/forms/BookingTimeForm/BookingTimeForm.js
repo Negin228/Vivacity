@@ -177,7 +177,7 @@ export class BookingTimeFormComponent extends Component {
                   this.handleOnChange(values);
                 }}
               />
-              {monthlyTimeSlots && timeZone ? (
+              {/* {monthlyTimeSlots && timeZone ? (
                 <FieldDateAndTimeInput
                   {...dateInputProps}
                   className={css.bookingDates}
@@ -191,7 +191,7 @@ export class BookingTimeFormComponent extends Component {
                   pristine={pristine}
                   timeZone={timeZone}
                 />
-              ) : null}
+              ) : null} */}
 
               {bookingInfoMaybe}
               {loadingSpinnerMaybe}

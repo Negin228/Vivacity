@@ -214,7 +214,7 @@ export class ListingPageComponent extends Component {
       isPendingApprovalVariant || isDraftVariant
         ? ensureOwnListing(getOwnListing(listingId))
         : ensureListing(getListing(listingId));
-    console.log('currentListing', currentListing);
+    // console.log('currentListing', currentListing);
     const listingSlug = rawParams.slug || createSlug(currentListing.attributes.title || '');
     const params = { slug: listingSlug, ...rawParams };
 

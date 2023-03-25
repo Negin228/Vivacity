@@ -139,6 +139,19 @@ const EditListingDescriptionPanel = props => {
             ...stockUpdateMaybe,
             title: title,
             description,
+            availabilityPlan: {
+              type: 'availability-plan/time',
+              timezone: timezone,
+              entries: [
+                // { dayOfWeek: 'mon', startTime: '09:00', endTime: '17:00', seats: 1 },
+                // { dayOfWeek: 'tue', startTime: '09:00', endTime: '17:00', seats: 1 },
+                // { dayOfWeek: 'wed', startTime: '09:00', endTime: '17:00', seats: 1 },
+                // { dayOfWeek: 'thu', startTime: '09:00', endTime: '17:00', seats: 1 },
+                // { dayOfWeek: 'fri', startTime: '09:00', endTime: '17:00', seats: 1 },
+                // { dayOfWeek: 'sat', startTime: '09:00', endTime: '17:00', seats: 1 },
+                // { dayOfWeek: 'sun', startTime: '09:00', endTime: '17:00', seats: 1 },
+              ],
+            },
             // price: type?.key === config.isPaid ? price : null,
             ...priceMaybe,
             publicData: {
