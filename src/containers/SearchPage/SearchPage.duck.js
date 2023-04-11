@@ -183,11 +183,11 @@ export const searchListings = searchParams => (dispatch, getState, sdk) => {
   const availabilityFilterMaybe = {
     start: new Date(new Date().toUTCString()).toISOString(),
     end: new Date(
-      new Date(new Date().setMonth(new Date().getMonth() + 1)).toUTCString()
+      new Date(new Date().setMonth(new Date().getMonth() + 2)).toUTCString()
     ).toISOString(),
     availability: 'time-partial',
   };
-  console.log('hihi', availabilityFilterMaybe);
+  // console.log('hihi', availabilityFilterMaybe);
   const params = {
     ...rest,
     ...priceMaybe,

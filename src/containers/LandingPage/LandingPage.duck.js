@@ -71,12 +71,19 @@ export const fetchProductsError = error => ({ type: PRODUCTS_FETCH_ERROR, payloa
 export const fetchTrainerRequest = () => ({ type: TRAINER_FETCH_REQUEST });
 export const fetchTrainerSuccess = payload => ({ type: TRAINER_FETCH_SUCCESS, payload });
 export const fetchTrainerError = error => ({ type: TRAINER_FETCH_ERROR, payload: error });
-
+const availabilityFilterMaybe = {
+  start: new Date(new Date().toUTCString()).toISOString(),
+  end: new Date(
+    new Date(new Date().setMonth(new Date().getMonth() + 2)).toUTCString()
+  ).toISOString(),
+  availability: 'time-partial',
+};
 export const getAllListings = () => async (dispatch, getState, sdk) => {
   dispatch(fetchProductsRequest());
 
   try {
     const response = await sdk.listings.query({
+      ...availabilityFilterMaybe,
       include: ['images', 'author'],
       'fields.listing': ['title', 'metadata', 'price', 'publicData', 'createdAt'],
       'fields.image': [
