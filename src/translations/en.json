@@ -419,7 +419,7 @@
   "ListingCard.hostedBy": "Hosted by {authorName}.",
   "ListingCard.perDay": "per day",
   "ListingCard.perNight": "per night",
-  "ListingCard.perUnit": "per hour",
+  "ListingCard.perUnit": "per person",
   "ListingCard.unsupportedPrice": "({currency})",
   "ListingCard.unsupportedPriceTitle": "Unsupported currency ({currency})",
   "ListingPage.bookingTitle": "Book a session with {title}",
