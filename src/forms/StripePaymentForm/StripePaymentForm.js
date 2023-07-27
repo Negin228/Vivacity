@@ -247,7 +247,7 @@ class StripePaymentForm extends Component {
   }
 
   componentWillUnmount() {
-    if (this.card) {
+    if (this.card && !this.props.isFreeBooking) {
       this.card.removeEventListener('change', this.handleCardValueChange);
       this.card.unmount();
       this.card = null;
@@ -257,7 +257,7 @@ class StripePaymentForm extends Component {
   initializeStripeElement(element) {
     const elements = this.stripe.elements(stripeElementsOptions);
 
-    if (!this.card) {
+    if (!this.card && !this.props.isFreeBooking) {
       this.card = elements.create('card', { style: cardStyles });
       this.card.mount(element || this.cardContainer);
       this.card.addEventListener('change', this.handleCardValueChange);
@@ -314,6 +314,7 @@ class StripePaymentForm extends Component {
       formId,
       hasHandledCardPayment,
       defaultPaymentMethod,
+      isFreeBooking,
     } = this.props;
     const { initialMessage } = values;
     const { cardValueValid, paymentMethod } = this.state;
@@ -326,7 +327,7 @@ class StripePaymentForm extends Component {
       hasHandledCardPayment
     );
 
-    if (inProgress || onetimePaymentNeedsAttention) {
+    if (inProgress || (onetimePaymentNeedsAttention && !isFreeBooking)) {
       // Already submitting or card value incomplete/invalid
       return;
     }
@@ -381,7 +382,9 @@ class StripePaymentForm extends Component {
       hasHandledCardPayment
     );
 
-    const submitDisabled = invalid || onetimePaymentNeedsAttention || submitInProgress;
+    const submitDisabled = isFreeBooking
+      ? false
+      : invalid || onetimePaymentNeedsAttention || submitInProgress;
     const hasCardError = this.state.error && !submitInProgress;
     const hasPaymentErrors = confirmCardPaymentError || confirmPaymentError;
     const classes = classNames(rootClassName || css.root, className);

@@ -1061,7 +1061,7 @@ export const filters = [
     group: 'primary',
     queryParamNames: ['pub_languagesFilter'],
     config: {
-      searchMode: 'has_all',
+      // searchMode: 'has_all',
       options: [...languages],
     },
   },

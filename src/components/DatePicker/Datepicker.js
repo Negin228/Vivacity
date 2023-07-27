@@ -87,6 +87,7 @@ function DatepickerComponent(props) {
         timeInputLabel="Time:"
         dateFormat="MM/dd/yyyy h:mm aa"
         showTimeInput
+        showTimeSelect
 
         // dateFormat="d-MMMM-yyyy "
       />
