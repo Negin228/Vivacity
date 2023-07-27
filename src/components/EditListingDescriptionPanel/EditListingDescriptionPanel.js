@@ -13,7 +13,8 @@ import css from './EditListingDescriptionPanel.module.css';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { clearPreviousListingData } from '../../containers/EditListingPage/EditListingPage.duck';
-
+import { types as sdkTypes } from '../../util/sdkLoader';
+const { Money } = sdkTypes;
 const EditListingDescriptionPanel = props => {
   const {
     className,
@@ -134,7 +135,8 @@ const EditListingDescriptionPanel = props => {
           const startDateISO = start_date.toISOString();
           const selectedDate = moment(startDateISO).tz(timezone);
           const unix_time_stamp = selectedDate.unix();
-          const priceMaybe = type?.key === config.isPaid ? { price } : {};
+          const priceMaybe =
+            type?.key === config.isPaid ? { price } : { price: new Money(0, config.currency) };
           const updateValues = {
             ...stockUpdateMaybe,
             title: title,
