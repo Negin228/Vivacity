@@ -19,9 +19,17 @@ const SectionFeaturesMaybe = props => {
   );
 
   // prettier-ignore
-
-  const formattedDate = moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
-
+  const myTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  console.log({ myTimeZone });
+  const formattedDate = moment(publicData.startDate)
+    .tz(publicData.timezone, true)
+    .local()
+    .format('dddd, MMMM Do YYYY, h:mm a');
+  const convertedTime = moment(publicData.startDate)
+    .tz(publicData.timezone, true)
+    .tz(myTimeZone)
+    .format('dddd, MMMM Do YYYY, h:mm a');
+  console.log({ convertedTime });
   return (
     <div className={css.sectionFeatures}>
       <h2 className={css.featuresTitle}>
