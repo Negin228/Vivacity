@@ -68,7 +68,10 @@ const EditListingDescriptionPanel = props => {
         languages: publicData.languages,
         yogaStyles: yogaStyles || [],
         price: publicData.type === config.isPaid ? price : null,
-        timezone: publicData.timezone ? publicData.timezone : undefined,
+        timezone: publicData.timezone
+          ? config.custom.timezones?.find(i => i.key == publicData?.timezone)
+          : undefined,
+        // timezone: publicData.timezone ? publicData.timezone : undefined,
         start_date: publicData.startDate ? new Date(publicData.startDate) : undefined,
         stock: currentStock,
         class_duration: publicData.classDuration ? publicData.classDuration : undefined,
@@ -82,7 +85,10 @@ const EditListingDescriptionPanel = props => {
       languages: publicData.languages,
       yogaStyles: yogaStyles || [],
       price: publicData.type === config.isPaid ? price : null,
-      timezone: publicData.timezone ? publicData.timezone : undefined,
+      timezone: publicData.timezone
+        ? config.custom.timezones?.find(i => i.key == publicData?.timezone)
+        : undefined,
+      // timezone: publicData.timezone ? publicData.timezone : undefined,
       start_date: publicData.startDate ? new Date(publicData.startDate) : undefined,
       stock: currentStock,
       class_duration: publicData.classDuration ? publicData.classDuration : undefined,
@@ -133,7 +139,7 @@ const EditListingDescriptionPanel = props => {
               }
             : {};
           const startDateISO = start_date.toISOString();
-          const selectedDate = moment(startDateISO).tz(timezone);
+          const selectedDate = moment(startDateISO).tz(timezone?.key);
           const unix_time_stamp = selectedDate.unix();
           const yogaStylesFilter = yogaStyles?.map(
             style => config.custom.workoutTypes?.find(s => s.key === style)?.label
@@ -147,7 +153,7 @@ const EditListingDescriptionPanel = props => {
             description,
             availabilityPlan: {
               type: 'availability-plan/time',
-              timezone: timezone,
+              timezone: timezone?.key,
               entries: [
                 // { dayOfWeek: 'mon', startTime: '09:00', endTime: '17:00', seats: 1 },
                 // { dayOfWeek: 'tue', startTime: '09:00', endTime: '17:00', seats: 1 },
@@ -164,7 +170,7 @@ const EditListingDescriptionPanel = props => {
               languages: languages,
               languagesFilter: [languages.key],
               yogaStyles: yogaStyles,
-              timezone: hasZoom ? publicData?.timezone : timezone,
+              timezone: hasZoom ? publicData?.timezone : timezone?.key,
               startDate: hasZoom ? publicData?.startDate : start_date.toISOString(),
               stock: stock,
               classDuration: hasZoom ? publicData?.classDuration : class_duration,

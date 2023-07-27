@@ -148,7 +148,8 @@ const EditListingDescriptionFormComponent = props => (
       const submitReady = (updated && pristine) || ready;
       const submitInProgress = updateInProgress;
       const submitDisabled = invalid || disabled || submitInProgress;
-
+      console.log('timezone', values?.timezone);
+      console.log('timezones', values?.timezones);
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           {errorMessageCreateListingDraft}
@@ -230,12 +231,23 @@ const EditListingDescriptionFormComponent = props => (
           ) : null}
           {/* date and availability section */}
           <fieldset disabled={hasZoom} className={css.fieldset}>
-            <FieldTimeZoneSelect
+            {/* <FieldTimeZoneSelect
               id="timezone"
               name="timezone"
               label="Time Zone"
               placeholder="Select time zone"
               style={{ marginBottom: '32px' }}
+              disabled={hasZoom}
+            /> */}
+            <FieldSelectModern
+              className={css.features}
+              id="timezone"
+              name="timezone"
+              label="Time Zone"
+              options={config.custom.timezones}
+              placeholder="Select time zone"
+              validate={fieldSelectModernRequired('Please select a time zone')}
+              isSearchable={true}
               disabled={hasZoom}
             />
             <Datepicker
