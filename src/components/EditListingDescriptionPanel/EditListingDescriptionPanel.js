@@ -135,6 +135,10 @@ const EditListingDescriptionPanel = props => {
           const startDateISO = start_date.toISOString();
           const selectedDate = moment(startDateISO).tz(timezone);
           const unix_time_stamp = selectedDate.unix();
+          const yogaStylesFilter = yogaStyles?.map(
+            style => config.custom.workoutTypes?.find(s => s.key === style)?.label
+          );
+
           const priceMaybe =
             type?.key === config.isPaid ? { price } : { price: new Money(0, config.currency) };
           const updateValues = {
@@ -169,6 +173,7 @@ const EditListingDescriptionPanel = props => {
               timeUpdated,
               type: type?.key,
               otherWorkoutType: yogaStyles?.includes('other') ? otherWorkoutType : null,
+              yogaStylesFilter: yogaStylesFilter?.toString(),
             },
           };
           setInitialProps({
