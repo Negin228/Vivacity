@@ -1,6 +1,7 @@
 import queryString from 'query-string';
 import { types as sdkTypes } from './sdkLoader';
-
+import 'moment-timezone';
+import moment from 'moment';
 const { LatLng, LatLngBounds } = sdkTypes;
 
 export const LISTING_PAGE_PENDING_APPROVAL_VARIANT = 'pending-approval';
@@ -247,4 +248,37 @@ export const twitterPageURL = twitterHandle => {
     return `https://twitter.com/${twitterHandle}`;
   }
   return null;
+};
+export const convertTime = (time, timezone) => {
+  const myTimeZone =
+    // 'America/New_York';
+    moment.tz.guess();
+  const inputDate = moment.tz(time, timezone);
+  const targetTime = inputDate
+    .clone()
+    .tz(myTimeZone)
+    .format('dddd, MMMM Do YYYY, h:mm a');
+  return targetTime;
+};
+export const convertDate = (time, timezone) => {
+  const myTimeZone =
+    // 'America/New_York';
+    moment.tz.guess();
+  const inputDate = moment.tz(time, timezone);
+  const targetTime = inputDate
+    .clone()
+    .tz(myTimeZone)
+    .format('dddd, MMMM Do YYYY');
+  return targetTime;
+};
+export const convertTimeOnly = (time, timezone) => {
+  const myTimeZone =
+    // 'America/New_York';
+    moment.tz.guess();
+  const inputDate = moment.tz(time, timezone);
+  const targetTime = inputDate
+    .clone()
+    .tz(myTimeZone)
+    .format('h:mm a');
+  return targetTime;
 };

@@ -53,6 +53,7 @@ import PanelHeading, {
 
 import css from './TransactionPanel.module.css';
 import { getZoomFromAPI } from '../../util/api';
+import { convertTime } from '../../util/urlHelpers';
 
 // Helper function to get display names for different roles
 const displayNames = (currentUser, currentProvider, currentCustomer, intl) => {
@@ -318,10 +319,9 @@ export class TransactionPanelComponent extends Component {
       ? deletedListingTitle
       : currentListing.attributes.title;
 
+    const formattedDate = convertTime(publicData.startDate, publicData.timezone);
+    //  moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
 
-    const formattedDate = moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
-  
-    
     const unitType = config.bookingUnitType;
     const isNightly = unitType === LINE_ITEM_NIGHT;
     const isDaily = unitType === LINE_ITEM_DAY;

@@ -148,8 +148,8 @@ const EditListingDescriptionFormComponent = props => (
       const submitReady = (updated && pristine) || ready;
       const submitInProgress = updateInProgress;
       const submitDisabled = invalid || disabled || submitInProgress;
-      console.log('timezone', values?.timezone);
-      console.log('timezones', values?.timezones);
+      // console.log('timezone', values?.timezone);
+      // console.log('timezones', values?.timezones);
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           {errorMessageCreateListingDraft}

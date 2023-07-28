@@ -19,7 +19,7 @@ import {
   ensurePaymentMethodCard,
 } from '../../util/data';
 import { minutesBetween } from '../../util/dates';
-import { createSlug } from '../../util/urlHelpers';
+import { convertTime, createSlug } from '../../util/urlHelpers';
 import {
   isTransactionInitiateAmountTooLowError,
   isTransactionInitiateListingNotFoundError,
@@ -763,10 +763,11 @@ export class CheckoutPageComponent extends Component {
 
     const initalValuesForStripePayment = { name: userName };
 
-    const {publicData} = currentListing.attributes;
+    const { publicData } = currentListing.attributes;
 
-    const formattedDate = moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
-    
+    const formattedDate = convertTime(publicData.startDate, publicData.timezone);
+    //  moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
+
     return (
       <Page {...pageProps}>
         {topbar}

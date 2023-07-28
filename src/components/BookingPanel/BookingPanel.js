@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import omit from 'lodash/omit';
 import { propTypes, LISTING_STATE_CLOSED, LINE_ITEM_NIGHT, LINE_ITEM_DAY } from '../../util/types';
 import { formatMoney } from '../../util/currency';
-import { parse, stringify } from '../../util/urlHelpers';
+import { convertTime, parse, stringify } from '../../util/urlHelpers';
 import config from '../../config';
 import { ModalInMobile, Button, ResponsiveImage, AvatarMedium } from '../../components';
 import { BookingTimeForm } from '../../forms';
@@ -115,7 +115,9 @@ const BookingPanel = props => {
   const classes = classNames(rootClassName || css.root, className);
   const titleClasses = classNames(titleClassName || css.bookingTitle);
   // prettier-ignore
-  const formattedDate = moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
+
+  const formattedDate = convertTime(publicData.startDate, publicData.timezone);
+  // moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
   return (
     <div className={classes}>
       <ModalInMobile

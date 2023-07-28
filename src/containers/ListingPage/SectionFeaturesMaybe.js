@@ -6,7 +6,9 @@ import css from './ListingPage.module.css';
 import { CgGym } from 'react-icons/cg';
 import { MdDateRange, MdAccessTime } from 'react-icons/md';
 import config from '../../config';
-
+// import moment from 'moment';
+import 'moment-timezone';
+import { convertTime } from '../../util/urlHelpers';
 const SectionFeaturesMaybe = props => {
   const { options, publicData } = props;
   if (!publicData) {
@@ -18,16 +20,19 @@ const SectionFeaturesMaybe = props => {
     selectedOptions.find(s => s === o.key)
   );
 
-  // prettier-ignore
-
-  const formattedDate = moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
-
+  // ;
+  const targetTime = convertTime(publicData.startDate, publicData.timezone);
+  const formattedDate = moment(publicData.startDate)
+    .tz(publicData.timezone, true)
+    .local()
+    .format('dddd, MMMM Do YYYY, h:mm a');
   return (
     <div className={css.sectionFeatures}>
       <h2 className={css.featuresTitle}>
         <CgGym style={{ marginRight: '10px' }} />
         Workouts
       </h2>
+
       <PropertyGroup
         id="ListingPage.yogaStyles"
         options={[
@@ -46,7 +51,8 @@ const SectionFeaturesMaybe = props => {
         <MdDateRange style={{ marginRight: '10px' }} />
         Start Date
       </h2>
-      <p>{formattedDate}</p>
+      <p>{targetTime}</p>
+      {/* <p>{formattedDate}</p> */}
       <h2 className={css.featuresTitle} style={{ marginTop: '16px' }}>
         <MdAccessTime style={{ marginRight: '10px' }} />
         Class Duration

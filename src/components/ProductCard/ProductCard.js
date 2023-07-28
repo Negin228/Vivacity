@@ -4,7 +4,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import { ResponsiveImage } from '../../components';
 import { formatMoney } from '../../util/currency';
-import { createSlug } from '../../util/urlHelpers';
+import { convertDate, convertTimeOnly, createSlug } from '../../util/urlHelpers';
 import css from './ProductCard.module.css';
 import { AiFillStar } from 'react-icons/ai';
 import classNames from 'classnames';
@@ -16,14 +16,8 @@ function ProductCard({ title, id, timeZone, startDate, images, teacherName }) {
       pathname: `/l/${createSlug(title)}/${id}`,
     });
 
-  const formattedDate = moment(startDate)
-    .tz(timeZone, true)
-    .local()
-    .format('dddd, MMMM Do YYYY');
-  const formattedTime = moment(startDate)
-    .tz(timeZone, true)
-    .local()
-    .format('h:mm a');
+  const formattedDate = convertDate(startDate, timeZone);
+  const formattedTime = convertTimeOnly(startDate, timeZone);
   return (
     <div className={css.product} onClick={handleClick}>
       {/* <div className="px-3 flex items-center justify-between">
