@@ -250,9 +250,8 @@ export const twitterPageURL = twitterHandle => {
   return null;
 };
 export const convertTime = (time, timezone) => {
-  const myTimeZone =
-    // 'America/New_York';
-    moment.tz.guess();
+  const myTimeZone = 'America/New_York';
+  // moment.tz.guess();
   const inputDate = moment.tz(time, timezone);
   const targetTime = inputDate
     .clone()
@@ -261,9 +260,8 @@ export const convertTime = (time, timezone) => {
   return targetTime;
 };
 export const convertDate = (time, timezone) => {
-  const myTimeZone =
-    // 'America/New_York';
-    moment.tz.guess();
+  const myTimeZone = 'America/New_York';
+  // moment.tz.guess();
   const inputDate = moment.tz(time, timezone);
   const targetTime = inputDate
     .clone()
@@ -272,9 +270,8 @@ export const convertDate = (time, timezone) => {
   return targetTime;
 };
 export const convertTimeOnly = (time, timezone) => {
-  const myTimeZone =
-    // 'America/New_York';
-    moment.tz.guess();
+  const myTimeZone = 'America/New_York';
+  // moment.tz.guess();
   const inputDate = moment.tz(time, timezone);
   const targetTime = inputDate
     .clone()

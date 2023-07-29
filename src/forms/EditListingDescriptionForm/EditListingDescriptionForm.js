@@ -53,7 +53,7 @@ const EditListingDescriptionFormComponent = props => (
         hasZoom,
         values,
       } = formRenderProps;
-
+      console.log('values', values);
       const unitType = config.bookingUnitType;
       const isNightly = unitType === LINE_ITEM_NIGHT;
       const isDaily = unitType === LINE_ITEM_DAY;
@@ -260,6 +260,7 @@ const EditListingDescriptionFormComponent = props => (
               style={{ marginBottom: '32px' }}
               validate={composeValidators(required('Start date is required'))}
               disabled={hasZoom}
+              timezone={'America/Los_Angeles'}
             />
             <FieldSelectModern
               className={css.features}

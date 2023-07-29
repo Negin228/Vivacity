@@ -9,15 +9,17 @@ import css from './ProductCard.module.css';
 import { AiFillStar } from 'react-icons/ai';
 import classNames from 'classnames';
 import mt from 'moment-timezone';
-function ProductCard({ title, id, timeZone, startDate, images, teacherName }) {
+function ProductCard({ title, id, timeZone, startDate, startDateString, images, teacherName }) {
   const history = useHistory();
   const handleClick = () =>
     history.push({
       pathname: `/l/${createSlug(title)}/${id}`,
     });
 
-  const formattedDate = convertDate(startDate, timeZone);
-  const formattedTime = convertTimeOnly(startDate, timeZone);
+  const formattedDate = convertDate(startDateString, timeZone);
+  const formattedTime = convertTimeOnly(startDateString, timeZone);
+  // const formattedDate = convertDate(startDate, timeZone);
+  // const formattedTime = convertTimeOnly(startDate, timeZone);
   return (
     <div className={css.product} onClick={handleClick}>
       {/* <div className="px-3 flex items-center justify-between">

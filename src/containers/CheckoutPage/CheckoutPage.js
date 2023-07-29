@@ -765,7 +765,8 @@ export class CheckoutPageComponent extends Component {
 
     const { publicData } = currentListing.attributes;
 
-    const formattedDate = convertTime(publicData.startDate, publicData.timezone);
+    const formattedDate = convertTime(publicData?.startDateString, publicData.timezone);
+    // const formattedDate = convertTime(publicData.startDate, publicData.timezone);
     //  moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
 
     return (

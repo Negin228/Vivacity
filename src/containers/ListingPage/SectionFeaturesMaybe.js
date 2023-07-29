@@ -21,7 +21,7 @@ const SectionFeaturesMaybe = props => {
   );
 
   // ;
-  const targetTime = convertTime(publicData.startDate, publicData.timezone);
+  const targetTime = convertTime(publicData?.startDateString, publicData.timezone);
   const formattedDate = moment(publicData.startDate)
     .tz(publicData.timezone, true)
     .local()

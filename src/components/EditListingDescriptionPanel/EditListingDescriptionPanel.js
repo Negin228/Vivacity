@@ -144,6 +144,7 @@ const EditListingDescriptionPanel = props => {
           const yogaStylesFilter = yogaStyles?.map(
             style => config.custom.workoutTypes?.find(s => s.key === style)?.label
           );
+          const startDateString = moment(start_date).format('YYYY-MM-DD HH:mm:ss');
 
           const priceMaybe =
             type?.key === config.isPaid ? { price } : { price: new Money(0, config.currency) };
@@ -180,6 +181,7 @@ const EditListingDescriptionPanel = props => {
               type: type?.key,
               otherWorkoutType: yogaStyles?.includes('other') ? otherWorkoutType : null,
               yogaStylesFilter: yogaStylesFilter?.toString(),
+              startDateString,
             },
           };
           setInitialProps({
