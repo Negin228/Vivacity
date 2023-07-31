@@ -486,14 +486,20 @@ export const requestPublishListingDraft = listingId => async (dispatch, getState
     // requestAddAvailabilityException()
     const listing = await sdk.ownListings.show({ id: listingId });
     const { publicData } = listing.data.data.attributes;
+    const timezone = publicData?.timezone;
+    const start = moment.tz(publicData.startDateString, timezone);
+
+    const end = moment.tz(start, timezone).add(+publicData?.classDuration?.key?.split('_')[0], 'm');
 
     const params = {
       listingId,
-      start: new Date(publicData.startDate).toISOString(),
-      end: moment(publicData.startDate)
-        .add(+publicData?.classDuration?.key?.split('_')[0], 'm')
-        .toDate()
-        .toISOString(),
+      start: start.toISOString(),
+      end: end.toISOString(),
+      // start: new Date(publicData.startDate).toISOString(),
+      // end: moment(publicData.startDate)
+      //   .add(+publicData?.classDuration?.key?.split('_')[0], 'm')
+      //   .toDate()
+      //   .toISOString(),
       seats: 1,
     };
     await dispatch(requestAddAvailabilityException(params));

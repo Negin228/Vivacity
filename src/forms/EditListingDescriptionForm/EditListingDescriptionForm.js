@@ -53,7 +53,7 @@ const EditListingDescriptionFormComponent = props => (
         hasZoom,
         values,
       } = formRenderProps;
-      console.log('values', values);
+      // console.log('values', values);
       const unitType = config.bookingUnitType;
       const isNightly = unitType === LINE_ITEM_NIGHT;
       const isDaily = unitType === LINE_ITEM_DAY;
