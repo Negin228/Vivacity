@@ -287,10 +287,12 @@ app.get('*', async (req, res) => {
           meta_featured: true,
           sort: 'meta_sortingOrder',
           include: ['profileImage'],
+          // 'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
         })
         .then(res => {
           return res.data;
         });
+      // console.log('users', users);
       return res.status(200).send(users);
     } catch (err) {
       console.log('trainers error', err);
