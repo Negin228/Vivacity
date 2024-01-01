@@ -23,13 +23,23 @@ module.exports = (req, res) => {
     .then(trustedSdk => {
       const { params } = bodyParams;
       const providerTimezone = l.attributes.publicData.timezone;
-      const time = l.attributes.publicData.startDate;
-      const customerTime = moment(time)
+      const time = l.attributes.publicData?.startDateString;
+      const inputDate = moment.tz(time, customerTimezone);
+      const inputDateProvider = moment.tz(time, providerTimezone);
+      const customerTime = inputDate
+        .clone()
         .tz(customerTimezone)
-        .format('DD/MM/yyyy HH:mm');
-      const providerTime = moment(time)
-        .tz(providerTimezone)
-        .format('DD/MM/yyyy HH:mm');
+        .format('dddd, MMMM Do YYYY, h:mm a');
+      const providerTime = inputDateProvider
+        .clone()
+        .tz(customerTimezone)
+        .format('dddd, MMMM Do YYYY, h:mm a');
+      // const customerTime = moment(time)
+      //   .tz(customerTimezone)
+      //   .format('DD/MM/yyyy HH:mm');
+      // const providerTime = moment(time)
+      //   .tz(providerTimezone)
+      //   .format('DD/MM/yyyy HH:mm');
       // console.log({
       //   customerTime,
       //   providerTime,

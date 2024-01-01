@@ -179,7 +179,7 @@ export const initiateOrder = (orderParams, transactionId) => (dispatch, getState
     endDate: orderParams.bookingEnd,
   };
   const { quantity, bookingType, bookingDates, ...otherOrderParams } = orderParams;
-  console.log({ quantity, bookingType, bookingDates, orderParams });
+  // console.log({ quantity, bookingType, bookingDates, orderParams });
   const quantityMaybe = quantity ? { stockReservationQuantity: quantity } : {};
   const customerTimezone = getDefaultTimeZoneOnBrowser();
   const bookingParamsMaybe = bookingDates || {};
