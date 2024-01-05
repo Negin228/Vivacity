@@ -101,6 +101,8 @@ export class BookingTimeFormComponent extends Component {
             startDate,
             seats,
             isStockZero,
+            transactionId,
+            joinUrl,
           } = fieldRenderProps;
 
           const startTime = values && values.bookingStartTime ? values.bookingStartTime : null;
@@ -209,14 +211,17 @@ export class BookingTimeFormComponent extends Component {
                 )}
               </p>
               <div className={submitButtonClasses}>
-                <PrimaryButton type="submit" disabled={isStockZero}>
+                <PrimaryButton type="submit" disabled={isStockZero || transactionId}>
                   {isStockZero ? (
                     'All class tickets are sold!'
+                  ) : transactionId ? (
+                    <FormattedMessage id="BookingTimeForm.BookingTimeForm.alreadyRegisterLabel" />
                   ) : (
                     <FormattedMessage id="BookingTimeForm.requestToBook" />
                   )}
                 </PrimaryButton>
               </div>
+              {joinUrl}
             </Form>
           );
         }}

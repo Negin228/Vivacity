@@ -1131,5 +1131,6 @@
   "ManageListingsPage.yourListings": "Your listings",
   "SectionUpcomingClasses.title": "Upcoming classes",
   "ListingCard.free": "Free",
-  "ZoomUsagePage.schemaTitle": "Zoom Usage"
+  "ZoomUsagePage.schemaTitle": "Zoom Usage",
+  "BookingTimeForm.BookingTimeForm.alreadyRegisterLabel": "Already Registered "
 }

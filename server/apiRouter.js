@@ -23,7 +23,7 @@ const { authenticateGoogle, authenticateGoogleCallback } = require('./api/auth/g
 const createMeetingWithZoom = require('./api/create-meeting-with-zoom');
 const transitionConfirmPayment = require('./api/transition-confirm-payment');
 const getZoomMeetingData = require('./api/get-zoom-meeting-data');
-
+const getOldTransactionData = require('./api/check-transaction');
 const router = express.Router();
 
 // ================ API router middleware: ================ //
@@ -57,7 +57,7 @@ router.get('/login-as', loginAs);
 router.post('/transaction-line-items', transactionLineItems);
 router.post('/initiate-privileged', initiatePrivileged);
 router.post('/transition-privileged', transitionPrivileged);
-
+router.post('/check-transaction', getOldTransactionData);
 // Create user with identity provider (e.g. Facebook or Google)
 // This endpoint is called to create a new user after user has confirmed
 // they want to continue with the data fetched from IdP (e.g. name and email)

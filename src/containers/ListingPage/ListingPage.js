@@ -205,6 +205,13 @@ export class ListingPageComponent extends Component {
       lineItems,
       fetchLineItemsInProgress,
       fetchLineItemsError,
+      checkOldTransactionLoading,
+      checkOldTransactionError,
+      checkOldTransactionData,
+      join_url,
+      start_url,
+      zoomLoading,
+      zoomError,
     } = this.props;
 
     const listingId = new UUID(rawParams.id);
@@ -467,6 +474,13 @@ export class ListingPageComponent extends Component {
                   lineItems={lineItems}
                   fetchLineItemsInProgress={fetchLineItemsInProgress}
                   fetchLineItemsError={fetchLineItemsError}
+                  checkOldTransactionLoading={checkOldTransactionLoading}
+                  checkOldTransactionError={checkOldTransactionError}
+                  checkOldTransactionData={checkOldTransactionData}
+                  join_url={join_url}
+                  start_url={start_url}
+                  zoomLoading={zoomLoading}
+                  zoomError={zoomError}
                 />
               </div>
             </div>
@@ -574,6 +588,13 @@ const mapStateToProps = state => {
     fetchLineItemsInProgress,
     fetchLineItemsError,
     enquiryModalOpenForListingId,
+    checkOldTransactionLoading,
+    checkOldTransactionError,
+    checkOldTransactionData,
+    join_url,
+    start_url,
+    zoomLoading,
+    zoomError,
   } = state.ListingPage;
   const { currentUser } = state.user;
 
@@ -605,6 +626,13 @@ const mapStateToProps = state => {
     fetchLineItemsError,
     sendEnquiryInProgress,
     sendEnquiryError,
+    checkOldTransactionLoading,
+    checkOldTransactionError,
+    checkOldTransactionData,
+    join_url,
+    start_url,
+    zoomLoading,
+    zoomError,
   };
 };
 

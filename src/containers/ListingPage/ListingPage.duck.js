@@ -3,7 +3,7 @@ import config from '../../config';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import { storableError } from '../../util/errors';
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
-import { transactionLineItems } from '../../util/api';
+import { getOldTransactionData, getZoomFromAPI, transactionLineItems } from '../../util/api';
 import * as log from '../../util/log';
 import { denormalisedResponseEntities } from '../../util/data';
 import { findNextBoundary, nextMonthFn, monthIdStringInTimeZone } from '../../util/dates';
@@ -39,6 +39,13 @@ export const SEND_ENQUIRY_REQUEST = 'app/ListingPage/SEND_ENQUIRY_REQUEST';
 export const SEND_ENQUIRY_SUCCESS = 'app/ListingPage/SEND_ENQUIRY_SUCCESS';
 export const SEND_ENQUIRY_ERROR = 'app/ListingPage/SEND_ENQUIRY_ERROR';
 
+export const CHECK_OLD_TRANSACTION_REQUEST = 'app/ListingPage/CHECK_OLD_TRANSACTION_REQUEST';
+export const CHECK_OLD_TRANSACTION_SUCCESS = 'app/ListingPage/CHECK_OLD_TRANSACTION_SUCCESS';
+export const CHECK_OLD_TRANSACTION_ERROR = 'app/ListingPage/CHECK_OLD_TRANSACTION_ERROR';
+
+export const GET_ZOOM_MEETING_DATA_REQUEST = 'app/ListingPage/GET_ZOOM_MEETING_DATA_REQUEST';
+export const GET_ZOOM_MEETING_DATA_SUCCESS = 'app/ListingPage/GET_ZOOM_MEETING_DATA_SUCCESS';
+export const GET_ZOOM_MEETING_DATA_ERROR = 'app/ListingPage/GET_ZOOM_MEETING_DATA_ERROR';
 // ================ Reducer ================ //
 
 const initialState = {
@@ -59,6 +66,13 @@ const initialState = {
   sendEnquiryInProgress: false,
   sendEnquiryError: null,
   enquiryModalOpenForListingId: null,
+  checkOldTransactionLoading: false,
+  checkOldTransactionError: null,
+  checkOldTransactionData: null,
+  join_url: null,
+  start_url: null,
+  zoomLoading: false,
+  zoomError: null,
 };
 
 const listingPageReducer = (state = initialState, action = {}) => {
@@ -128,6 +142,30 @@ const listingPageReducer = (state = initialState, action = {}) => {
       return { ...state, sendEnquiryInProgress: false };
     case SEND_ENQUIRY_ERROR:
       return { ...state, sendEnquiryInProgress: false, sendEnquiryError: payload };
+    case CHECK_OLD_TRANSACTION_REQUEST:
+      return { ...state, checkOldTransactionLoading: true, checkOldTransactionError: null };
+    case CHECK_OLD_TRANSACTION_SUCCESS:
+      return { ...state, checkOldTransactionLoading: false, checkOldTransactionData: payload };
+    case CHECK_OLD_TRANSACTION_ERROR:
+      return { ...state, checkOldTransactionLoading: false, checkOldTransactionError: payload };
+    case GET_ZOOM_MEETING_DATA_REQUEST:
+      return {
+        ...state,
+        zoomLoading: true,
+        zoomError: null,
+
+        join_url: null,
+        start_url: null,
+      };
+    case GET_ZOOM_MEETING_DATA_SUCCESS:
+      return {
+        ...state,
+        zoomLoading: false,
+        join_url: payload.join_url,
+        start_url: payload.start_url,
+      };
+    case GET_ZOOM_MEETING_DATA_ERROR:
+      return { ...state, zoomLoading: false, zoomError: payload };
 
     default:
       return state;
@@ -191,7 +229,44 @@ export const sendEnquiryRequest = () => ({ type: SEND_ENQUIRY_REQUEST });
 export const sendEnquirySuccess = () => ({ type: SEND_ENQUIRY_SUCCESS });
 export const sendEnquiryError = e => ({ type: SEND_ENQUIRY_ERROR, error: true, payload: e });
 
+export const checkOldTransactionRequest = () => ({ type: CHECK_OLD_TRANSACTION_REQUEST });
+export const checkOldTransactionSuccess = value => ({
+  type: CHECK_OLD_TRANSACTION_SUCCESS,
+  payload: value,
+});
+export const checkOldTransactionError = e => ({
+  type: CHECK_OLD_TRANSACTION_ERROR,
+  error: true,
+  payload: e,
+});
 // ================ Thunks ================ //
+export const fetchZoomMeetingData = txId => (dispatch, getState, sdk) => {
+  dispatch({ type: GET_ZOOM_MEETING_DATA_REQUEST });
+  return getZoomFromAPI({ id: txId })
+    .then(res => {
+      const response = res;
+      dispatch({ type: GET_ZOOM_MEETING_DATA_SUCCESS, payload: response });
+      return response;
+    })
+    .catch(e => {
+      dispatch({ type: GET_ZOOM_MEETING_DATA_ERROR, payload: storableError(e) });
+    });
+};
+export const fetchOldTransaction = listingId => (dispatch, getState, sdk) => {
+  dispatch(checkOldTransactionRequest());
+  return getOldTransactionData({ listingId })
+    .then(async res => {
+      const response = res.data.data;
+      const transaction = response[0];
+      const txId = transaction?.id?.uuid;
+      await dispatch(fetchZoomMeetingData(txId));
+      dispatch(checkOldTransactionSuccess(transaction));
+      return transaction;
+    })
+    .catch(e => {
+      dispatch(checkOldTransactionError(storableError(e)));
+    });
+};
 
 export const showListing = (listingId, isOwn = false) => (dispatch, getState, sdk) => {
   dispatch(showListingRequest(listingId));
@@ -354,17 +429,19 @@ export const loadData = (params, search) => dispatch => {
     return dispatch(showListing(listingId, true));
   }
 
-  return Promise.all([dispatch(showListing(listingId)), dispatch(fetchReviews(listingId))]).then(
-    responses => {
-      if (responses[0] && responses[0].data && responses[0].data.data) {
-        const listing = responses[0].data.data;
+  return Promise.all([
+    dispatch(fetchOldTransaction(listingId)),
+    dispatch(showListing(listingId)),
+    dispatch(fetchReviews(listingId)),
+  ]).then(responses => {
+    if (responses[0] && responses[0].data && responses[0].data.data) {
+      const listing = responses[0].data.data;
 
-        // Fetch timeSlots.
-        // This can happen parallel to loadData.
-        // We are not interested to return them from loadData call.
-        fetchMonthlyTimeSlots(dispatch, listing);
-      }
-      return responses;
+      // Fetch timeSlots.
+      // This can happen parallel to loadData.
+      // We are not interested to return them from loadData call.
+      fetchMonthlyTimeSlots(dispatch, listing);
     }
-  );
+    return responses;
+  });
 };

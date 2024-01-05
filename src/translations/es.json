@@ -1116,5 +1116,6 @@
   "UserNav.newListing": "Crea to perfil público",
   "UserNav.editListing": "Editar perfil de profesor",
   "UserNav.profileSettingsPage": "Editar perfil de usuario",
-  "UserNav.contactDetailsPage": "Configuración de cuenta"
+  "UserNav.contactDetailsPage": "Configuración de cuenta",
+  "BookingTimeForm.BookingTimeForm.alreadyRegisterLabel": "Already Registered "
 }

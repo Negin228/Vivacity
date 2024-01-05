@@ -9,7 +9,14 @@ import { propTypes, LISTING_STATE_CLOSED, LINE_ITEM_NIGHT, LINE_ITEM_DAY } from 
 import { formatMoney } from '../../util/currency';
 import { convertTime, parse, stringify } from '../../util/urlHelpers';
 import config from '../../config';
-import { ModalInMobile, Button, ResponsiveImage, AvatarMedium } from '../../components';
+import {
+  ModalInMobile,
+  Button,
+  ResponsiveImage,
+  AvatarMedium,
+  IconSpinner,
+  ExternalLink,
+} from '../../components';
 import { BookingTimeForm } from '../../forms';
 import moment from 'moment';
 import { ensureListing, ensureUser } from '../../util/data';
@@ -73,8 +80,25 @@ const BookingPanel = props => {
     lineItems,
     fetchLineItemsInProgress,
     fetchLineItemsError,
+    checkOldTransactionLoading,
+    checkOldTransactionError,
+    checkOldTransactionData,
+    join_url,
+    zoomLoading,
+    zoomError,
   } = props;
-
+  const transactionId = checkOldTransactionData?.id?.uuid;
+  const joinUrl =
+    join_url && transactionId ? (
+      <div className="mt-4 w-full  bg-marketplaceColor hover:bg-marketplaceColorDark transition duration-100 rounded shadow">
+        <ExternalLink
+          href={join_url}
+          className="py-2 w-full h-full block text-center text-white hover:no-underline font-semibold tracking-wide"
+        >
+          Join Meeting
+        </ExternalLink>
+      </div>
+    ) : null;
   const price = listing.attributes.price;
   const timeZone =
     listing.attributes.availabilityPlan && listing.attributes.availabilityPlan.timezone;
@@ -114,8 +138,15 @@ const BookingPanel = props => {
 
   const classes = classNames(rootClassName || css.root, className);
   const titleClasses = classNames(titleClassName || css.bookingTitle);
-  // prettier-ignore
-
+  if (checkOldTransactionLoading || zoomLoading)
+    return (
+      <div className={classes}>
+        <span>Loading...</span>{' '}
+        <span>
+          <IconSpinner />
+        </span>
+      </div>
+    );
   const formattedDate = convertTime(publicData?.startDateString, publicData.timezone);
   // const formattedDate = convertTime(publicData.startDate, publicData.timezone);
   // moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
@@ -205,6 +236,8 @@ const BookingPanel = props => {
             fetchLineItemsInProgress={fetchLineItemsInProgress}
             fetchLineItemsError={fetchLineItemsError}
             bookingType={bookingType}
+            transactionId={transactionId}
+            joinUrl={joinUrl}
           />
         ) : null}
       </ModalInMobile>

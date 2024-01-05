@@ -144,7 +144,9 @@ export const transitionPrivileged = body => {
 export const createUserWithIdp = body => {
   return post('/api/auth/create-user-with-idp', body);
 };
-
+export const getOldTransactionData = params => {
+  return post('/api/check-transaction', params);
+};
 export const confirmPaymentFromAPI = body => post('/api/transition-confirm-payment', body);
 export const getZoomFromAPI = params => {
   const urlParams = new URLSearchParams(params).toString();
