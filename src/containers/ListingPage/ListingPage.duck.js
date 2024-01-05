@@ -254,6 +254,7 @@ export const fetchZoomMeetingData = txId => (dispatch, getState, sdk) => {
 };
 export const fetchOldTransaction = listingId => (dispatch, getState, sdk) => {
   dispatch(checkOldTransactionRequest());
+  if (typeof window === 'undefined') return null;
   return getOldTransactionData({ listingId })
     .then(async res => {
       const response = res.data.data;
