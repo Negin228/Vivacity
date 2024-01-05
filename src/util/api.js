@@ -152,3 +152,4 @@ export const getZoomFromAPI = params => {
   const urlParams = new URLSearchParams(params).toString();
   return get('/api/zoom', urlParams);
 };
+export const createUserFromAPI = body => post('/api/sign-up', body);

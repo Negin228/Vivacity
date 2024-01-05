@@ -24,6 +24,7 @@ const createMeetingWithZoom = require('./api/create-meeting-with-zoom');
 const transitionConfirmPayment = require('./api/transition-confirm-payment');
 const getZoomMeetingData = require('./api/get-zoom-meeting-data');
 const getOldTransactionData = require('./api/check-transaction');
+const createUser = require('./api/sign-up');
 const router = express.Router();
 
 // ================ API router middleware: ================ //
@@ -85,5 +86,6 @@ router.get('/auth/google/callback', authenticateGoogleCallback);
 router.get('/auth/callback/zoom', createMeetingWithZoom);
 router.post('/transition-confirm-payment', transitionConfirmPayment);
 router.get('/zoom', getZoomMeetingData);
+router.post('/sign-up', createUser);
 
 module.exports = router;
