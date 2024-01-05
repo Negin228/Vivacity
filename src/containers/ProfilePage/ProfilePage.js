@@ -49,7 +49,7 @@ export class ProfilePageComponent extends Component {
 
   showOfCustomerReviews() {
     this.setState({
-      showReviewsType: REVIEW_TYPE_OF_CUSTOMER,
+      showReviewsType: REVIEW_TYPE_OF_PROVIDER,
     });
   }
 
@@ -64,6 +64,7 @@ export class ProfilePageComponent extends Component {
       viewport,
       intl,
     } = this.props;
+    // console.log('reviews', reviews);
     const ensuredCurrentUser = ensureCurrentUser(currentUser);
     const profileUser = ensureUser(user);
     const isCurrentUser =
@@ -109,50 +110,50 @@ export class ProfilePageComponent extends Component {
 
     const mobileReviews = (
       <div className={css.mobileReviews}>
-        <h2 className={css.mobileReviewsTitle}>
+        {/* <h2 className={css.mobileReviewsTitle}>
           <FormattedMessage
             id="ProfilePage.reviewsOfProviderTitle"
             values={{ count: reviewsOfProvider.length }}
           />
-        </h2>
-        {queryReviewsError ? reviewsError : null}
-        <Reviews reviews={reviewsOfProvider} />
-        {/* <h2 className={css.mobileReviewsTitle}>
-          <FormattedMessage
-            id="ProfilePage.reviewsOfCustomerTitle"
-            values={{ count: reviewsOfCustomer.length }}
-          />
         </h2> */}
         {queryReviewsError ? reviewsError : null}
-        <Reviews reviews={reviewsOfCustomer} />
+        {/* <Reviews reviews={reviewsOfProvider} /> */}
+        <h2 className={css.mobileReviewsTitle}>
+          <FormattedMessage
+            id="ProfilePage.reviewsOfCustomerTitle"
+            values={{ count: reviews.length }}
+          />
+        </h2>
+        {queryReviewsError ? reviewsError : null}
+        <Reviews reviews={reviews} />
       </div>
     );
 
     const desktopReviewTabs = [
-      {
-        text: (
-          <h3 className={css.desktopReviewsTitle}>
-            <FormattedMessage
-              id="ProfilePage.reviewsOfProviderTitle"
-              values={{ count: reviewsOfProvider.length }}
-            />
-          </h3>
-        ),
-        selected: this.state.showReviewsType === REVIEW_TYPE_OF_PROVIDER,
-        onClick: this.showOfProviderReviews,
-      },
       // {
       //   text: (
       //     <h3 className={css.desktopReviewsTitle}>
       //       <FormattedMessage
-      //         id="ProfilePage.reviewsOfCustomerTitle"
-      //         values={{ count: reviewsOfCustomer.length }}
+      //         id="ProfilePage.reviewsOfProviderTitle"
+      //         values={{ count: reviewsOfProvider.length }}
       //       />
       //     </h3>
       //   ),
-      //   selected: this.state.showReviewsType === REVIEW_TYPE_OF_CUSTOMER,
-      //   onClick: this.showOfCustomerReviews,
+      //   selected: this.state.showReviewsType === REVIEW_TYPE_OF_PROVIDER,
+      //   onClick: this.showOfProviderReviews,
       // },
+      {
+        text: (
+          <h3 className={css.desktopReviewsTitle}>
+            <FormattedMessage
+              id="ProfilePage.reviewsOfCustomerTitle"
+              // values={{ count: reviews.length }}
+            />
+          </h3>
+        ),
+        selected: this.state.showReviewsType === REVIEW_TYPE_OF_PROVIDER,
+        onClick: this.showOfCustomerReviews,
+      },
     ];
 
     const desktopReviews = (
