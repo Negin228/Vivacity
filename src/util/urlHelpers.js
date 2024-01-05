@@ -258,8 +258,8 @@ export const convertTime = (time, timezone) => {
   const targetTime = inputDate
     .clone()
     .tz(myTimeZone)
-    .format('dddd, MMMM Do YYYY, h:mm a');
-  return targetTime;
+    .format('dddd, MMMM Do YYYY, h:mm a zz');
+  return `${targetTime}`;
 };
 export const convertDate = (time, timezone) => {
   const myTimeZone =
@@ -269,7 +269,7 @@ export const convertDate = (time, timezone) => {
   const targetTime = inputDate
     .clone()
     .tz(myTimeZone)
-    .format('dddd, MMMM Do YYYY');
+    .format('dddd, MMMM Do YYYY zz');
   return targetTime;
 };
 export const convertTimeOnly = (time, timezone) => {

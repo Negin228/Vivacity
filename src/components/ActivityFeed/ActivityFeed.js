@@ -114,7 +114,7 @@ const resolveTransitionMessage = (
   const isOwnTransition = transition.by === ownRole;
   const currentTransition = transition.transition;
   const displayName = otherUsersName;
-
+  const isCustomer = txRoleIsCustomer(ownRole);
   switch (currentTransition) {
     case TRANSITION_CONFIRM_PAYMENT:
       return isOwnTransition ? (
@@ -149,11 +149,12 @@ const resolveTransitionMessage = (
       // Show the leave a review link if the state is delivered and if the current user is the first to leave a review
       const reviewPeriodJustStarted = txIsDelivered(transaction);
 
-      const reviewAsFirstLink = reviewPeriodJustStarted ? (
-        <InlineTextButton onClick={onOpenReviewModal}>
-          <FormattedMessage id="ActivityFeed.leaveAReview" values={{ displayName }} />
-        </InlineTextButton>
-      ) : null;
+      const reviewAsFirstLink =
+        reviewPeriodJustStarted && isCustomer ? (
+          <InlineTextButton onClick={onOpenReviewModal}>
+            <FormattedMessage id="ActivityFeed.leaveAReview" values={{ displayName }} />
+          </InlineTextButton>
+        ) : null;
 
       return (
         <FormattedMessage

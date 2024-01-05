@@ -747,7 +747,7 @@
   "ProfilePage.loadingReviewsFailed": "Loading reviews failed.",
   "ProfilePage.mobileHeading": "{name}",
   "ProfilePage.reviewsOfCustomerTitle": "Reviews from Teachers ({count})",
-  "ProfilePage.reviewsOfProviderTitle": "Reviews from Practitioners ({count})",
+  "ProfilePage.reviewsOfProviderTitle": "Student Reviews ({count})",
   "ProfilePage.schemaTitle": "{name} | {siteTitle}",
   "ProfileSettingsForm.addYourProfilePicture": "+ Add your profile picture…",
   "ProfileSettingsForm.addYourProfilePictureMobile": "+ Add",

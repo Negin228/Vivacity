@@ -117,12 +117,12 @@ export class ProfilePageComponent extends Component {
         </h2>
         {queryReviewsError ? reviewsError : null}
         <Reviews reviews={reviewsOfProvider} />
-        <h2 className={css.mobileReviewsTitle}>
+        {/* <h2 className={css.mobileReviewsTitle}>
           <FormattedMessage
             id="ProfilePage.reviewsOfCustomerTitle"
             values={{ count: reviewsOfCustomer.length }}
           />
-        </h2>
+        </h2> */}
         {queryReviewsError ? reviewsError : null}
         <Reviews reviews={reviewsOfCustomer} />
       </div>
@@ -141,18 +141,18 @@ export class ProfilePageComponent extends Component {
         selected: this.state.showReviewsType === REVIEW_TYPE_OF_PROVIDER,
         onClick: this.showOfProviderReviews,
       },
-      {
-        text: (
-          <h3 className={css.desktopReviewsTitle}>
-            <FormattedMessage
-              id="ProfilePage.reviewsOfCustomerTitle"
-              values={{ count: reviewsOfCustomer.length }}
-            />
-          </h3>
-        ),
-        selected: this.state.showReviewsType === REVIEW_TYPE_OF_CUSTOMER,
-        onClick: this.showOfCustomerReviews,
-      },
+      // {
+      //   text: (
+      //     <h3 className={css.desktopReviewsTitle}>
+      //       <FormattedMessage
+      //         id="ProfilePage.reviewsOfCustomerTitle"
+      //         values={{ count: reviewsOfCustomer.length }}
+      //       />
+      //     </h3>
+      //   ),
+      //   selected: this.state.showReviewsType === REVIEW_TYPE_OF_CUSTOMER,
+      //   onClick: this.showOfCustomerReviews,
+      // },
     ];
 
     const desktopReviews = (

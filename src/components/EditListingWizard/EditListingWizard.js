@@ -422,6 +422,7 @@ class EditListingWizard extends Component {
                 handlePublishListing={this.handlePublishListing}
                 fetchInProgress={fetchInProgress}
                 onManageDisableScrolling={onManageDisableScrolling}
+                currentUser={currentUser}
               />
             );
           })}
