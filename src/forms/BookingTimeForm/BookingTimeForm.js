@@ -212,10 +212,10 @@ export class BookingTimeFormComponent extends Component {
               </p>
               <div className={submitButtonClasses}>
                 <PrimaryButton type="submit" disabled={isStockZero || transactionId}>
-                  {isStockZero ? (
-                    'All class tickets are sold!'
-                  ) : transactionId ? (
+                  {transactionId ? (
                     <FormattedMessage id="BookingTimeForm.BookingTimeForm.alreadyRegisterLabel" />
+                  ) : isStockZero ? (
+                    'All class tickets are sold!'
                   ) : (
                     <FormattedMessage id="BookingTimeForm.requestToBook" />
                   )}
