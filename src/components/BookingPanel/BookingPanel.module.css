@@ -241,13 +241,15 @@
 }
 
 .detailsContainerDesktop {
-  display: none;
-
+  display: block;
+  padding: 2rem;
+  padding-top: 0;
   @media (--viewportLarge) {
     flex-shrink: 0;
     display: block;
     /* Dimensions */
     width: 409px;
+    padding: 0;
     padding-bottom: 55px;
 
     /* Position */
@@ -267,7 +269,7 @@
 }
 
 .detailsHeadings {
-  display: none;
+  display: block;
 
   @media (--viewportLarge) {
     display: block;

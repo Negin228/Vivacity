@@ -103,8 +103,10 @@ export class BookingTimeFormComponent extends Component {
             isStockZero,
             transactionId,
             joinUrl,
+            panelCard,
+            loading,
           } = fieldRenderProps;
-
+          if (loading) return null;
           const startTime = values && values.bookingStartTime ? values.bookingStartTime : null;
           const endTime = values && values.bookingEndTime ? values.bookingEndTime : null;
 
@@ -194,7 +196,6 @@ export class BookingTimeFormComponent extends Component {
                   timeZone={timeZone}
                 />
               ) : null} */}
-
               {bookingInfoMaybe}
               {loadingSpinnerMaybe}
               {bookingInfoErrorMaybe}
@@ -220,8 +221,8 @@ export class BookingTimeFormComponent extends Component {
                     <FormattedMessage id="BookingTimeForm.requestToBook" />
                   )}
                 </PrimaryButton>
+                {joinUrl}
               </div>
-              {joinUrl}
             </Form>
           );
         }}

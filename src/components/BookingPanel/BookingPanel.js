@@ -138,18 +138,49 @@ const BookingPanel = props => {
 
   const classes = classNames(rootClassName || css.root, className);
   const titleClasses = classNames(titleClassName || css.bookingTitle);
-  if (checkOldTransactionLoading || zoomLoading)
-    return (
+
+  const loading =
+    checkOldTransactionLoading || zoomLoading ? (
       <div className={classes}>
         <span>Loading...</span>{' '}
         <span>
           <IconSpinner />
         </span>
       </div>
-    );
+    ) : null;
   const formattedDate = convertTime(publicData?.startDateString, publicData.timezone);
   // const formattedDate = convertTime(publicData.startDate, publicData.timezone);
   // moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
+  const panelCard = (
+    <div className={css.detailsContainerDesktop}>
+      <div className={css.detailsAspectWrapper}>
+        <ResponsiveImage
+          rootClassName={css.rootForImage}
+          alt={title}
+          image={firstImage}
+          variants={['landscape-crop', 'landscape-crop2x']}
+        />
+      </div>
+
+      <div className={css.detailsHeadings}>
+        <h2 className={css.detailsTitle}>{title}</h2>
+
+        {isFreeBooking ? (
+          <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
+            Free
+          </p>
+        ) : (
+          <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
+            <b>Price:</b>
+            {formattedPrice} per person
+          </p>
+        )}
+        <p className={css.detailsSubtitle}>
+          <b>Start date:</b> {formattedDate}
+        </p>
+      </div>
+    </div>
+  );
   return (
     <div className={classes}>
       <ModalInMobile
@@ -160,9 +191,7 @@ const BookingPanel = props => {
         showAsModalMaxWidth={MODAL_BREAKPOINT}
         onManageDisableScrolling={onManageDisableScrolling}
       >
-        <div className={css.modalHeading}>
-          <h1 className={css.title}>{title}</h1>
-        </div>
+        <div className={css.modalHeading}>{/* <h1 className={css.title}>{title}</h1> */}</div>
         {/* <div className={css.bookingHeading}>
           <h3>Price:</h3>
           <div className={css.desktopPriceContainer}>
@@ -181,7 +210,7 @@ const BookingPanel = props => {
           </div>
         </div> */}
 
-        <div className={css.detailsContainerDesktop}>
+        {/* <div className={css.detailsContainerDesktop}>
           <div className={css.detailsAspectWrapper}>
             <ResponsiveImage
               rootClassName={css.rootForImage}
@@ -190,9 +219,6 @@ const BookingPanel = props => {
               variants={['landscape-crop', 'landscape-crop2x']}
             />
           </div>
-          {/* <div className={css.avatarWrapper}>
-            <AvatarMedium user={currentAuthor} disableProfileLink />
-          </div> */}
           <div className={css.detailsHeadings}>
             <h2 className={css.detailsTitle}>{title}</h2>
 
@@ -210,9 +236,9 @@ const BookingPanel = props => {
               <b>Start date:</b> {formattedDate}
             </p>
           </div>
-          {/* <p style={{ color: 'red' }}></p> */}
-        </div>
-
+        </div> */}
+        {loading}
+        {panelCard}
         {showBookingTimeForm ? (
           <BookingTimeForm
             className={css.bookingForm}
@@ -238,6 +264,8 @@ const BookingPanel = props => {
             bookingType={bookingType}
             transactionId={transactionId}
             joinUrl={joinUrl}
+            panelCard={panelCard}
+            loading={loading}
           />
         ) : null}
       </ModalInMobile>

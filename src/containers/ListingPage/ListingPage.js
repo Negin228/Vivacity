@@ -266,9 +266,12 @@ export class ListingPageComponent extends Component {
         })}
       </span>
     );
-
+    const displayName = currentListing?.author?.attributes?.profile?.displayName;
     const bookingTitle = (
-      <FormattedMessage id="ListingPage.bookingTitle" values={{ title: richTitle }} />
+      <FormattedMessage
+        id="ListingPage.bookingTitle"
+        values={{ title: richTitle, displayName: displayName }}
+      />
     );
 
     const topbar = <TopbarContainer />;

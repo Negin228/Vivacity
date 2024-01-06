@@ -422,7 +422,7 @@
   "ListingCard.perUnit": "per person",
   "ListingCard.unsupportedPrice": "({currency})",
   "ListingCard.unsupportedPriceTitle": "Unsupported currency ({currency})",
-  "ListingPage.bookingTitle": "Book a session with {title}",
+  "ListingPage.bookingTitle": "Book a {title} session with {displayName}",
   "ListingPage.closedListing": "This teacher profile has been closed and sessions can't be booked.",
   "ListingPage.contactUser": "Contact",
   "ListingPage.descriptionTitle": "Class description",
