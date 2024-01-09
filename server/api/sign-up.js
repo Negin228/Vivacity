@@ -7,11 +7,12 @@ module.exports = async (req, res) => {
     const integrationSdk = await getIntegrationSdk();
     const createUser = await sdk.currentUser.create(createUserParams);
     const createUserId = createUser?.data?.data?.id?.uuid;
-    // console.log('createUserId', createUserId);
+
+    const isTeacher = createUserParams?.publicData?.userType === 'teacher';
     const updateUser = await integrationSdk.users.updateProfile({
       id: createUserId,
       metadata: {
-        featured: true,
+        featured: isTeacher ? true : null,
       },
     });
     // console.log('updateUser', updateUser);
