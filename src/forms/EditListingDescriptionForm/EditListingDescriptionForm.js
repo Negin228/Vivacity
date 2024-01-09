@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { arrayOf, bool, func, shape, string } from 'prop-types';
 import { compose } from 'redux';
 import { Form as FinalForm } from 'react-final-form';
@@ -52,8 +52,9 @@ const EditListingDescriptionFormComponent = props => (
         fetchErrors,
         hasZoom,
         values,
+        form,
       } = formRenderProps;
-      // console.log('values', values);
+
       const unitType = config.bookingUnitType;
       const isNightly = unitType === LINE_ITEM_NIGHT;
       const isDaily = unitType === LINE_ITEM_DAY;
@@ -254,13 +255,31 @@ const EditListingDescriptionFormComponent = props => (
               className={css.title}
               id="start_date"
               name="start_date"
-              label="Date and Time"
-              placeholder="Choose date and time"
+              label="Date "
+              placeholder="Choose date"
               minDate={new Date()}
+              onFieldChange={e => form.change('time', e)}
+              dateFormat="MM/dd/yyyy "
               style={{ marginBottom: '32px' }}
               validate={composeValidators(required('Start date is required'))}
               disabled={hasZoom}
-              timezone={'America/Los_Angeles'}
+            />
+            <Datepicker
+              className={css.title}
+              id="time"
+              name="time"
+              label="Time"
+              placeholder="Choose time"
+              minDate={new Date()}
+              style={{ marginBottom: '32px' }}
+              showTimeSelect
+              onFieldChange={e => form.change('start_date', e)}
+              showTimeSelectOnly
+              timeIntervals={15}
+              timeCaption="Time"
+              dateFormat="h:mm aa"
+              validate={composeValidators(required('Time is required'))}
+              disabled={hasZoom}
             />
             <FieldSelectModern
               className={css.features}

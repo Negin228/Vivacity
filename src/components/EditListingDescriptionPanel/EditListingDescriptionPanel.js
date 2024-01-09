@@ -77,6 +77,7 @@ const EditListingDescriptionPanel = props => {
           : undefined,
         // timezone: publicData.timezone ? publicData.timezone : undefined,
         start_date: publicData.startDate ? new Date(publicData.startDate) : undefined,
+        time: publicData.startDate ? new Date(publicData.startDate) : undefined,
         stock: currentStock,
         class_duration: publicData.classDuration ? publicData.classDuration : undefined,
         type: config.custom.typeOptions?.find(option => option.key === publicData.type),
@@ -98,6 +99,7 @@ const EditListingDescriptionPanel = props => {
       class_duration: publicData.classDuration ? publicData.classDuration : undefined,
       type: config.custom.typeOptions?.find(option => option.key === publicData.type),
       otherWorkoutType: publicData.otherWorkoutType,
+      time: publicData.startDate ? new Date(publicData.startDate) : undefined,
       ...initialProps,
     };
   }, [initialProps]);

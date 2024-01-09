@@ -25,6 +25,7 @@ function DatepickerComponent(props) {
     placeholder,
     minDate,
     disabled = false,
+    onFieldChange,
     ...rest
   } = props;
   /* eslint-enable no-unused-vars */
@@ -79,15 +80,18 @@ function DatepickerComponent(props) {
 
       <DatePicker
         {...inputProps}
-        onChange={input.onChange}
+        onChange={e => {
+          input.onChange(e);
+          onFieldChange && onFieldChange(e);
+        }}
         selected={input.value}
         placeholderText={placeholder}
         minDate={minDate}
         autocomplete="off"
         timeInputLabel="Time:"
-        dateFormat="MM/dd/yyyy h:mm aa"
-        showTimeInput
-        showTimeSelect
+        // dateFormat="MM/dd/yyyy h:mm aa"
+        // showTimeInput
+        // showTimeSelect
 
         // dateFormat="d-MMMM-yyyy "
       />
