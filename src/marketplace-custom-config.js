@@ -104,6 +104,11 @@ export const timezones = [
     value: 'Pacific/Auckland',
     key: 'Pacific/Auckland',
   },
+  // {
+  //   label: 'IST (India Standard Time) (GMT+5:30) - Mumbai, New Delhi',
+  //   value: 'Asia/Kolkata',
+  //   key: 'Asia/Kolkata',
+  // },
 ];
 export const languages = [
   {

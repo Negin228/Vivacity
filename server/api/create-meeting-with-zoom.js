@@ -12,7 +12,6 @@ const ROOT_API_URL = ROOT_URL === 'http://localhost:3000' ? 'http://localhost:35
 
 module.exports = async (req, res) => {
   const { code, backurl: backURL } = req.query;
-
   const paramsMissing = !code || !backURL;
   const sdk = getSdk(req, res);
   const integrationSdk = getIntegrationSdk();
@@ -62,7 +61,8 @@ module.exports = async (req, res) => {
 
     listingResponse = denormalizeResponseData(listingResponse);
     const listing = listingResponse.data;
-    const { startDate, timezone: listingTimezone, classDuration } = listing?.attributes?.publicData ?? {};
+    const { startDate, startDateString, timezone: listingTimezone, classDuration } =
+      listing?.attributes?.publicData ?? {};
     // console.log({ timezone, startDate });
 
     let duration;
@@ -108,11 +108,13 @@ module.exports = async (req, res) => {
     //   .tz(timezone)
     //   .format('HH:mm:ss');
 
+    const start_time = moment(startDateString)
+      .tz(zoomTimezone)
+      .tz(listingTimezone, true)
+      .tz(zoomTimezone)
+      .format('YYYY-MM-DDTHH:mm:ss');
 
-    const start_time = moment(startDate).tz(zoomTimezone).tz(listingTimezone,true).tz(zoomTimezone).format('YYYY-MM-DDTHH:mm:ss');
-
-
-    console.log({startDate,listingTimezone,zoomTimezone,start_time})
+    // console.log({ startDate, listingTimezone, zoomTimezone, start_time });
 
     const meetingParams = JSON.stringify({
       // start_time: moment(new Date(startDate))

@@ -202,6 +202,7 @@ const EditListingDescriptionPanel = props => {
             class_duration: hasZoom ? publicData.classDuration : class_duration,
             type,
             otherWorkoutType,
+            time: hasZoom ? new Date(publicData?.startDate) : start_date,
           });
 
           onSubmit(updateValues);
