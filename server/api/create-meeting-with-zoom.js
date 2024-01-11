@@ -108,24 +108,26 @@ module.exports = async (req, res) => {
     //   .tz(timezone)
     //   .format('HH:mm:ss');
 
-    const start_time = moment(startDateString)
-      .tz(zoomTimezone)
-      .tz(listingTimezone, true)
-      .tz(zoomTimezone)
-      .format('YYYY-MM-DDTHH:mm:ss');
+    const start_time = startDate;
+    //  moment(startDate)
+    //   .tz(zoomTimezone)
+    //   .tz(listingTimezone, true)
+    //   .tz(zoomTimezone)
+    //   .format('YYYY-MM-DDTHH:mm:ss');
 
     // console.log({ startDate, listingTimezone, zoomTimezone, start_time });
+    // console.log('start_time', start_time);
+    // return;
 
     const meetingParams = JSON.stringify({
-      // start_time: moment(new Date(startDate))
-      //   .tz(timezone)
-      //   .format('YYYY-MM-DDTHH:mm:ss'),
-      start_time,
+      start_time: moment.tz(startDate, listingTimezone).format('YYYY-MM-DDTHH:mm:ssZ'),
+      // start_time,
+      timezone: listingTimezone,
       type: 2,
       duration,
       topic: listing.attributes.title.slice(0, 199),
     });
-
+    console.log('meetingParams', meetingParams);
     const meetingRespData = await fetch(`https://api.zoom.us/v2/users/${zoomUserId}/meetings`, {
       method: 'POST',
       body: meetingParams,

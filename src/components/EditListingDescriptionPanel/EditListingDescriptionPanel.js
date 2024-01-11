@@ -8,7 +8,7 @@ import { LISTING_STATE_DRAFT } from '../../util/types';
 import { ListingLink } from '../../components';
 import { EditListingDescriptionForm } from '../../forms';
 import config from '../../config';
-import moment from 'moment-timezone';
+import moment from 'moment';
 import css from './EditListingDescriptionPanel.module.css';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -39,6 +39,7 @@ const EditListingDescriptionPanel = props => {
       dispatch(clearPreviousListingData());
     }
   }, []);
+
   const [initialProps, setInitialProps] = React.useState({});
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
@@ -147,10 +148,15 @@ const EditListingDescriptionPanel = props => {
           const startDateISO = start_date.toISOString();
           const selectedDate = moment(startDateISO).tz(timezone?.key);
           const unix_time_stamp = selectedDate.unix();
+
           const yogaStylesFilter = yogaStyles?.map(
             style => config.custom.workoutTypes?.find(s => s.key === style)?.label
           );
           const startDateString = moment(start_date).format('YYYY-MM-DD HH:mm:ss');
+          const startDateUnix = moment.tz(startDateString, timezone?.key).unix();
+
+          const startDateToIso = moment.unix(startDateUnix).toISOString();
+
           const priceMaybe =
             type?.key === config.isPaid ? { price } : { price: new Money(0, config.currency) };
           const updateValues = {
@@ -177,10 +183,10 @@ const EditListingDescriptionPanel = props => {
               languagesFilter: [languages.key],
               yogaStyles: yogaStyles,
               timezone: hasZoom ? publicData?.timezone : timezone?.key,
-              startDate: hasZoom ? publicData?.startDate : start_date.toISOString(),
+              startDate: hasZoom ? publicData?.startDate : startDateToIso,
               stock: stock,
               classDuration: hasZoom ? publicData?.classDuration : class_duration,
-              unixTimeStamp: hasZoom ? publicData?.unixTimeStamp : unix_time_stamp,
+              unixTimeStamp: hasZoom ? publicData?.unixTimeStamp : startDateUnix,
               classDurationFilter: hasZoom ? publicData?.classDurationFilter : [class_duration.key],
               timeUpdated,
               type: type?.key,
