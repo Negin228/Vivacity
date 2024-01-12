@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { PrimaryButton, SecondaryButton } from '../../components';
-
+import moment from 'moment';
 import css from './TransactionPanel.module.css';
 
 // Functional component as a helper to build ActionButtons for
@@ -18,13 +18,29 @@ const SaleActionButtonsMaybe = props => {
     declineSaleError,
     onAcceptSale,
     onDeclineSale,
+    listing,
   } = props;
+  const { attributes } = listing || {};
+  const { publicData } = attributes || {};
+  const { startDate: lStartDate } = publicData || {};
+  const currentTimezone = moment.tz.guess();
+  const startDate = moment.tz(lStartDate, currentTimezone);
+  const currentDate = moment.tz(new Date(), currentTimezone);
+  // console.log('dates--------------->', {
+  //   currentDate: currentDate.format('YYYY-MM-DD HH:mm a'),
+  //   startDate: startDate.format('YYYY-MM-DD HH:mm a'),
+  // });
+  const isPast = startDate.isBefore(currentDate);
 
   const buttonsDisabled = acceptInProgress || declineInProgress;
 
   const acceptErrorMessage = acceptSaleError ? (
     <p className={css.actionError}>
-      <FormattedMessage id="TransactionPanel.acceptSaleFailed" />
+      {acceptSaleError?.message ? (
+        acceptSaleError?.message
+      ) : (
+        <FormattedMessage id="TransactionPanel.acceptSaleFailed" />
+      )}
     </p>
   ) : null;
   const declineErrorMessage = declineSaleError ? (
@@ -49,13 +65,15 @@ const SaleActionButtonsMaybe = props => {
         >
           <FormattedMessage id="TransactionPanel.declineButton" />
         </SecondaryButton>
-        <PrimaryButton
-          inProgress={acceptInProgress}
-          disabled={buttonsDisabled}
-          onClick={onAcceptSale}
-        >
-          <FormattedMessage id="TransactionPanel.acceptButton" />
-        </PrimaryButton>
+        {isPast ? null : (
+          <PrimaryButton
+            inProgress={acceptInProgress}
+            disabled={buttonsDisabled}
+            onClick={onAcceptSale}
+          >
+            <FormattedMessage id="TransactionPanel.acceptButton" />
+          </PrimaryButton>
+        )}
       </div>
     </div>
   ) : null;

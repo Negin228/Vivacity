@@ -25,6 +25,7 @@ const transitionConfirmPayment = require('./api/transition-confirm-payment');
 const getZoomMeetingData = require('./api/get-zoom-meeting-data');
 const getOldTransactionData = require('./api/check-transaction');
 const createUser = require('./api/sign-up');
+const acceptTransaction = require('./api/accept-transaction');
 const router = express.Router();
 
 // ================ API router middleware: ================ //
@@ -63,7 +64,7 @@ router.post('/check-transaction', getOldTransactionData);
 // This endpoint is called to create a new user after user has confirmed
 // they want to continue with the data fetched from IdP (e.g. name and email)
 router.post('/auth/create-user-with-idp', createUserWithIdp);
-
+router.post('/accept-transaction', acceptTransaction);
 // Facebook authentication endpoints
 
 // This endpoint is called when user wants to initiate authenticaiton with Facebook

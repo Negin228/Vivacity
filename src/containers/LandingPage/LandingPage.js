@@ -152,7 +152,7 @@ const mapStateToProps = state => {
     const listings = getMarketplaceEntities(state, [ref]);
     return listings.length === 1 ? listings[0] : null;
   });
-  const products = productArr;
+  const products = productArr || [];
   //  ??
   // []?.filter(
   //   l =>

@@ -12,7 +12,7 @@ import {
   TRANSITION_ACCEPT,
   TRANSITION_DECLINE,
 } from '../../util/transaction';
-import { transactionLineItems } from '../../util/api';
+import { onAcceptTransaction, transactionLineItems } from '../../util/api';
 import * as log from '../../util/log';
 import {
   updatedEntities,
@@ -22,7 +22,7 @@ import {
 import { findNextBoundary, nextMonthFn, monthIdStringInTimeZone } from '../../util/dates';
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { fetchCurrentUserNotifications } from '../../ducks/user.duck';
-
+import moment from 'moment';
 const { UUID } = sdkTypes;
 
 const MESSAGES_PAGE_SIZE = 100;
@@ -443,9 +443,13 @@ export const acceptSale = id => (dispatch, getState, sdk) => {
     return Promise.reject(new Error('Accept or decline already in progress'));
   }
   dispatch(acceptSaleRequest());
-
-  return sdk.transactions
-    .transition({ id, transition: TRANSITION_ACCEPT, params: {} }, { expand: true })
+  // move this logic to the backend
+  // return sdk.transactions
+  //   .transition({ id, transition: TRANSITION_ACCEPT, params: {} }, { expand: true })
+  const timezone =
+    // 'America/Los_Angeles';
+    moment.tz.guess();
+  return onAcceptTransaction({ id, userTimeZone: timezone })
     .then(response => {
       dispatch(addMarketplaceEntities(response));
       dispatch(acceptSaleSuccess());
@@ -458,7 +462,7 @@ export const acceptSale = id => (dispatch, getState, sdk) => {
         txId: id,
         transition: TRANSITION_ACCEPT,
       });
-      throw e;
+      // throw e;
     });
 };
 

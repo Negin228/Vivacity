@@ -147,6 +147,9 @@ export const createUserWithIdp = body => {
 export const getOldTransactionData = params => {
   return post('/api/check-transaction', params);
 };
+export const onAcceptTransaction = body => {
+  return post('/api/accept-transaction', body);
+};
 export const confirmPaymentFromAPI = body => post('/api/transition-confirm-payment', body);
 export const getZoomFromAPI = params => {
   const urlParams = new URLSearchParams(params).toString();

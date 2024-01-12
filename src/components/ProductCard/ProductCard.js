@@ -4,7 +4,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import { ResponsiveImage } from '../../components';
 import { formatMoney } from '../../util/currency';
-import { convertDate, convertTimeOnly, createSlug } from '../../util/urlHelpers';
+import { convertDate, convertTime, convertTimeOnly, createSlug } from '../../util/urlHelpers';
 import css from './ProductCard.module.css';
 import { AiFillStar } from 'react-icons/ai';
 import classNames from 'classnames';
@@ -18,8 +18,8 @@ function ProductCard({ title, id, timeZone, startDate, startDateString, images, 
 
   const formattedDate = convertDate(startDateString, timeZone);
   const formattedTime = convertTimeOnly(startDateString, timeZone);
-  // const formattedDate = convertDate(startDate, timeZone);
-  // const formattedTime = convertTimeOnly(startDate, timeZone);
+  const targetTime = convertTime(startDateString, timeZone);
+  if (!targetTime) return null;
   return (
     <div className={css.product} onClick={handleClick}>
       {/* <div className="px-3 flex items-center justify-between">
@@ -44,7 +44,8 @@ function ProductCard({ title, id, timeZone, startDate, startDateString, images, 
 
         <div>
           <h3>
-            {formattedDate} at {formattedTime}
+            {targetTime}
+            {/* {formattedDate} at {formattedTime} */}
           </h3>
           <p className={css.price}>
             {title} with {teacherName}
