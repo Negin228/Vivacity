@@ -54,7 +54,7 @@ const EditListingDescriptionFormComponent = props => (
         values,
         form,
       } = formRenderProps;
-
+      console.log('values', values);  
       const unitType = config.bookingUnitType;
       const isNightly = unitType === LINE_ITEM_NIGHT;
       const isDaily = unitType === LINE_ITEM_DAY;
@@ -305,6 +305,101 @@ const EditListingDescriptionFormComponent = props => (
             onKeyDown={e => (e.keyCode === 189 || e.keyCode === 190) && e.preventDefault()}
           />
           {setStockError ? <p className={css.error}>{stockErrorMessage}</p> : null}
+              {/* Recurrence section */}
+              <FieldSelectModern
+            className={css.features}
+            id="recurrence_type"
+            name="recurrence_type"
+            label="Recurrence Type ( Do you want the meeting to repeat? )"
+            options={[
+              { value: '0', label: 'No Recurrence' },
+              { value: '1', label: 'Daily' },
+              { value: '2', label: 'Weekly' },
+              { value: '3', label: 'Monthly' },
+            ]}
+            placeholder="Select recurrence type"
+            validate={fieldSelectModernRequired('Please select a recurrence type')}
+          />
+
+          {values?.recurrence_type?.value !== '0' && (
+            <>
+              <FieldTextInput
+                id="repeat_interval"
+                name="repeat_interval"
+                className={css.title}
+                type="number"
+                label="Repeat Interval (number of days, weeks, or months that should pass before the meeting repeats.)"
+                placeholder="Enter repeat interval."
+                validate={required('Please enter repeat interval')}
+              />
+              <FieldSelectModern
+                className={css.features}
+                id="end_recurrence"
+                name="end_recurrence"
+                label="End of Recurrence"
+                options={[
+                  { value: 'end_date', label: 'End by Date' },
+                  { value: 'end_times', label: 'End after X occurrences' },
+                ]}
+                placeholder="Select end of recurrence"
+                validate={fieldSelectModernRequired('Please select an end of recurrence')}
+              />
+              {values?.end_recurrence?.value === 'end_date' ? (
+                <Datepicker
+                  className={css.title}
+                  id="end_date"
+                  name="end_date"
+                  label="End Date"
+                  placeholder="Choose end date"
+                  minDate={values?.start_date ? new Date(values.start_date) : new Date()}
+                  dateFormat="MM/dd/yyyy"
+                  validate={composeValidators(required('End date is required'))}
+                />
+              ) : null}
+              {values?.end_recurrence?.value === 'end_times' ? (
+                <FieldTextInput
+                  id="end_times"
+                  name="end_times"
+                  className={css.title}
+                  type="number"
+                  label="Occurrences"
+                  placeholder="Enter number of occurrences"
+                  validate={required('Please enter number of occurrences')}
+                />
+              ) : null}
+              {values?.recurrence_type?.value === '2' ? (
+                <FieldSelectModern
+                  className={css.features}
+                  id="weekly_days"
+                  name="weekly_days"
+                  label="Days of the Week"
+                  options={[
+                    { value: '1', label: 'Sunday' },
+                    { value: '2', label: 'Monday' },
+                    { value: '3', label: 'Tuesday' },
+                    { value: '4', label: 'Wednesday' },
+                    { value: '5', label: 'Thursday' },
+                    { value: '6', label: 'Friday' },
+                    { value: '7', label: 'Saturday' },
+                  ]}
+                  isMulti
+                />
+              ) : null}
+              {values?.recurrence_type?.value === '3' ? (
+                <>
+                  <FieldTextInput
+                    id="monthly_day"
+                    name="monthly_day"
+                    className={css.title}
+                    type="number"
+                    label="Day of the Month"
+                    placeholder="Enter day of the month"
+                  />
+                </>
+              ) : null}
+            </>
+          )}
+
           <Button
             className={css.submitButton}
             type="submit"

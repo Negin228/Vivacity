@@ -83,6 +83,14 @@ const EditListingDescriptionPanel = props => {
         class_duration: publicData.classDuration ? publicData.classDuration : undefined,
         type: config.custom.typeOptions?.find(option => option.key === publicData.type),
         otherWorkoutType: publicData.otherWorkoutType,
+        recurrence_type: publicData.recurrenceType,
+        repeat_interval: publicData.repeatInterval,
+        end_recurrence: publicData.endRecurrence,
+        end_date: publicData.endDate ? new Date(publicData.endDate) : undefined,
+        end_times: publicData.endTimes,
+        weekly_days: publicData.weeklyDays,
+        monthly_day: publicData.monthlyDay,
+        
       };
     }
     return {
@@ -101,6 +109,14 @@ const EditListingDescriptionPanel = props => {
       type: config.custom.typeOptions?.find(option => option.key === publicData.type),
       otherWorkoutType: publicData.otherWorkoutType,
       time: publicData.startDateString ? new Date(publicData.startDateString) : undefined,
+      recurrence_type: publicData.recurrenceType,
+      repeat_interval: publicData.repeatInterval,
+      end_recurrence: publicData.endRecurrence,
+      end_date: publicData.endDate ? new Date(publicData.endDate) : undefined,
+      end_times: publicData.endTimes,
+      weekly_days: publicData.weeklyDays,
+      monthly_day: publicData.monthlyDay,
+      
       ...initialProps,
     };
   }, [initialProps]);
@@ -193,6 +209,14 @@ const EditListingDescriptionPanel = props => {
               otherWorkoutType: yogaStyles?.includes('other') ? otherWorkoutType : null,
               yogaStylesFilter: fullName + yogaStylesFilter?.toString(),
               startDateString,
+              recurrenceType: values.recurrence_type,
+              repeatInterval: values.repeat_interval,
+              endRecurrence: values.end_recurrence,
+              endDate: values.end_date ? values.end_date.toISOString() : undefined,
+              endTimes: values.end_times,
+              weeklyDays: values.weekly_days,
+              monthlyDay: values.monthly_day,
+              
             },
           };
           setInitialProps({
