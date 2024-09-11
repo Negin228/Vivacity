@@ -144,6 +144,13 @@ const EditListingDescriptionPanel = props => {
             class_duration,
             type,
             otherWorkoutType,
+            recurrence_type,
+            repeat_interval,
+            end_recurrence,
+            end_date,
+            end_times,
+            weekly_days,
+            monthly_day,
           } = values;
 
           const hasStockQuantityChanged = stock && currentStockRaw !== stock;
@@ -209,13 +216,13 @@ const EditListingDescriptionPanel = props => {
               otherWorkoutType: yogaStyles?.includes('other') ? otherWorkoutType : null,
               yogaStylesFilter: fullName + yogaStylesFilter?.toString(),
               startDateString,
-              recurrenceType: values.recurrence_type,
-              repeatInterval: values.repeat_interval,
-              endRecurrence: values.end_recurrence,
-              endDate: values.end_date ? values.end_date.toISOString() : undefined,
-              endTimes: values.end_times,
-              weeklyDays: values.weekly_days,
-              monthlyDay: values.monthly_day,
+              recurrenceType: recurrence_type,
+              repeatInterval: recurrence_type?.value !== '0' ? repeat_interval : null,
+              endRecurrence: recurrence_type?.value !== '0' ? end_recurrence : null,
+              endDate: end_recurrence?.value === 'end_date' ? end_date?.toISOString() : null,
+              endTimes: end_recurrence?.value === 'end_times' ? end_times : null,
+              weeklyDays: recurrence_type?.value === '2' ? weekly_days : null,
+              monthlyDay: recurrence_type?.value === '3' ? monthly_day : null,
               
             },
           };
@@ -233,6 +240,14 @@ const EditListingDescriptionPanel = props => {
             type,
             otherWorkoutType,
             time: hasZoom ? new Date(publicData?.startDate) : start_date,
+            recurrence_type,
+            repeat_interval,
+            end_recurrence,
+            end_date,
+            end_times,
+            weekly_days,
+            monthly_day,
+            
           });
 
           onSubmit(updateValues);
