@@ -75,7 +75,6 @@ module.exports = async (req, res) => {
       } =
       listing?.attributes?.publicData ?? {};
     // console.log({ timezone, startDate });
-      console.log(recurrenceType?.value,'valuee')
     let duration;
     switch (classDuration.key) {
       case '30_min':
@@ -134,7 +133,7 @@ module.exports = async (req, res) => {
       start_time: moment.tz(startDate, listingTimezone).format('YYYY-MM-DDTHH:mm:ssZ'),
       // start_time,
       timezone: listingTimezone,
-      type: 2,
+      type: recurrenceType?.value !== '0' ? 8 : 2, // Set type to 8 if recurring, otherwise 2
       duration,
       topic: listing.attributes.title.slice(0, 199),
     };
@@ -148,7 +147,12 @@ module.exports = async (req, res) => {
         weekly_days: recurrenceType?.value === '2' ? weeklyDays.map(day => day.value).join(',') : undefined,
         monthly_day: recurrenceType?.value === '3' ? parseInt(monthlyDay, 10) : undefined,
       };
+      // Remove undefined properties from the recurrence object
+      Object.keys(meetingParams.recurrence).forEach(
+        key => meetingParams.recurrence[key] === undefined && delete meetingParams.recurrence[key]
+      );
     }
+    
     console.log('meetingParams', JSON.stringify(meetingParams));
     const meetingRespData = await fetch(`https://api.zoom.us/v2/users/${zoomUserId}/meetings`, {
       method: 'POST',

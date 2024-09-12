@@ -53,8 +53,7 @@ const EditListingDescriptionFormComponent = props => (
         hasZoom,
         values,
         form,
-      } = formRenderProps;
-      console.log('values', values);  
+      } = formRenderProps; 
       const recurrenceTypeCheck = values.recurrence_type.value; 
         let maxRecurrence;
         switch (recurrenceTypeCheck) {
