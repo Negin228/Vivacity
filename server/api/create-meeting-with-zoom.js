@@ -61,10 +61,21 @@ module.exports = async (req, res) => {
 
     listingResponse = denormalizeResponseData(listingResponse);
     const listing = listingResponse.data;
-    const { startDate, startDateString, timezone: listingTimezone, classDuration } =
+    const { startDate,
+       startDateString,
+       timezone: listingTimezone,
+       classDuration,
+       recurrenceType,
+       repeatInterval,
+       endRecurrence,
+       endDate,
+       endTimes,
+       weeklyDays,
+       monthlyDay
+      } =
       listing?.attributes?.publicData ?? {};
     // console.log({ timezone, startDate });
-
+      console.log(recurrenceType?.value,'valuee')
     let duration;
     switch (classDuration.key) {
       case '30_min':
@@ -119,18 +130,29 @@ module.exports = async (req, res) => {
     // console.log('start_time', start_time);
     // return;
 
-    const meetingParams = JSON.stringify({
+    const meetingParams = {
       start_time: moment.tz(startDate, listingTimezone).format('YYYY-MM-DDTHH:mm:ssZ'),
       // start_time,
       timezone: listingTimezone,
       type: 2,
       duration,
       topic: listing.attributes.title.slice(0, 199),
-    });
-    console.log('meetingParams', meetingParams);
+    };
+    // Add recurrence settings if they exist
+    if (recurrenceType?.value !== '0') {
+      meetingParams.recurrence = {
+        type: parseInt(recurrenceType.value, 10),
+        repeat_interval: parseInt(repeatInterval, 10),
+        end_date_time: endRecurrence?.value === 'end_date' ? moment(endDate).format('YYYY-MM-DDTHH:mm:ssZ') : undefined,
+        end_times: endRecurrence?.value === 'end_times' ? parseInt(endTimes, 10) : undefined,
+        weekly_days: recurrenceType?.value === '2' ? weeklyDays.map(day => day.value).join(',') : undefined,
+        monthly_day: recurrenceType?.value === '3' ? parseInt(monthlyDay, 10) : undefined,
+      };
+    }
+    console.log('meetingParams', JSON.stringify(meetingParams));
     const meetingRespData = await fetch(`https://api.zoom.us/v2/users/${zoomUserId}/meetings`, {
       method: 'POST',
-      body: meetingParams,
+      body: JSON.stringify(meetingParams),
 
       headers: {
         'Content-Type': 'application/json',

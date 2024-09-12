@@ -55,6 +55,22 @@ const EditListingDescriptionFormComponent = props => (
         form,
       } = formRenderProps;
       console.log('values', values);  
+      const recurrenceTypeCheck = values.recurrence_type.value; 
+        let maxRecurrence;
+        switch (recurrenceTypeCheck) {
+          case '1':
+            maxRecurrence = 99;
+            break;
+          case '2':
+            maxRecurrence = 50;
+            break;
+          case '3':
+            maxRecurrence = 10;
+            break;
+          default:
+            maxRecurrence = 60; // Default value if recurrence type is not set
+        }
+      
       const unitType = config.bookingUnitType;
       const isNightly = unitType === LINE_ITEM_NIGHT;
       const isDaily = unitType === LINE_ITEM_DAY;
@@ -331,6 +347,8 @@ const EditListingDescriptionFormComponent = props => (
                 label="Repeat Interval (number of days, weeks, or months that should pass before the meeting repeats.)"
                 placeholder="Enter repeat interval."
                 validate={required('Please enter repeat interval')}
+                min={1}
+                max={maxRecurrence}
               />
               <FieldSelectModern
                 className={css.features}
@@ -365,6 +383,8 @@ const EditListingDescriptionFormComponent = props => (
                   label="Occurrences"
                   placeholder="Enter number of occurrences"
                   validate={required('Please enter number of occurrences')}
+                  min={1}
+                  max={60}
                 />
               ) : null}
               {values?.recurrence_type?.value === '2' ? (
@@ -394,6 +414,8 @@ const EditListingDescriptionFormComponent = props => (
                     type="number"
                     label="Day of the Month"
                     placeholder="Enter day of the month"
+                    min={1}
+                    max={31}
                   />
                 </>
               ) : null}
