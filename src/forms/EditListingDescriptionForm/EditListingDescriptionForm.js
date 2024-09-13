@@ -54,7 +54,7 @@ const EditListingDescriptionFormComponent = props => (
         values,
         form,
       } = formRenderProps; 
-      const recurrenceTypeCheck = values.recurrence_type.value; 
+      const recurrenceTypeCheck = values?.recurrence_type?.value; 
         let maxRecurrence;
         switch (recurrenceTypeCheck) {
           case '1':
