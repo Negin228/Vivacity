@@ -54,7 +54,7 @@ const AboutPage = () => {
               We created Vivacity for us, and for you! We understand how a busy life can get in the way of self-care. Between work, family, and friends, it might be hard to find time in your day to go to the gym or studio to fit in exercise.
               </p>
 
-              {/* <h3 className={css.subtitle}>Are you a yoga teacher?</h3> */}
+              {/* <h3 className={css.subtitle}>Are you a fitness instructor?</h3> */}
 
               <p>
               That’s why we’ve created a platform that merges the convenience of virtual fitness with the community and motivation of live group fitness classes. 
