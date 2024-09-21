@@ -454,7 +454,7 @@
   "LoadableComponentErrorBoundaryPage.description": "It looks like the app needs to be updated! Please, refresh the current page or go back to {link}.",
   "LoadableComponentErrorBoundaryPage.landingPageLink": "landing page",
   "LocationAutocompleteInput.currentLocation": "Current location",
-  "LocationSearchForm.placeholder": "Search yoga teachers...",
+  "LocationSearchForm.placeholder": "Search fitness instructors...",
   "LoginForm.emailInvalid": "A valid email address is required",
   "LoginForm.emailLabel": "Email",
   "LoginForm.emailPlaceholder": "john.doe@example.com",
