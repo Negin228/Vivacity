@@ -121,7 +121,7 @@ export class ListingPageComponent extends Component {
       },
       confirmPaymentError: null,
     };
-
+    
     const saveToSessionStorage = !this.props.currentUser;
 
     const routes = routeConfiguration();
@@ -257,7 +257,6 @@ export class ListingPageComponent extends Component {
       title = '',
       publicData,
     } = currentListing.attributes;
-
     const richTitle = (
       <span>
         {richText(title, {

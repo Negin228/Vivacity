@@ -21,6 +21,7 @@ const createUserWithIdp = require('./api/auth/createUserWithIdp');
 const { authenticateFacebook, authenticateFacebookCallback } = require('./api/auth/facebook');
 const { authenticateGoogle, authenticateGoogleCallback } = require('./api/auth/google');
 const createMeetingWithZoom = require('./api/create-meeting-with-zoom');
+const checkoutStripeRecurring = require('./api/checkout-stripe-recurring');
 const transitionConfirmPayment = require('./api/transition-confirm-payment');
 const getZoomMeetingData = require('./api/get-zoom-meeting-data');
 const getOldTransactionData = require('./api/check-transaction');
@@ -88,5 +89,6 @@ router.get('/auth/callback/zoom', createMeetingWithZoom);
 router.post('/transition-confirm-payment', transitionConfirmPayment);
 router.get('/zoom', getZoomMeetingData);
 router.post('/sign-up', createUser);
+router.post('/checkout-stripe-recurring', checkoutStripeRecurring);
 
 module.exports = router;

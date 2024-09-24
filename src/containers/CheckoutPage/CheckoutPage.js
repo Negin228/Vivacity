@@ -55,9 +55,11 @@ import {
   confirmPayment,
   sendMessage,
 } from './CheckoutPage.duck';
+import { stripeRecurringPaymentRequest } from './CheckoutPage.duck';
 import { storeData, storedData, clearData } from './CheckoutPageSessionHelpers';
 import css from './CheckoutPage.module.css';
 import { types as sdkTypes } from '../../util/sdkLoader';
+import { on } from 'nodemailer/lib/xoauth2';
 
 const { Money } = sdkTypes;
 const STORAGE_KEY = 'CheckoutPage';
@@ -170,7 +172,7 @@ export class CheckoutPageComponent extends Component {
     // Check if a booking is already created according to stored data.
     const tx = pageData ? pageData.transaction : null;
     const isBookingCreated = tx && tx.booking && tx.booking.id;
-
+    
     const quantity = pageData?.bookingData?.quantity;
     const quantityMaybe = quantity ? { quantity } : {};
     const shouldFetchSpeculatedTransaction =
@@ -260,7 +262,7 @@ export class CheckoutPageComponent extends Component {
         storeData(bookingData, bookingDates, listing, order, STORAGE_KEY);
         this.setState({ pageData: { ...pageData, transaction: order } });
       }
-
+      
       const hasPaymentIntents =
         order.attributes.protectedData && order.attributes.protectedData.stripePaymentIntents;
       if (!isFree) {
@@ -326,7 +328,7 @@ export class CheckoutPageComponent extends Component {
       createdPaymentIntent = fnParams.paymentIntent;
       return onConfirmPayment(fnParams);
     };
-
+    
     // Step 4: send initial message
     const fnSendMessage = fnParams => {
       return onSendMessage({ ...fnParams, message });
@@ -472,7 +474,12 @@ export class CheckoutPageComponent extends Component {
         this.setState({ submitting: false });
       });
   }
-
+  
+  handleSubmitRecurring( listingTitle , price, listingDescription) {
+    const {  dispatch } = this.props;
+  
+   dispatch(stripeRecurringPaymentRequest(listingTitle, price, listingDescription))
+  }
   onStripeInitialized(stripe) {
     this.stripe = stripe;
 
@@ -537,7 +544,13 @@ export class CheckoutPageComponent extends Component {
     const currentAuthor = ensureUser(currentListing.author);
 
     const listingTitle = currentListing.attributes.title;
+    const listingDescription = currentListing.attributes.description;
     const title = intl.formatMessage({ id: 'CheckoutPage.title' }, { listingTitle });
+    console.log(listing, 'listing');
+    const isRecurring = listing?.attributes?.publicData?.recurrenceType.value > 0 ;
+    const data = listing?.attributes?.publicData;
+    console.log(data, 'data');
+    console.log(isRecurring,'isRecurring');
 
     const pageProps = { title, scrollingDisabled };
     const topbar = (
@@ -628,7 +641,7 @@ export class CheckoutPageComponent extends Component {
       !retrievePaymentIntentError &&
       !isPaymentExpired
     );
-
+    
     const firstImage =
       currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
 
@@ -742,7 +755,7 @@ export class CheckoutPageComponent extends Component {
     const price = currentListing.attributes.price ?? new Money(100, config.currency);
     const formattedPrice = formatMoney(intl, price);
     const detailsSubTitle = `${formattedPrice} ${intl.formatMessage({ id: unitTranslationKey })}`;
-
+    
     const showInitialMessageInput = !(
       existingTransaction && existingTransaction.attributes.lastTransition === TRANSITION_ENQUIRE
     );
@@ -806,29 +819,35 @@ export class CheckoutPageComponent extends Component {
                   />
                 </p>
               ) : null}
-              {showPaymentForm ? (
-                <StripePaymentForm
-                  className={css.paymentForm}
-                  onSubmit={this.handleSubmit}
-                  inProgress={this.state.submitting}
-                  formId="CheckoutPagePaymentForm"
-                  paymentInfo={intl.formatMessage({ id: 'CheckoutPage.paymentInfo' })}
-                  authorDisplayName={currentAuthor.attributes.profile.displayName}
-                  showInitialMessageInput={showInitialMessageInput}
-                  initialValues={initalValuesForStripePayment}
-                  initiateOrderError={initiateOrderError}
-                  confirmCardPaymentError={confirmCardPaymentError}
-                  confirmPaymentError={confirmPaymentError}
-                  hasHandledCardPayment={hasPaymentIntentUserActionsDone}
-                  loadingData={!stripeCustomerFetched}
-                  defaultPaymentMethod={
-                    hasDefaultPaymentMethod ? currentUser.stripeCustomer.defaultPaymentMethod : null
-                  }
-                  paymentIntent={paymentIntent}
-                  onStripeInitialized={this.onStripeInitialized}
-                  isFreeBooking={isFreeBooking}
-                />
-              ) : null}
+            {
+             isRecurring ?
+             (
+              <button onClick={() => this.handleSubmitRecurring(listingTitle, price, listingDescription)}>Pay</button>
+            ) : showPaymentForm ? (
+              <StripePaymentForm
+                className={css.paymentForm}
+                onSubmit={this.handleSubmit}
+                inProgress={this.state.submitting}
+                formId="CheckoutPagePaymentForm"
+                paymentInfo={intl.formatMessage({ id: 'CheckoutPage.paymentInfo' })}
+                authorDisplayName={currentAuthor.attributes.profile.displayName}
+                showInitialMessageInput={showInitialMessageInput}
+                initialValues={initalValuesForStripePayment}
+                initiateOrderError={initiateOrderError}
+                confirmCardPaymentError={confirmCardPaymentError}
+                confirmPaymentError={confirmPaymentError}
+                hasHandledCardPayment={hasPaymentIntentUserActionsDone}
+                loadingData={!stripeCustomerFetched}
+                defaultPaymentMethod={
+                  hasDefaultPaymentMethod ? currentUser.stripeCustomer.defaultPaymentMethod : null
+                }
+                paymentIntent={paymentIntent}
+                onStripeInitialized={this.onStripeInitialized}
+                isFreeBooking={isFreeBooking}
+              />
+            ) : null
+              }
+
               {isPaymentExpired ? (
                 <p className={css.orderError}>
                   <FormattedMessage
@@ -946,6 +965,7 @@ const mapStateToProps = state => {
     transaction,
     initiateOrderError,
     confirmPaymentError,
+
   } = state.CheckoutPage;
   const { currentUser } = state.user;
   const { confirmCardPaymentError, paymentIntent, retrievePaymentIntentError } = state.stripe;
@@ -965,6 +985,7 @@ const mapStateToProps = state => {
     confirmPaymentError,
     paymentIntent,
     retrievePaymentIntentError,
+    
   };
 };
 
@@ -980,6 +1001,7 @@ const mapDispatchToProps = dispatch => ({
   onSendMessage: params => dispatch(sendMessage(params)),
   onSavePaymentMethod: (stripeCustomer, stripePaymentMethodId) =>
     dispatch(savePaymentMethod(stripeCustomer, stripePaymentMethodId)),
+
 });
 
 const CheckoutPage = compose(

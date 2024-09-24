@@ -1,6 +1,7 @@
 import pick from 'lodash/pick';
 import config from '../../config';
 import { confirmPaymentFromAPI, initiatePrivileged, transitionPrivileged } from '../../util/api';
+import { stripeRecurringPayment } from '../../util/api';
 import { denormalisedResponseEntities } from '../../util/data';
 import { storableError } from '../../util/errors';
 import {
@@ -33,6 +34,11 @@ export const STRIPE_CUSTOMER_REQUEST = 'app/CheckoutPage/STRIPE_CUSTOMER_REQUEST
 export const STRIPE_CUSTOMER_SUCCESS = 'app/CheckoutPage/STRIPE_CUSTOMER_SUCCESS';
 export const STRIPE_CUSTOMER_ERROR = 'app/CheckoutPage/STRIPE_CUSTOMER_ERROR';
 
+export const RECURRING_PAYMENT_REQUEST = 'app/CheckoutPage/RECURRING_PAYMENT_REQUEST';
+export const RECURRING_PAYMENT_SUCCESS = 'app/CheckoutPage/RECURRING_PAYMENT_SUCCESS';
+export const RECURRING_PAYMENT_ERROR = 'app/CheckoutPage/RECURRING_PAYMENT_ERROR';
+
+
 // ================ Reducer ================ //
 
 const initialState = {
@@ -46,6 +52,7 @@ const initialState = {
   initiateOrderError: null,
   confirmPaymentError: null,
   stripeCustomerFetched: false,
+
 };
 
 export default function checkoutPageReducer(state = initialState, action = {}) {
@@ -98,7 +105,13 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
     case STRIPE_CUSTOMER_ERROR:
       console.error(payload); // eslint-disable-line no-console
       return { ...state, stripeCustomerFetchError: payload };
-
+    case RECURRING_PAYMENT_REQUEST:
+      return { ...state, recurringPaymentError: null };
+    case RECURRING_PAYMENT_SUCCESS:
+      return state;
+    case RECURRING_PAYMENT_ERROR:
+      console.error(payload); // eslint-disable-line no-console
+      return { ...state, recurringPaymentError: payload };
     default:
       return state;
   }
@@ -159,6 +172,16 @@ export const stripeCustomerError = e => ({
   error: true,
   payload: e,
 });
+
+export const recurringPaymentRequest = () => ({ type: RECURRING_PAYMENT_REQUEST });
+export const recurringPaymentSuccess = () => ({ type: RECURRING_PAYMENT_SUCCESS });
+export const recurringPaymentError = e => ({
+  type: RECURRING_PAYMENT_ERROR,
+  error: true,
+  payload: e,
+});
+
+
 
 /* ================ Thunks ================ */
 
@@ -299,6 +322,20 @@ export const sendMessage = params => (dispatch, getState, sdk) => {
   } else {
     return Promise.resolve({ orderId, messageSuccess: true });
   }
+};
+
+export const stripeRecurringPaymentRequest = (listingTitle, price, listingDescription) => (dispatch, getState, sdk) => {
+  dispatch(recurringPaymentRequest());
+  console.log(listingTitle, price, listingDescription,'sdsdsd');
+  return stripeRecurringPayment({ listingTitle, price, listingDescription })
+    .then(response => {
+      dispatch(recurringPaymentSuccess());
+    })
+    .catch(e => {
+      console.error('Error creating recurring payment:', e);
+      dispatch(recurringPaymentError(e));
+      throw e;
+    });
 };
 
 /**
