@@ -38,7 +38,6 @@ export const RECURRING_PAYMENT_REQUEST = 'app/CheckoutPage/RECURRING_PAYMENT_REQ
 export const RECURRING_PAYMENT_SUCCESS = 'app/CheckoutPage/RECURRING_PAYMENT_SUCCESS';
 export const RECURRING_PAYMENT_ERROR = 'app/CheckoutPage/RECURRING_PAYMENT_ERROR';
 
-
 // ================ Reducer ================ //
 
 const initialState = {
@@ -52,7 +51,6 @@ const initialState = {
   initiateOrderError: null,
   confirmPaymentError: null,
   stripeCustomerFetched: false,
-
 };
 
 export default function checkoutPageReducer(state = initialState, action = {}) {
@@ -180,8 +178,6 @@ export const recurringPaymentError = e => ({
   error: true,
   payload: e,
 });
-
-
 
 /* ================ Thunks ================ */
 
@@ -324,10 +320,14 @@ export const sendMessage = params => (dispatch, getState, sdk) => {
   }
 };
 
-export const stripeRecurringPaymentRequest = (listingTitle, price, listingDescription) => (dispatch, getState, sdk) => {
+export const stripeRecurringPaymentRequest = (listingTitle, price, listingDescription, userId) => (
+  dispatch,
+  getState,
+  sdk
+) => {
   dispatch(recurringPaymentRequest());
-  console.log(listingTitle, price, listingDescription,'sdsdsd');
-  return stripeRecurringPayment({ listingTitle, price, listingDescription })
+  console.log(listingTitle, price, listingDescription, 'sdsdsd');
+  return stripeRecurringPayment({ listingTitle, price, listingDescription, userId })
     .then(response => {
       dispatch(recurringPaymentSuccess());
     })
