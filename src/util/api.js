@@ -160,3 +160,7 @@ export const createUserFromAPI = body => post('/api/sign-up', body);
 export const stripeRecurringPayment = body => {
   return post('/api/checkout-stripe-recurring', body);
 };
+
+export const createStripeProductAndPrice = body => {
+  return post('/api/createStripeProductAndPrice', body);
+};

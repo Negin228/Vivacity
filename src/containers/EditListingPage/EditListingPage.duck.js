@@ -12,6 +12,7 @@ import {
 import { fetchCurrentUser } from '../../ducks/user.duck';
 import * as log from '../../util/log';
 import moment from 'moment';
+import { createStripeProductAndPrice } from '../../util/api';
 const { UUID } = sdkTypes;
 
 const requestAction = actionType => params => ({ type: actionType, payload: { params } });
@@ -503,6 +504,36 @@ export const requestPublishListingDraft = listingId => async (dispatch, getState
       seats: 1,
     };
     await dispatch(requestAddAvailabilityException(params));
+    console.log(publicData, 'publicData');
+    console.log(listing, 'listing');
+    console.log(publicData.recurrenceType.value, 'publicData?.recurrenceType.value');
+
+    if (publicData?.recurrenceType.value > 0) {
+      console.log('recurring');
+      const {
+        title: listingTitle,
+        description: listingDescription,
+        price: { amount },
+      } = listing.data.data.attributes;
+      const stripeAccount = getState().user.currentUser.stripeAccount.attributes.stripeAccountId;
+      console.log(stripeAccount, 'stripeAccount');
+      // Call the new route to create Stripe product and price
+      const response = await createStripeProductAndPrice({
+        listingTitle,
+        listingDescription,
+        amount,
+        listingId,
+        stripeAccount,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create Stripe product and price');
+      }
+
+      // const data = await response.json();
+      console.log('Stripe product and price created');
+    }
+
     const response = await sdk.ownListings.publishDraft({ id: listingId }, { expand: true });
     await dispatch(addMarketplaceEntities(response));
     await dispatch(publishListingSuccess(response));

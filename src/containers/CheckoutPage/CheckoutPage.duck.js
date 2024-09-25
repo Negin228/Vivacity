@@ -326,7 +326,7 @@ export const stripeRecurringPaymentRequest = (listingTitle, price, listingDescri
   sdk
 ) => {
   dispatch(recurringPaymentRequest());
-  console.log(listingTitle, price, listingDescription, 'sdsdsd');
+  console.log(listingTitle, price, listingDescription, 'TEST');
   return stripeRecurringPayment({ listingTitle, price, listingDescription, userId })
     .then(response => {
       dispatch(recurringPaymentSuccess());

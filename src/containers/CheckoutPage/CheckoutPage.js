@@ -35,6 +35,7 @@ import { TRANSITION_ENQUIRE, txIsPaymentPending, txIsPaymentExpired } from '../.
 import {
   AvatarMedium,
   BookingBreakdown,
+  Button,
   Logo,
   NamedLink,
   NamedRedirect,
@@ -477,7 +478,7 @@ export class CheckoutPageComponent extends Component {
 
   handleSubmitRecurring(listingTitle, price, listingDescription, userId) {
     const { dispatch } = this.props;
-
+    console.log(userId, 'userId');
     dispatch(stripeRecurringPaymentRequest(listingTitle, price, listingDescription, userId));
   }
   onStripeInitialized(stripe) {
@@ -820,13 +821,13 @@ export class CheckoutPageComponent extends Component {
                 </p>
               ) : null}
               {isRecurring ? (
-                <button
+                <Button
                   onClick={() =>
                     this.handleSubmitRecurring(listingTitle, price, listingDescription, userId)
                   }
                 >
                   Pay
-                </button>
+                </Button>
               ) : showPaymentForm ? (
                 <StripePaymentForm
                   className={css.paymentForm}
