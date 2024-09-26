@@ -4,14 +4,6 @@ module.exports = async (req, res) => {
   console.log(
     '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CREATE STRIPE PRODUCT AND PRICE START >>>>>>>>>>>>>>>>>>>>>>>>'
   );
-  //   const integration = await getIntegrationSdk();
-  //   const userWithStripeAccount = await integration.users.show({
-  //     id: userId,
-  //     include: ['stripeAccount'],
-  //   });
-  //   const stripeAccount = userWithStripeAccount?.data?.included[0]?.attributes?.stripeAccountId;
-
-  //   console.log(stripeAccount, 'stripeAccount');
   const { listingTitle, listingDescription, amount, listingId, stripeAccount } = req.body;
 
   try {
@@ -45,8 +37,9 @@ module.exports = async (req, res) => {
 
     console.log(price, 'response price');
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> PRICE CREATED >>>>>>>>>>>>>>>>>>>>>>>>>');
-    await getIntegrationSdk.listings.update({
-      id: listingId,
+    const integration = getIntegrationSdk();
+    await integration.listings.update({
+      id: listingId.uuid,
       publicData: {
         priceId: price.id,
       },

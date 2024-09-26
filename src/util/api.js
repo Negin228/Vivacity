@@ -162,5 +162,6 @@ export const stripeRecurringPayment = body => {
 };
 
 export const createStripeProductAndPrice = body => {
-  return post('/api/createStripeProductAndPrice', body);
+  console.log('hello', body);
+  return post('/api/create-stripe-product-and-price', body);
 };

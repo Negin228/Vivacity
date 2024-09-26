@@ -504,10 +504,33 @@ export const requestPublishListingDraft = listingId => async (dispatch, getState
       seats: 1,
     };
     await dispatch(requestAddAvailabilityException(params));
-    console.log(publicData, 'publicData');
-    console.log(listing, 'listing');
-    console.log(publicData.recurrenceType.value, 'publicData?.recurrenceType.value');
+    const response = await sdk.ownListings.publishDraft({ id: listingId }, { expand: true });
+    await dispatch(createStripeProductRequest(listing, listingId));
+    await dispatch(addMarketplaceEntities(response));
+    await dispatch(publishListingSuccess(response));
 
+    return response;
+    // .then(response => {
+    //   // Add the created listing to the marketplace data
+    //   dispatch(addMarketplaceEntities(response));
+    //   dispatch(publishListingSuccess(response));
+    //   return response;
+    // })
+    // .catch(e => {
+    //   dispatch(publishListingError(storableError(e)));
+    // });
+  } catch (e) {
+    dispatch(publishListingError(storableError(e)));
+  }
+};
+
+export const createStripeProductRequest = (listing, listingId) => async (
+  dispatch,
+  getState,
+  sdk
+) => {
+  try {
+    const { publicData } = listing.data.data.attributes;
     if (publicData?.recurrenceType.value > 0) {
       console.log('recurring');
       const {
@@ -525,30 +548,10 @@ export const requestPublishListingDraft = listingId => async (dispatch, getState
         listingId,
         stripeAccount,
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to create Stripe product and price');
-      }
-
-      // const data = await response.json();
-      console.log('Stripe product and price created');
+      console.log(response);
     }
-
-    const response = await sdk.ownListings.publishDraft({ id: listingId }, { expand: true });
-    await dispatch(addMarketplaceEntities(response));
-    await dispatch(publishListingSuccess(response));
-    return response;
-    // .then(response => {
-    //   // Add the created listing to the marketplace data
-    //   dispatch(addMarketplaceEntities(response));
-    //   dispatch(publishListingSuccess(response));
-    //   return response;
-    // })
-    // .catch(e => {
-    //   dispatch(publishListingError(storableError(e)));
-    // });
-  } catch (e) {
-    dispatch(publishListingError(storableError(e)));
+  } catch (error) {
+    console.error('Error 554', error);
   }
 };
 
