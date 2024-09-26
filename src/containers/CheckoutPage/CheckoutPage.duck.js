@@ -320,13 +320,13 @@ export const sendMessage = params => (dispatch, getState, sdk) => {
   }
 };
 
-export const stripeRecurringPaymentRequest = (userId, priceId) => async (
+export const stripeRecurringPaymentRequest = (userId, priceId, listingId) => async (
   dispatch,
   getState,
   sdk
 ) => {
   dispatch(recurringPaymentRequest());
-  return stripeRecurringPayment({ userId, priceId })
+  return stripeRecurringPayment({ userId, priceId, listingId })
     .then(response => {
       // Redirect to the Stripe Checkout session URL
       window.location.href = response.url;
