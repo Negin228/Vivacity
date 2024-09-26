@@ -1,5 +1,5 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const { getIntegrationSdk } = require('../api-util/sdk');
+const { getSdk, getIntegrationSdk } = require('../api-util/sdk');
 module.exports = async (req, res) => {
   console.log(
     '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CREATE STRIPE PRODUCT AND PRICE START >>>>>>>>>>>>>>>>>>>>>>>>'
@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
 
     console.log(price, 'response price');
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> PRICE CREATED >>>>>>>>>>>>>>>>>>>>>>>>>');
-    const integration = getIntegrationSdk();
+    const integration = await getIntegrationSdk();
     await integration.listings.update({
       id: listingId.uuid,
       publicData: {

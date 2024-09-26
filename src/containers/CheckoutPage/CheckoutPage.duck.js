@@ -320,14 +320,13 @@ export const sendMessage = params => (dispatch, getState, sdk) => {
   }
 };
 
-export const stripeRecurringPaymentRequest = (listingTitle, price, listingDescription, userId) => (
+export const stripeRecurringPaymentRequest = (userId, priceId) => async (
   dispatch,
   getState,
   sdk
 ) => {
   dispatch(recurringPaymentRequest());
-  console.log(listingTitle, price, listingDescription, 'TEST');
-  return stripeRecurringPayment({ listingTitle, price, listingDescription, userId })
+  return stripeRecurringPayment({ userId, priceId })
     .then(response => {
       dispatch(recurringPaymentSuccess());
     })

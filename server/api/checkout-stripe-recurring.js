@@ -1,9 +1,9 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const { handleError, getSdk, serialize, getIntegrationSdk } = require('../api-util/sdk');
-
+const { getSdk, getIntegrationSdk } = require('../api-util/sdk');
+const { denormalizeResponseData } = require('./utils');
 module.exports = async (req, res) => {
-  const { listingTitle, price, listingDescription, userId } = req.body;
-  const { amount, currency } = price;
+  const { userId, priceId } = req.body;
+
   console.log(
     '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CHECKOUT STRIPE RECURRING START >>>>>>>>>>>>>>>>>>>>>>>>'
   );
@@ -14,48 +14,13 @@ module.exports = async (req, res) => {
   });
   const stripeAccount = userWithStripeAccount?.data?.included[0]?.attributes?.stripeAccountId;
 
-  console.log(stripeAccount, 'stripeAccount');
-
   try {
-    // Step 1: Create a Product
-    const product = await stripe.products.create(
-      {
-        name: listingTitle,
-        description: listingDescription,
-      },
-      {
-        stripeAccount: stripeAccount,
-      }
-    );
-    console.log(product);
-    console.log(
-      '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>PRODUCT CREATED>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
-    );
-    // Step 2: Create a Price associated with the Product
-    const price = await stripe.prices.create(
-      {
-        currency: 'usd',
-        unit_amount: amount,
-        recurring: {
-          interval: 'month',
-        },
-        product: product.id,
-      },
-      {
-        stripeAccount: stripeAccount,
-      }
-    );
-
-    console.log(price, 'response price');
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>PRICE CREATED>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-
-    // Step 3: Create a Checkout Session using the Price ID
     const session = await stripe.checkout.sessions.create(
       {
         mode: 'subscription',
         line_items: [
           {
-            price: price.id,
+            price: priceId,
             quantity: 1,
           },
         ],

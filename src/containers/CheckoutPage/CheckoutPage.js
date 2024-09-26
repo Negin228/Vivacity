@@ -476,10 +476,10 @@ export class CheckoutPageComponent extends Component {
       });
   }
 
-  handleSubmitRecurring(listingTitle, price, listingDescription, userId) {
+  handleSubmitRecurring(userId, priceId) {
     const { dispatch } = this.props;
     console.log(userId, 'userId');
-    dispatch(stripeRecurringPaymentRequest(listingTitle, price, listingDescription, userId));
+    dispatch(stripeRecurringPaymentRequest(userId, priceId));
   }
   onStripeInitialized(stripe) {
     this.stripe = stripe;
@@ -549,6 +549,7 @@ export class CheckoutPageComponent extends Component {
     const title = intl.formatMessage({ id: 'CheckoutPage.title' }, { listingTitle });
     console.log(listing, 'listing');
     const isRecurring = listing?.attributes?.publicData?.recurrenceType.value > 0;
+    const priceId = listing?.attributes?.publicData?.priceId;
     const data = listing?.attributes?.publicData;
     console.log(data, 'data');
     console.log(isRecurring, 'isRecurring');
@@ -821,13 +822,7 @@ export class CheckoutPageComponent extends Component {
                 </p>
               ) : null}
               {isRecurring ? (
-                <Button
-                  onClick={() =>
-                    this.handleSubmitRecurring(listingTitle, price, listingDescription, userId)
-                  }
-                >
-                  Pay
-                </Button>
+                <Button onClick={() => this.handleSubmitRecurring(userId, priceId)}>Pay</Button>
               ) : showPaymentForm ? (
                 <StripePaymentForm
                   className={css.paymentForm}
