@@ -35,6 +35,7 @@ module.exports = async (req, res) => {
     console.log(
       '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>CHECKOUT SESSION CREATED>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
     );
+    return res.status(200).json({ url: session.url });
   } catch (error) {
     console.log(
       '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CHECKOUT STRIPE RECURRING ERROR >>>>>>>>>>>>>>>>>>>>>>>>',

@@ -328,6 +328,8 @@ export const stripeRecurringPaymentRequest = (userId, priceId) => async (
   dispatch(recurringPaymentRequest());
   return stripeRecurringPayment({ userId, priceId })
     .then(response => {
+      // Redirect to the Stripe Checkout session URL
+      window.location.href = response.url;
       dispatch(recurringPaymentSuccess());
     })
     .catch(e => {
