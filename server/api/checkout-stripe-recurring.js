@@ -78,7 +78,8 @@ module.exports = async (req, res) => {
 
     const apiResponse = await trustedSdk.transactions.initiate(body, queryParams);
     const { status, statusText, data } = apiResponse;
-    const transactionId = data.id;
+    const transactionId = apiResponse.data.id.uuid;
+    console.log(transactionId, 'transactionId');
     console.log(data, 'apiResponse');
     // res
     //   .status(status)
