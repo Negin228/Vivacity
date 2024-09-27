@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
     const listingResponse = await sdk.listings.show({ id: listingId });
     const listing = listingResponse.data.data;
     bodyParams = {
-      processAlias: 'flex-hourly-default-process/release-1',
+      processAlias: 'flex-subscription/release-4',
       transition: 'transition/request-payment',
       params: {
         bookingType: 'paid',
@@ -77,8 +77,10 @@ module.exports = async (req, res) => {
     const queryParams = { include: ['booking', 'provider'], expand: true };
 
     const apiResponse = await trustedSdk.transactions.initiate(body, queryParams);
+
+    console.log('API Response:', apiResponse);
     const { status, statusText, data } = apiResponse;
-    const transactionId = apiResponse.data.id.uuid;
+    const transactionId = apiResponse.data.data.id.uuid;
     console.log(transactionId, 'transactionId');
     console.log(data, 'apiResponse');
     // res
@@ -109,8 +111,10 @@ module.exports = async (req, res) => {
             quantity: 1,
           },
         ],
-        metadata: {
-          transactionId: transactionId,
+        subscription_data: {
+          metadata: {
+            transactionId: transactionId,
+          },
         },
         success_url: `${rootUrl}/api/stripe/success?userId=${userId}`,
         cancel_url: `${rootUrl}/api/stripe/cancel`,

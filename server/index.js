@@ -67,38 +67,95 @@ const integrationSdk = flexIntegrationSdk.createInstance({
   clientId,
   clientSecret,
 });
-const webhookSecret =
-  process.env.STRIPE_WEBHOOK_SECRET ||
-  'whsec_902fc9e665f935a0920d01b263f2474fce96302d7c392347fed8fd01ceec9bbc';
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
 const options = {
   auth: {
     api_key: process.env.SENDGRID_API_KEY,
   },
 };
+// const handlePaymentIntentSucceeded = async paymentIntent => {
+//   try {
+//     const { id, metadata, charges } = paymentIntent;
 
+//     const chargeId = charges?.data[0]?.id;
+//     const { transaction_id, stripeAccount, paymentMethod, type, userId, priceId } = metadata;
+//     const isAffiliation = type == 'affiliation';
+//     const isGiftCard = type == 'gift_card';
+//     if (isGiftCard) {
+//       await handleGiftCard(metadata);
+//       return;
+//     }
+//     if (isAffiliation && userId) {
+//       await integrationSdk.users.updateProfile({
+//         id: userId,
+//         metadata: {
+//           affiliation: true,
+//           affiliationPriceId: priceId,
+//         },
+//       });
+//       console.log('affiliation updated successfully');
+//     } else {
+//       await integrationSdk.transactions.transition(
+//         {
+//           id: transaction_id,
+//           transition: 'transition/confirm-payment',
+//           params: {
+//             metadata: {
+//               payment_method: paymentMethod,
+//               chargeId,
+//             },
+//           },
+//         },
+//         {
+//           expand: true,
+//         }
+//       );
+
+//       console.log('transitioned');
+//     }
+//   } catch (e) {
+//     console.log(e?.data?.errors);
+//   }
+// };
 const updateUserSubscriptionCreated = async dataObject => {
   try {
-    const { id, current_period_end, current_period_start, metadata } = dataObject || {};
-    const { userId, priceId, plan } = metadata || {};
-    const updateUser = await integrationSdk.users.updateProfile({
-      id: userId,
-      metadata: {
-        subscriptionId: id,
-        current_period_end,
-        current_period_start,
-        plan,
-        priceId,
-        membership: true,
-        oldSubscriptionId: null,
-      },
-    });
-    console.log('user updated successfully');
+    // Extract metadata from the subscription object
+    const { metadata } = dataObject || {};
+
+    // Check if metadata exists and log it
+    if (metadata) {
+      console.log('Subscription Metadata:', metadata);
+
+      // Extract the transaction ID from metadata if available
+      const transactionId = metadata.transactionId; // Use a default or placeholder value
+
+      // Log the transaction ID
+      console.log('Transaction ID:', transactionId);
+
+      // Proceed with transitioning the transaction using the SDK
+      await integrationSdk.transactions.transition(
+        {
+          id: transactionId,
+          transition: 'transition/confirm-payment',
+          params: {}, // Additional parameters if required
+        },
+        {
+          expand: true,
+        }
+      );
+
+      // Log success
+      console.log('Transaction successfully transitioned.');
+    } else {
+      console.warn('No metadata found in subscription object.');
+    }
   } catch (e) {
-    console.log('error in updateUserSubscriptionCreated', e);
+    // Log detailed error information for debugging
+    console.error('Error transitioning transaction:', e?.data?.errors || e.message || e);
   }
 };
+
 const updateUserSubscriptionDeleted = async dataObject => {
   try {
     const { id, metadata } = dataObject || {};
@@ -116,7 +173,50 @@ const updateUserSubscriptionDeleted = async dataObject => {
     console.log('error in updateUserSubscriptionDeleted', e);
   }
 };
+app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, res) => {
+  let event;
 
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      req.headers['stripe-signature'],
+      webhookSecret
+    );
+  } catch (err) {
+    console.error(`⚠️  Webhook signature verification failed: ${err.message}`);
+    return res.sendStatus(400); // Return 400 for failed signature verification
+  }
+
+  // Extract the Stripe object from the event
+  const dataObject = event.data.object;
+
+  try {
+    switch (event.type) {
+      case 'customer.subscription.created':
+        // Log the entire dataObject to inspect the structure
+        console.log('Subscription Data Object:', dataObject);
+
+        // Check metadata in case it's not present directly on dataObject
+        const metadata = dataObject.metadata || dataObject.subscription_details?.metadata || {};
+        console.log('Subscription Metadata:', metadata);
+
+        await updateUserSubscriptionCreated(dataObject);
+        break;
+      case 'customer.subscription.updated':
+        await updateUserSubscriptionCreated(dataObject);
+        break;
+      case 'customer.subscription.deleted':
+        await updateUserSubscriptionDeleted(dataObject);
+        break;
+      default:
+        console.warn(`Unhandled event type: ${event.type}`);
+    }
+    return res.sendStatus(200);
+  } catch (e) {
+    console.error(`Error processing event: ${e.message}`);
+    return res.sendStatus(400);
+  }
+});
 const transporter = nodemailer.createTransport(sgTransport(options));
 // load sitemap and robots file structure
 // and write those into files
@@ -251,93 +351,6 @@ app.post('/deauthorize-zoom/:key', middlewares, async (req, res) => {
   console.log(req.body);
 
   return res.status(200).end();
-});
-
-const handlePaymentIntentSucceeded = async paymentIntent => {
-  try {
-    const { id, metadata, charges } = paymentIntent;
-
-    const chargeId = charges?.data[0]?.id;
-    const { transaction_id, stripeAccount, paymentMethod, type, userId, priceId } = metadata;
-    const isAffiliation = type == 'affiliation';
-    const isGiftCard = type == 'gift_card';
-    if (isGiftCard) {
-      await handleGiftCard(metadata);
-      return;
-    }
-    if (isAffiliation && userId) {
-      await integrationSdk.users.updateProfile({
-        id: userId,
-        metadata: {
-          affiliation: true,
-          affiliationPriceId: priceId,
-        },
-      });
-      console.log('affiliation updated successfully');
-    } else {
-      await integrationSdk.transactions.transition(
-        {
-          id: transaction_id,
-          transition: 'transition/confirm-payment',
-          params: {
-            metadata: {
-              payment_method: paymentMethod,
-              chargeId,
-            },
-          },
-        },
-        {
-          expand: true,
-        }
-      );
-
-      console.log('transitioned');
-    }
-  } catch (e) {
-    console.log(e?.data?.errors);
-  }
-};
-
-app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, res) => {
-  let event;
-  try {
-    event = stripe.webhooks.constructEvent(
-      req.body,
-      req.headers['stripe-signature'],
-      webhookSecret
-      // process.env.STRIPE_WEBHOOK_SECRET
-    );
-  } catch (err) {
-    console.log(err.message);
-    console.log(`⚠️  Webhook signature verification failed.`);
-    console.log(`⚠️  Check the env file and enter the correct webhook secret.`);
-    return res.sendStatus(400);
-  }
-  try {
-    // Extract the object from the event.
-    const dataObject = event.data.object;
-    switch (event.type) {
-      case 'customer.subscription.created':
-        // console.log('customer.subscription.created', dataObject);
-        await updateUserSubscriptionCreated(dataObject);
-        break;
-      case 'customer.subscription.updated':
-        await updateUserSubscriptionCreated(dataObject);
-        break;
-
-      case 'customer.subscription.deleted':
-        await updateUserSubscriptionDeleted(dataObject);
-        break;
-      case 'payment_intent.succeeded':
-        const paymentIntent = event.data.object;
-        await handlePaymentIntentSucceeded(paymentIntent);
-      default:
-      // Unexpected event type
-    }
-    return res.sendStatus(200);
-  } catch (e) {
-    return res.sendStatus(400);
-  }
 });
 
 app.post('*', async (req, res) => {
