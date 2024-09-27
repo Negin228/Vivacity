@@ -5,7 +5,8 @@ module.exports = async (req, res) => {
     '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CREATE STRIPE PRODUCT AND PRICE START >>>>>>>>>>>>>>>>>>>>>>>>'
   );
   const { listingTitle, listingDescription, amount, listingId, stripeAccount } = req.body;
-
+  console.log(stripeAccount, 'stripeAccount');
+  console.log(req.body, 'req.body');
   try {
     // Step 1: Create a Product
     const product = await stripe.products.create(

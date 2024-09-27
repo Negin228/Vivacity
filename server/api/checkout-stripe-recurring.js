@@ -8,6 +8,10 @@ const {
 } = require('../api-util/sdk');
 const { transactionLineItems } = require('../api-util/lineItems');
 const moment = require('moment');
+const rootUrl =
+  process.env.REACT_APP_CANONICAL_ROOT_URL == 'http://localhost:3000'
+    ? 'http://localhost:3500'
+    : process.env.REACT_APP_CANONICAL_ROOT_URL;
 module.exports = async (req, res) => {
   try {
     const { userId, priceId, listingId, customerTimezone } = req.body;
@@ -74,6 +78,7 @@ module.exports = async (req, res) => {
 
     const apiResponse = await trustedSdk.transactions.initiate(body, queryParams);
     const { status, statusText, data } = apiResponse;
+    const transactionId = data.id;
     console.log(data, 'apiResponse');
     // res
     //   .status(status)
@@ -103,8 +108,11 @@ module.exports = async (req, res) => {
             quantity: 1,
           },
         ],
-        success_url: `${process.env.REACT_APP_CANONICAL_ROOT_URL}?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.REACT_APP_CANONICAL_ROOT_URL}/checkout`,
+        metadata: {
+          transactionId: transactionId,
+        },
+        success_url: `${rootUrl}/api/stripe/success?userId=${userId}`,
+        cancel_url: `${rootUrl}/api/stripe/cancel`,
       },
       {
         stripeAccount: stripeAccount,

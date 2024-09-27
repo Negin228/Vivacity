@@ -1132,5 +1132,8 @@
   "SectionUpcomingClasses.title": "Upcoming classes",
   "ListingCard.free": "Free",
   "ZoomUsagePage.schemaTitle": "Zoom Usage",
-  "BookingTimeForm.BookingTimeForm.alreadyRegisterLabel": "Already Registered "
+  "BookingTimeForm.BookingTimeForm.alreadyRegisterLabel": "Already Registered ",
+  "MembershipPage.SuccessPage.successPageHeading": "Success",
+  "MembershipPage.SuccessPage.subscriptionHeading": "Subscription Successful!",
+  "MembershipPage.SuccessPage.subHeading": "Thank you for subscribing to our service. Your subscription is now active."
 }
