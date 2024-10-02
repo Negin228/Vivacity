@@ -21,7 +21,6 @@ import {
   FieldTimeZoneSelect,
   FieldCurrencyInput,
 } from '../../components';
-const { Money } = sdkTypes;
 import { isOldTotalMismatchStockError } from '../../util/errors';
 import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
 import * as validators from '../../util/validators';
@@ -31,6 +30,8 @@ import css from './EditListingDescriptionForm.module.css';
 import { types as sdkTypes } from '../../util/sdkLoader';
 
 const TITLE_MAX_LENGTH = 60;
+
+const { Money } = sdkTypes;
 
 const EditListingDescriptionFormComponent = props => (
   <FinalForm

@@ -138,7 +138,7 @@ const updateUserSubscriptionCreated = async dataObject => {
         {
           id: transactionId,
           transition: 'transition/confirm-payment',
-          params: {}, // Additional parameters if required
+          params: {},
         },
         {
           expand: true,
