@@ -149,7 +149,7 @@ export class CheckoutPageComponent extends Component {
       fetchStripeCustomer,
       history,
     } = this.props;
-
+    console.log(bookingData, 'bookingData');
     // Fetch currentUser with stripeCustomer entity
     // Note: since there's need for data loading in "componentWillMount" function,
     //       this is added here instead of loadData static function.
@@ -167,6 +167,7 @@ export class CheckoutPageComponent extends Component {
       storeData(bookingData, bookingDates, listing, transaction, STORAGE_KEY);
     }
     // NOTE: stored data can be empty if user has already successfully completed transaction.
+
     const pageData = hasDataInProps
       ? { bookingData, listing, transaction }
       : storedData(STORAGE_KEY);
@@ -538,7 +539,7 @@ export class CheckoutPageComponent extends Component {
 
     const isLoading = !this.state.dataLoaded || speculateTransactionInProgress;
 
-    const { listing, bookingDates, transaction } = this.state.pageData;
+    const { listing, bookingDates, transaction, bookingData } = this.state.pageData;
     const existingTransaction = ensureTransaction(transaction);
     const speculatedTransaction = ensureTransaction(speculatedTransactionMaybe, {}, null);
     const currentListing = ensureListing(listing);
@@ -548,7 +549,8 @@ export class CheckoutPageComponent extends Component {
     const listingDescription = currentListing.attributes.description;
     const title = intl.formatMessage({ id: 'CheckoutPage.title' }, { listingTitle });
     console.log(listing, 'listing');
-    const isRecurring = listing?.attributes?.publicData?.recurrenceType.value > 0;
+    const isRecurring = bookingData?.paymentMethod?.value === 'recurring';
+    console.log(bookingData, 'bookingDatasdadasd');
     const listingId = listing?.id?.uuid;
     console.log(listingId, 'listingId');
     const priceId = listing?.attributes?.publicData?.priceId;
@@ -825,7 +827,7 @@ export class CheckoutPageComponent extends Component {
               ) : null}
               {isRecurring ? (
                 <Button onClick={() => this.handleSubmitRecurring(userId, priceId, listingId)}>
-                  Pay
+                  Subscribe
                 </Button>
               ) : showPaymentForm ? (
                 <StripePaymentForm

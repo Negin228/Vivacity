@@ -21,6 +21,7 @@ import {
   FieldTimeZoneSelect,
   FieldCurrencyInput,
 } from '../../components';
+const { Money } = sdkTypes;
 import { isOldTotalMismatchStockError } from '../../util/errors';
 import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
 import * as validators from '../../util/validators';
@@ -30,8 +31,6 @@ import css from './EditListingDescriptionForm.module.css';
 import { types as sdkTypes } from '../../util/sdkLoader';
 
 const TITLE_MAX_LENGTH = 60;
-
-const { Money } = sdkTypes;
 
 const EditListingDescriptionFormComponent = props => (
   <FinalForm
@@ -53,23 +52,24 @@ const EditListingDescriptionFormComponent = props => (
         hasZoom,
         values,
         form,
-      } = formRenderProps; 
-      const recurrenceTypeCheck = values?.recurrence_type?.value; 
-        let maxRecurrence;
-        switch (recurrenceTypeCheck) {
-          case '1':
-            maxRecurrence = 99;
-            break;
-          case '2':
-            maxRecurrence = 50;
-            break;
-          case '3':
-            maxRecurrence = 10;
-            break;
-          default:
-            maxRecurrence = 60; // Default value if recurrence type is not set
-        }
-      
+      } = formRenderProps;
+      console.log(values, 'form values');
+      const recurrenceTypeCheck = values?.recurrence_type?.value;
+      let maxRecurrence;
+      switch (recurrenceTypeCheck) {
+        case '1':
+          maxRecurrence = 99;
+          break;
+        case '2':
+          maxRecurrence = 50;
+          break;
+        case '3':
+          maxRecurrence = 10;
+          break;
+        default:
+          maxRecurrence = 60; // Default value if recurrence type is not set
+      }
+
       const unitType = config.bookingUnitType;
       const isNightly = unitType === LINE_ITEM_NIGHT;
       const isDaily = unitType === LINE_ITEM_DAY;
@@ -233,7 +233,22 @@ const EditListingDescriptionFormComponent = props => (
             placeholder="Select a type"
             validate={fieldSelectModernRequired('Please select a type')}
           />
-          {values?.type?.key === config.isPaid ? (
+          <FieldSelectModern
+            className={css.features}
+            id="payment_type"
+            name="payment_type"
+            label="Payment Type"
+            options={[
+              { value: 'per_session', label: 'Per Session' },
+              { value: 'recurring', label: 'Recurring' },
+            ]}
+            placeholder="Select payment type"
+            validate={fieldSelectModernRequired('Please select a payment type')}
+            isMulti
+            isSearchable={true}
+          />
+          {values?.type?.key === config.isPaid &&
+          values?.payment_type?.some(type => type.value === 'per_session') ? (
             <FieldCurrencyInput
               id="price"
               name="price"
@@ -245,16 +260,21 @@ const EditListingDescriptionFormComponent = props => (
               style={{ marginBottom: '32px' }}
             />
           ) : null}
+          {values?.type?.key === config.isPaid &&
+          values?.payment_type?.some(type => type.value === 'recurring') ? (
+            <FieldCurrencyInput
+              id="monthly_price"
+              name="monthly_price"
+              className={css.priceInput}
+              label="Monthly Price"
+              placeholder="Enter monthly price"
+              currencyConfig={config.currencyConfig}
+              validate={priceValidators}
+              style={{ marginBottom: '32px' }}
+            />
+          ) : null}
           {/* date and availability section */}
           <fieldset disabled={hasZoom} className={css.fieldset}>
-            {/* <FieldTimeZoneSelect
-              id="timezone"
-              name="timezone"
-              label="Time Zone"
-              placeholder="Select time zone"
-              style={{ marginBottom: '32px' }}
-              disabled={hasZoom}
-            /> */}
             <FieldSelectModern
               className={css.features}
               id="timezone"
@@ -320,23 +340,24 @@ const EditListingDescriptionFormComponent = props => (
             onKeyDown={e => (e.keyCode === 189 || e.keyCode === 190) && e.preventDefault()}
           />
           {setStockError ? <p className={css.error}>{stockErrorMessage}</p> : null}
-              {/* Recurrence section */}
-              <FieldSelectModern
-            className={css.features}
-            id="recurrence_type"
-            name="recurrence_type"
-            label="Recurrence Type ( Do you want the meeting to repeat? )"
-            options={[
-              { value: '0', label: 'No Recurrence' },
-              { value: '1', label: 'Daily' },
-              { value: '2', label: 'Weekly' },
-              { value: '3', label: 'Monthly' },
-            ]}
-            placeholder="Select recurrence type"
-            validate={fieldSelectModernRequired('Please select a recurrence type')}
-          />
+          {/* Recurrence section */}
+          {values?.payment_type?.some(type => type.value === 'recurring') && (
+            <FieldSelectModern
+              className={css.features}
+              id="recurrence_type"
+              name="recurrence_type"
+              label="Recurrence Type ( Do you want the meeting to repeat? )"
+              options={[
+                { value: '1', label: 'Daily' },
+                { value: '2', label: 'Weekly' },
+                { value: '3', label: 'Monthly' },
+              ]}
+              placeholder="Select recurrence type"
+              validate={fieldSelectModernRequired('Please select a recurrence type')}
+            />
+          )}
 
-          {values?.recurrence_type?.value !== '0' && (
+          {values?.payment_type?.some(type => type.value === 'recurring') && (
             <>
               <FieldTextInput
                 id="repeat_interval"

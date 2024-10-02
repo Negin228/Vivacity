@@ -16,12 +16,14 @@ import {
   AvatarMedium,
   IconSpinner,
   ExternalLink,
+  FieldSelectModern,
 } from '../../components';
 import { BookingTimeForm } from '../../forms';
 import moment from 'moment';
 import { ensureListing, ensureUser } from '../../util/data';
 
 import css from './BookingPanel.module.css';
+import { Form } from 'react-final-form';
 
 // This defines when ModalInMobile shows content as Modal
 const MODAL_BREAKPOINT = 1023;
@@ -148,6 +150,7 @@ const BookingPanel = props => {
         </span>
       </div>
     ) : null;
+
   const formattedDate = convertTime(publicData?.startDateString, publicData.timezone);
   // const formattedDate = convertTime(publicData.startDate, publicData.timezone);
   // moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
@@ -164,7 +167,6 @@ const BookingPanel = props => {
 
       <div className={css.detailsHeadings}>
         <h2 className={css.detailsTitle}>{title}</h2>
-
         {isFreeBooking ? (
           <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
             Free
@@ -244,6 +246,7 @@ const BookingPanel = props => {
             className={css.bookingForm}
             formId="BookingPanel"
             submitButtonWrapperClassName={css.submitButtonWrapper}
+            listing={listing}
             unitType={unitType}
             onSubmit={onSubmit}
             price={price}

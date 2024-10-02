@@ -7,11 +7,12 @@ import { FormattedMessage, intlShape, injectIntl } from '../../util/reactIntl';
 import { timestampToDate } from '../../util/dates';
 import { propTypes } from '../../util/types';
 import config from '../../config';
-import { Form, IconSpinner, PrimaryButton } from '../../components';
+import { FieldSelectModern, Form, IconSpinner, PrimaryButton } from '../../components';
 import EstimatedBreakdownMaybe from './EstimatedBreakdownMaybe';
 import FieldDateAndTimeInput from './FieldDateAndTimeInput';
 
 import css from './BookingTimeForm.module.css';
+import { required } from '../../util/validators';
 
 export class BookingTimeFormComponent extends Component {
   constructor(props) {
@@ -105,6 +106,7 @@ export class BookingTimeFormComponent extends Component {
             joinUrl,
             panelCard,
             loading,
+            listing,
           } = fieldRenderProps;
           if (loading) return null;
           const startTime = values && values.bookingStartTime ? values.bookingStartTime : null;
@@ -172,7 +174,27 @@ export class BookingTimeFormComponent extends Component {
             startDateInputProps,
             endDateInputProps,
           };
+          let paymentMethodOptions = [];
 
+          const paymentType = listing?.attributes?.publicData?.paymentType;
+
+          const isRecurringOnly = paymentType?.length === 1 && paymentType[0].value === 'recurring';
+          const isPerSessionOnly =
+            paymentType?.length === 1 && paymentType[0].value === 'per_session';
+          const hasBoth =
+            paymentType?.length === 2 &&
+            paymentType.some(type => type.value === 'recurring') &&
+            paymentType.some(type => type.value === 'per_session');
+
+          if (isRecurringOnly) {
+            paymentMethodOptions.push({ label: 'Subscription', value: 'recurring' });
+          } else if (isPerSessionOnly) {
+            paymentMethodOptions.push({ label: 'Pay Per Session', value: 'per_session' });
+          } else if (hasBoth) {
+            paymentMethodOptions.push({ label: 'Subscription', value: 'recurring' });
+            paymentMethodOptions.push({ label: 'Pay Per Session', value: 'per_session' });
+          }
+          console.log(paymentMethodOptions);
           return (
             <Form onSubmit={handleSubmit} className={classes} enforcePagePreloadFor="CheckoutPage">
               <FormSpy
@@ -199,7 +221,24 @@ export class BookingTimeFormComponent extends Component {
               {bookingInfoMaybe}
               {loadingSpinnerMaybe}
               {bookingInfoErrorMaybe}
+              <FieldSelectModern
+                id="paymentMethod"
+                name="paymentMethod"
+                label="Payment Method"
+                className={css.select}
+                options={paymentMethodOptions}
+                validate={required(
+                  intl.formatMessage({
+                    id: 'ProductOrderForm.paymentMethodRequired',
+                  })
+                )}
+                placeholder={intl.formatMessage({
+                  id: 'ProductOrderForm.paymentMethodPlaceholder',
+                })}
+                isSearchable={false}
+              />
 
+              <br />
               <p className={css.smallPrint}>
                 {isStockZero ? null : (
                   <FormattedMessage

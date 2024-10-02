@@ -121,7 +121,7 @@ export class ListingPageComponent extends Component {
       },
       confirmPaymentError: null,
     };
-    
+
     const saveToSessionStorage = !this.props.currentUser;
 
     const routes = routeConfiguration();
@@ -350,6 +350,7 @@ export class ListingPageComponent extends Component {
     const { formattedPrice, priceTitle } = priceData(price, intl);
 
     const handleBookingSubmit = values => {
+      console.log('handleBookingSubmit', values);
       const isCurrentlyClosed = currentListing.attributes.state === LISTING_STATE_CLOSED;
       if (isOwnListing || isCurrentlyClosed) {
         window.scrollTo(0, 0);

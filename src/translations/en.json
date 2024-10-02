@@ -1135,5 +1135,7 @@
   "BookingTimeForm.BookingTimeForm.alreadyRegisterLabel": "Already Registered ",
   "MembershipPage.SuccessPage.successPageHeading": "Success",
   "MembershipPage.SuccessPage.subscriptionHeading": "Subscription Successful!",
-  "MembershipPage.SuccessPage.subHeading": "Thank you for subscribing to our service. Your subscription is now active."
+  "MembershipPage.SuccessPage.subHeading": "Thank you for subscribing to our service. Your subscription is now active.",
+  "ProductOrderForm.paymentMethodRequired": "Please select a payment method",
+  "ProductOrderForm.paymentMethodPlaceholder": "Select Payment Method"
 }
