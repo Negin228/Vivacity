@@ -73,6 +73,7 @@ module.exports = async (req, res) => {
       endTimes,
       weeklyDays,
       monthlyDay,
+      paymentType,
     } = listing?.attributes?.publicData ?? {};
     // console.log({ timezone, startDate });
     let duration;
@@ -119,6 +120,7 @@ module.exports = async (req, res) => {
     //   .format('HH:mm:ss');
 
     const start_time = startDate;
+    const type = paymentType.some(type => type.value === 'recurring'); // Set type to 8 if recurring, otherwise 2
     //  moment(startDate)
     //   .tz(zoomTimezone)
     //   .tz(listingTimezone, true)
@@ -133,14 +135,14 @@ module.exports = async (req, res) => {
       start_time: moment.tz(startDate, listingTimezone).format('YYYY-MM-DDTHH:mm:ssZ'),
       // start_time,
       timezone: listingTimezone,
-      type: recurrenceType?.value !== '0' ? 8 : 2, // Set type to 8 if recurring, otherwise 2
+      type: type ? 8 : 2,
       duration,
       topic: listing.attributes.title.slice(0, 199),
     };
     // Add recurrence settings if they exist
-    if (recurrenceType?.value !== '0') {
+    if (type) {
       meetingParams.recurrence = {
-        type: parseInt(recurrenceType.value, 10),
+        type: parseInt(recurrenceType?.value, 10),
         repeat_interval: parseInt(repeatInterval, 10),
         end_date_time:
           endRecurrence?.value === 'end_date'

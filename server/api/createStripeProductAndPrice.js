@@ -4,9 +4,17 @@ module.exports = async (req, res) => {
   console.log(
     '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CREATE STRIPE PRODUCT AND PRICE START >>>>>>>>>>>>>>>>>>>>>>>>'
   );
-  const { listingTitle, listingDescription, amount, listingId, stripeAccount } = req.body;
+  const {
+    listingTitle,
+    listingDescription,
+    amount,
+    monthlyPrice,
+    listingId,
+    stripeAccount,
+  } = req.body;
   console.log(stripeAccount, 'stripeAccount');
   console.log(req.body, 'req.body');
+  const unitAmount = monthlyPrice ? monthlyPrice : amount;
   try {
     // Step 1: Create a Product
     const product = await stripe.products.create(
@@ -25,7 +33,7 @@ module.exports = async (req, res) => {
     const price = await stripe.prices.create(
       {
         currency: 'usd',
-        unit_amount: amount,
+        unit_amount: unitAmount,
         recurring: {
           interval: 'month',
         },

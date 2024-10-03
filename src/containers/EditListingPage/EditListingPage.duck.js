@@ -531,7 +531,7 @@ export const createStripeProductRequest = (listing, listingId) => async (
 ) => {
   try {
     const { publicData } = listing.data.data.attributes;
-    if (publicData?.recurrenceType.value > 0) {
+    if (publicData?.paymentType?.length === 1 && publicData.paymentType[0].value === 'recurring') {
       console.log('recurring');
       const {
         title: listingTitle,
@@ -545,6 +545,22 @@ export const createStripeProductRequest = (listing, listingId) => async (
         listingTitle,
         listingDescription,
         amount,
+        listingId,
+        stripeAccount,
+      });
+      console.log(response);
+    } else if (publicData?.paymentType?.some(type => type.value === 'recurring')) {
+      console.log('both');
+      const { title: listingTitle, description: listingDescription } = listing.data.data.attributes;
+      const monthlyPrice = publicData?.monthlyPrice;
+      console.log(monthlyPrice, 'monthlyPrice');
+      const stripeAccount = getState().user.currentUser.stripeAccount.attributes.stripeAccountId;
+      console.log(stripeAccount, 'stripeAccount');
+      // Call the new route to create Stripe product and price
+      const response = await createStripeProductAndPrice({
+        listingTitle,
+        listingDescription,
+        monthlyPrice,
         listingId,
         stripeAccount,
       });
