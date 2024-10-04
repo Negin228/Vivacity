@@ -550,7 +550,7 @@ export const createStripeProductRequest = (listing, listingId) => async (
       });
       console.log(response);
     } else if (publicData?.paymentType?.some(type => type.value === 'recurring')) {
-      console.log('both');
+      console.log('recurring but could be both');
       const { title: listingTitle, description: listingDescription } = listing.data.data.attributes;
       const monthlyPrice = publicData?.monthlyPrice;
       console.log(monthlyPrice, 'monthlyPrice');

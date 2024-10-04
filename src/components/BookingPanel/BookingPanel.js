@@ -109,6 +109,7 @@ const BookingPanel = props => {
   const showBookingTimeForm = hasListingState && !isClosed;
   const showClosedListingHelpText = listing.id && isClosed;
   const { formattedPrice, priceTitle } = priceData(price, intl);
+  const monthlyPrice = listing.attributes.publicData?.monthlyPrice;
   const isBook = !!parse(location.search).book;
   const { publicData } = listing.attributes;
   // console.log('BookingPanel props', publicData);
@@ -154,35 +155,6 @@ const BookingPanel = props => {
   const formattedDate = convertTime(publicData?.startDateString, publicData.timezone);
   // const formattedDate = convertTime(publicData.startDate, publicData.timezone);
   // moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
-  const panelCard = (
-    <div className={css.detailsContainerDesktop}>
-      <div className={css.detailsAspectWrapper}>
-        <ResponsiveImage
-          rootClassName={css.rootForImage}
-          alt={title}
-          image={firstImage}
-          variants={['landscape-crop', 'landscape-crop2x']}
-        />
-      </div>
-
-      <div className={css.detailsHeadings}>
-        <h2 className={css.detailsTitle}>{title}</h2>
-        {isFreeBooking ? (
-          <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
-            Free
-          </p>
-        ) : (
-          <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
-            <b>Price:</b>
-            {formattedPrice} per person
-          </p>
-        )}
-        <p className={css.detailsSubtitle}>
-          <b>Start date:</b> {formattedDate}
-        </p>
-      </div>
-    </div>
-  );
   return (
     <div className={classes}>
       <ModalInMobile
@@ -240,7 +212,7 @@ const BookingPanel = props => {
           </div>
         </div> */}
         {loading}
-        {panelCard}
+        {/* {panelCard} */}
         {showBookingTimeForm ? (
           <BookingTimeForm
             className={css.bookingForm}
@@ -267,8 +239,13 @@ const BookingPanel = props => {
             bookingType={bookingType}
             transactionId={transactionId}
             joinUrl={joinUrl}
-            panelCard={panelCard}
+            // panelCard={panelCard}
             loading={loading}
+            title={title}
+            firstImage={firstImage}
+            formattedPrice={formattedPrice}
+            formattedDate={formattedDate}
+            monthlyPrice={monthlyPrice}
           />
         ) : null}
       </ModalInMobile>

@@ -554,6 +554,7 @@ export class CheckoutPageComponent extends Component {
     const listingId = listing?.id?.uuid;
     console.log(listingId, 'listingId');
     const priceId = listing?.attributes?.publicData?.priceId;
+    const monthlyPrice = listing?.attributes?.publicData?.monthlyPrice;
     const data = listing?.attributes?.publicData;
     console.log(data, 'data');
     console.log(isRecurring, 'isRecurring');
@@ -761,7 +762,8 @@ export class CheckoutPageComponent extends Component {
     const price = currentListing.attributes.price ?? new Money(100, config.currency);
     const formattedPrice = formatMoney(intl, price);
     const detailsSubTitle = `${formattedPrice} ${intl.formatMessage({ id: unitTranslationKey })}`;
-
+    const newMonthlyPrice = new Money(monthlyPrice, config.currency);
+    const formattedMonthlyPrice = formatMoney(intl, newMonthlyPrice);
     const showInitialMessageInput = !(
       existingTransaction && existingTransaction.attributes.lastTransition === TRANSITION_ENQUIRE
     );
@@ -885,7 +887,8 @@ export class CheckoutPageComponent extends Component {
                 </p>
               ) : (
                 <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
-                  <b>Price:</b> {detailsSubTitle}
+                  <b>Price:</b>
+                  {isRecurring ? `${formattedMonthlyPrice} Per Month` : detailsSubTitle}
                 </p>
               )}
               <p className={css.detailsSubtitle}>
