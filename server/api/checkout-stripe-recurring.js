@@ -114,6 +114,9 @@ module.exports = async (req, res) => {
         subscription_data: {
           metadata: {
             transactionId: transactionId,
+            userId: userId,
+            plan: 'monthly',
+            priceId: priceId,
           },
         },
         success_url: `${rootUrl}/api/stripe/success?userId=${userId}`,

@@ -121,15 +121,17 @@ const options = {
 const updateUserSubscriptionCreated = async dataObject => {
   try {
     // Extract metadata from the subscription object
-    const { metadata } = dataObject || {};
-
+    const { id, metadata, current_period_start, current_period_end } = dataObject || {};
+    const { userId, transactionId, priceId, plan } = metadata || {};
     // Check if metadata exists and log it
     if (metadata) {
       console.log('Subscription Metadata:', metadata);
 
       // Extract the transaction ID from metadata if available
-      const transactionId = metadata.transactionId; // Use a default or placeholder value
-
+      // const transactionId = metadata.transactionId; // Use a default or placeholder value
+      // const userId= metadata.userId;
+      // const priceId = metadata.priceId;
+      // const plan = metadata.plan;
       // Log the transaction ID
       console.log('Transaction ID:', transactionId);
 
@@ -145,6 +147,18 @@ const updateUserSubscriptionCreated = async dataObject => {
         }
       );
 
+      const updateUser = await integrationSdk.users.updateProfile({
+        id: userId,
+        metadata: {
+          subscriptionId: id,
+          current_period_end,
+          current_period_start,
+          plan,
+          priceId,
+          membership: true,
+          oldSubscriptionId: null,
+        },
+      });
       // Log success
       console.log('Transaction successfully transitioned.');
     } else {

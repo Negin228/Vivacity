@@ -26,6 +26,7 @@ const createStripeProductAndPrice = require('./api/createStripeProductAndPrice')
 const subscriptionSuccess = require('./api/subscription-sucess');
 const subscriptionDecline = require('./api/subscription-decline');
 const transitionConfirmPayment = require('./api/transition-confirm-payment');
+const cancelStripeRecurring = require('./api/cancel-stripe-recurring');
 const getZoomMeetingData = require('./api/get-zoom-meeting-data');
 const getOldTransactionData = require('./api/check-transaction');
 const createUser = require('./api/sign-up');
@@ -98,4 +99,5 @@ router.post('/create-stripe-product-and-price', createStripeProductAndPrice);
 router.get('/stripe/success', subscriptionSuccess);
 router.get('/stripe/cancel', subscriptionDecline);
 
+router.post('/cancel-stripe-recurring', cancelStripeRecurring);
 module.exports = router;
