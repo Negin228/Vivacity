@@ -137,7 +137,7 @@ const updateUserSubscriptionCreated = async dataObject => {
       await integrationSdk.transactions.transition(
         {
           id: transactionId,
-          transition: 'transition/confirm-payment',
+          transition: 'transition/confirm-subscription',
           params: {},
         },
         {
