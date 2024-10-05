@@ -234,7 +234,7 @@ export class BookingTimeFormComponent extends Component {
                     <b>Price: </b>
                     {values?.paymentMethod?.value === 'recurring'
                       ? `${formattedMonthlyPrice} Per Month`
-                      : `${formattedPrice} Per Session`}
+                      : `${formattedPrice} ${isRecurringOnly ? 'Per Month' : 'Per Session'}`}
                   </p>
                 )}
                 <p className={css.detailsSubtitle}>
