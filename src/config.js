@@ -34,6 +34,7 @@ const sortSearchByDistance = false;
 // this particular web application is able to handle.
 const bookingProcessAlias = 'flex-hourly-default-process/release-1';
 const freeBookingProcessAlias = 'vivacity-free-process/release-1';
+const flexSubscription = 'flex-subscription';
 const isPaid = 'paid';
 // The transaction line item code for the main unit type in bookings.
 //
@@ -218,6 +219,7 @@ const config = {
   enableAvailability,
   dayCountAvailableForBooking,
   freeBookingProcessAlias,
+  flexSubscription,
   i18n,
   sdk: {
     clientId: sdkClientId,

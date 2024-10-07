@@ -225,7 +225,7 @@ const Transition = props => {
     ? deletedListing
     : currentTransaction.listing.attributes.title;
   const lastTransition = currentTransaction.attributes.lastTransition;
-
+  console.log('lastTransition', lastTransition);
   const ownRole = getUserTxRole(currentUser.id, currentTransaction);
 
   const otherUsersName = txRoleIsProvider(ownRole) ? (

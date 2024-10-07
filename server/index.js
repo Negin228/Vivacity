@@ -140,25 +140,20 @@ const updateUserSubscriptionCreated = async dataObject => {
         {
           id: transactionId,
           transition: 'transition/confirm-subscription',
-          params: {},
+          params: {
+            metadata: {
+              subscriptionId: id,
+              current_period_end,
+              current_period_start,
+              plan,
+              priceId,
+            },
+          },
         },
         {
           expand: true,
         }
       );
-
-      const updateUser = await integrationSdk.users.updateProfile({
-        id: userId,
-        metadata: {
-          subscriptionId: id,
-          current_period_end,
-          current_period_start,
-          plan,
-          priceId,
-          membership: true,
-          oldSubscriptionId: null,
-        },
-      });
       // Log success
       console.log('Transaction successfully transitioned.');
     } else {
