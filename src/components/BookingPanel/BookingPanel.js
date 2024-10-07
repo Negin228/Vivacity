@@ -89,9 +89,10 @@ const BookingPanel = props => {
     zoomLoading,
     zoomError,
   } = props;
+  const isCancelled = checkOldTransactionData?.attributes?.lastTransition === 'transition/cancel';
   const transactionId = checkOldTransactionData?.id?.uuid;
   const joinUrl =
-    join_url && transactionId ? (
+    join_url && transactionId && !isCancelled ? (
       <div className="mt-4 w-full  bg-marketplaceColor hover:bg-marketplaceColorDark transition duration-100 rounded shadow">
         <ExternalLink
           href={join_url}

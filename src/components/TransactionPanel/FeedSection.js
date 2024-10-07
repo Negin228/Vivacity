@@ -40,6 +40,10 @@ const FeedSection = props => {
 
   const classes = classNames(rootClassName || css.feedContainer, className);
 
+  const hasCancelTransition = txTransitions.some(
+    transition => transition.transition === 'transition/cancel'
+  );
+
   // const txMetadata = currentTransaction?.attributes?.metadata ?? {};
   // const { join_url, start_url } = txMetadata;
 
@@ -93,7 +97,7 @@ const FeedSection = props => {
           </ExternalLink>
         </div>
       ) : null}
-      {isCustomer && joinUrl ? (
+      {isCustomer && joinUrl && !hasCancelTransition ? (
         <div className="mt-4 w-full  bg-marketplaceColor hover:bg-marketplaceColorDark transition duration-100 rounded shadow">
           <ExternalLink
             href={joinUrl}
