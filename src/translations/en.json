@@ -1142,5 +1142,6 @@
   "TransactionPanel.orderSuscriptionConfirmedTitle": "Subscription confirmed",
   "TransactionPanel.saleSuscriptionConfirmedTitle": "Subscription confirmed",
   "ActivityFeed.ownTransitionConfirmedSubscription": "{ displayName } subscribed to your session.",
-  "ActivityFeed.transitionConfirmedSubscription": "You subscribed to { listingTitle }."
+  "ActivityFeed.transitionConfirmedSubscription": "You subscribed to { listingTitle }.",
+  "TransactionPanel.perSubscription": "per month"
 }

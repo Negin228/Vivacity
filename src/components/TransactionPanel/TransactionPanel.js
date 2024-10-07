@@ -246,7 +246,7 @@ export class TransactionPanelComponent extends Component {
     const isProviderLoaded = !!currentProvider.id;
     const isProviderBanned = isProviderLoaded && currentProvider.attributes.banned;
     const isProviderDeleted = isProviderLoaded && currentProvider.attributes.deleted;
-
+    const isSubscription = currentTransaction?.attributes?.processName === 'flex-subscription';
     const stateDataFn = tx => {
       if (txIsEnquired(tx)) {
         const transitions = Array.isArray(nextTransitions)
@@ -335,17 +335,20 @@ export class TransactionPanelComponent extends Component {
     const isNightly = unitType === LINE_ITEM_NIGHT;
     const isDaily = unitType === LINE_ITEM_DAY;
 
-    const unitTranslationKey = isNightly
+    const unitTranslationKey = isSubscription
+      ? 'TransactionPanel.perSubscription'
+      : isNightly
       ? 'TransactionPanel.perNight'
       : isDaily
       ? 'TransactionPanel.perDay'
       : 'TransactionPanel.perUnit';
 
+    console.log(unitTranslationKey, 'unitTranslationKey');
     const price = currentListing.attributes.price;
     const bookingSubTitle = price
       ? `${formatMoney(intl, price)} ${intl.formatMessage({ id: unitTranslationKey })}`
       : '';
-
+    console.log();
     const firstImage =
       currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
 
@@ -486,6 +489,7 @@ export class TransactionPanelComponent extends Component {
                 showDetailCardHeadings={stateData.showDetailCardHeadings}
                 listingTitle={listingTitle}
                 subTitle={bookingSubTitle}
+                isSubscription={isSubscription}
                 startDate={formattedDate}
                 location={location}
                 geolocation={geolocation}

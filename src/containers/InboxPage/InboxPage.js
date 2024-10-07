@@ -154,7 +154,7 @@ export const txState = (intl, tx, type) => {
       nameClassName: css.nameNotEmphasized,
       bookingClassName: css.bookingNoActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtNotEmphasized,
-      stateClassName: css.stateNoActionNeeded,
+      stateClassName: css.stateSucces,
       state: intl.formatMessage({
         id: 'InboxPage.stateSubscriptionConfirmed',
       }),
