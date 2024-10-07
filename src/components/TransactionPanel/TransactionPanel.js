@@ -12,6 +12,7 @@ import {
   txIsPaymentPending,
   txIsRequested,
   txHasBeenDelivered,
+  txIsSubscriptionConfirmed,
 } from '../../util/transaction';
 import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
 import {
@@ -49,6 +50,7 @@ import PanelHeading, {
   HEADING_DECLINED,
   HEADING_CANCELED,
   HEADING_DELIVERED,
+  HEADING_SUSCRIPTION_CONFIRMED,
 } from './PanelHeading';
 
 import css from './TransactionPanel.module.css';
@@ -273,6 +275,12 @@ export class TransactionPanelComponent extends Component {
           headingState: HEADING_REQUESTED,
           showDetailCardHeadings: isCustomer,
           showSaleButtons: isProvider && !isCustomerBanned,
+        };
+      } else if (txIsSubscriptionConfirmed(tx)) {
+        return {
+          headingState: HEADING_SUSCRIPTION_CONFIRMED,
+          showDetailCardHeadings: isCustomer,
+          showAddress: isCustomer,
         };
       } else if (txIsAccepted(tx)) {
         return {

@@ -1137,5 +1137,10 @@
   "MembershipPage.SuccessPage.subscriptionHeading": "Subscription Successful!",
   "MembershipPage.SuccessPage.subHeading": "Thank you for subscribing to our service. Your subscription is now active.",
   "ProductOrderForm.paymentMethodRequired": "Please select a payment method",
-  "ProductOrderForm.paymentMethodPlaceholder": "Select Payment Method"
+  "ProductOrderForm.paymentMethodPlaceholder": "Select Payment Method",
+  "InboxPage.stateSubscriptionConfirmed": "Subscription confirmed",
+  "TransactionPanel.orderSuscriptionConfirmedTitle": "Subscription confirmed",
+  "TransactionPanel.saleSuscriptionConfirmedTitle": "Subscription confirmed",
+  "ActivityFeed.ownTransitionConfirmedSubscription": "{ displayName } subscribed to your session.",
+  "ActivityFeed.transitionConfirmedSubscription": "You subscribed to { listingTitle }."
 }
