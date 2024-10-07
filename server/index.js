@@ -126,13 +126,6 @@ const updateUserSubscriptionCreated = async dataObject => {
     // Check if metadata exists and log it
     if (metadata) {
       console.log('Subscription Metadata:', metadata);
-
-      // Extract the transaction ID from metadata if available
-      // const transactionId = metadata.transactionId; // Use a default or placeholder value
-      // const userId= metadata.userId;
-      // const priceId = metadata.priceId;
-      // const plan = metadata.plan;
-      // Log the transaction ID
       console.log('Transaction ID:', transactionId);
 
       // Proceed with transitioning the transaction using the SDK
@@ -147,6 +140,7 @@ const updateUserSubscriptionCreated = async dataObject => {
               current_period_start,
               plan,
               priceId,
+              membership: true,
             },
           },
         },
@@ -166,20 +160,66 @@ const updateUserSubscriptionCreated = async dataObject => {
 };
 
 const updateUserSubscriptionDeleted = async dataObject => {
+  const { id, metadata } = dataObject || {};
+  const { transactionId } = metadata || {};
+
+  if (!transactionId) {
+    console.error('No transactionId found in metadata.');
+    return;
+  }
+
   try {
-    const { id, metadata } = dataObject || {};
-    const { userId } = metadata || {};
-    const updateUser = await integrationSdk.users.updateProfile({
-      id: userId,
-      metadata: {
-        subscriptionId: null,
-        oldSubscriptionId: id,
-        membership: false,
-      },
-    });
-    console.log('user updated successfully');
-  } catch (e) {
-    console.log('error in updateUserSubscriptionDeleted', e);
+    // Fetch the transaction details
+    const transaction = await integrationSdk.transactions.show({ id: transactionId });
+    console.log('Transaction status:', transaction.status);
+
+    const lastTransition =
+      transaction.data.data.attributes.lastTransition === 'transition/confirm-subscription';
+
+    // Function to update transaction metadata
+    const updateTransactionMetadata = async () => {
+      return await integrationSdk.transactions.updateMetadata(
+        {
+          id: transactionId,
+          metadata: {
+            subscriptionId: null,
+            oldSubscriptionId: id,
+            membership: false,
+          },
+        },
+        { expand: true }
+      );
+    };
+
+    let result;
+    if (lastTransition) {
+      // Transition the transaction if the last transition is 'confirm-subscription'
+      result = await integrationSdk.transactions.transition(
+        {
+          id: transactionId,
+          transition: 'transition/cancel',
+          params: {
+            metadata: {
+              subscriptionId: null,
+              oldSubscriptionId: id,
+              membership: false,
+            },
+          },
+        },
+        { expand: true }
+      );
+      console.log('Transaction successfully transitioned.');
+    } else {
+      // Update the transaction metadata if no transition is needed
+      result = await updateTransactionMetadata();
+      console.log('Transaction metadata updated successfully:', result);
+    }
+  } catch (error) {
+    // Log detailed error information for debugging
+    console.error(
+      'Error updating transaction metadata:',
+      error?.data?.errors || error.message || error
+    );
   }
 };
 app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, res) => {

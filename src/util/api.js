@@ -166,7 +166,7 @@ export const createStripeProductAndPrice = body => {
   return post('/api/create-stripe-product-and-price', body);
 };
 
-export const cancelSubscription = () => {
+export const cancelSubscription = body => {
   console.log('cancelSubscription');
-  return post('/api/cancel-subscription');
+  return post('/api/cancel-stripe-recurring', body);
 };

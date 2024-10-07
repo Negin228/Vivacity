@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { array, arrayOf, bool, func, number, object, string } from 'prop-types';
 import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
+import { cancelSubscription } from '../../util/api';
 import classNames from 'classnames';
 import {
   TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY,
@@ -26,6 +27,7 @@ import { formatMoney } from '../../util/currency';
 import {
   AvatarLarge,
   BookingPanel,
+  Button,
   NamedLink,
   ReviewModal,
   UserDisplayName,
@@ -231,6 +233,23 @@ export class TransactionPanelComponent extends Component {
       fetchLineItemsError,
     } = this.props;
 
+    const handleCancelSubscription = (subscriptionId, transactionId, userId) => {
+      console.log(subscriptionId, transactionId, userId);
+      const body = {
+        subscriptionId,
+        transactionId,
+        userId,
+      };
+      cancelSubscription(body)
+        .then(response => {
+          // Handle success
+          console.log('Subscription cancelled successfully:', response);
+        })
+        .catch(error => {
+          // Handle error
+          console.error('Error cancelling subscription:', error);
+        });
+    };
     const currentTransaction = ensureTransaction(transaction);
     const currentListing = ensureListing(currentTransaction.listing);
     const currentProvider = ensureUser(currentTransaction.provider);
@@ -246,7 +265,11 @@ export class TransactionPanelComponent extends Component {
     const isProviderLoaded = !!currentProvider.id;
     const isProviderBanned = isProviderLoaded && currentProvider.attributes.banned;
     const isProviderDeleted = isProviderLoaded && currentProvider.attributes.deleted;
+    const userId = currentProvider.id.uuid;
     const isSubscription = currentTransaction?.attributes?.processName === 'flex-subscription';
+    const subscriptionId = currentTransaction?.attributes?.metadata?.subscriptionId;
+    const transactionId = currentTransaction?.id?.uuid;
+
     const stateDataFn = tx => {
       if (txIsEnquired(tx)) {
         const transitions = Array.isArray(nextTransitions)
@@ -489,12 +512,19 @@ export class TransactionPanelComponent extends Component {
                 showDetailCardHeadings={stateData.showDetailCardHeadings}
                 listingTitle={listingTitle}
                 subTitle={bookingSubTitle}
-                isSubscription={isSubscription}
                 startDate={formattedDate}
                 location={location}
                 geolocation={geolocation}
                 showAddress={stateData.showAddress}
               />
+              {isSubscription && isCustomer ? (
+                <Button
+                  onClick={() => handleCancelSubscription(subscriptionId, transactionId, userId)}
+                >
+                  Cancel Subscription
+                </Button>
+              ) : null}
+
               {stateData.showBookingPanel ? (
                 <BookingPanel
                   className={css.bookingPanel}
