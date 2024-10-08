@@ -235,7 +235,7 @@ export class TransactionPanelComponent extends Component {
       fetchLineItemsError,
     } = this.props;
 
-    const handleCancelSubscription = (subscriptionId, transactionId, userId) => {
+    const handleCancelSubscription = async (subscriptionId, transactionId, userId) => {
       console.log(subscriptionId, transactionId, userId);
       const body = {
         subscriptionId,
@@ -243,7 +243,7 @@ export class TransactionPanelComponent extends Component {
         userId,
       };
       this.setState({ isLoading: true });
-      cancelSubscription(body)
+      await cancelSubscription(body)
         .then(response => {
           // Handle success
           console.log('Subscription cancelled successfully:', response);
@@ -482,6 +482,7 @@ export class TransactionPanelComponent extends Component {
               startUrl={this.state.start_url}
               zoomLoading={this.state.zoomLoading}
               zoomError={this.state.zoomError}
+              isSubscription={isSubscription}
             />
             {showSendMessageForm ? (
               <SendMessageForm

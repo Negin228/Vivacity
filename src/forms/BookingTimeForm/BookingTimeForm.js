@@ -120,8 +120,9 @@ export class BookingTimeFormComponent extends Component {
             formattedDate,
             monthlyPrice,
             subscriptionId,
+            checkOldTransactionData,
           } = fieldRenderProps;
-
+          console.log(checkOldTransactionData, 'checkOldTransactionData form');
           console.log(values);
           const newMonthlyPrice = new Money(monthlyPrice, config.currency);
           const formattedMonthlyPrice = formatMoney(intl, newMonthlyPrice);
@@ -213,10 +214,19 @@ export class BookingTimeFormComponent extends Component {
           }
           console.log(paymentMethodOptions);
 
-          const shouldDisableButton =
-            isStockZero ||
-            (values.paymentMethod?.value === 'recurring' && subscriptionId) ||
-            (values.paymentMethod?.value === 'per_session' && transactionId);
+          const shouldDisableButton = () => {
+            if (checkOldTransactionData) {
+              const processName = checkOldTransactionData.attributes.processName;
+              if (processName === 'flex-subscription' && subscriptionId) {
+                return true;
+              }
+              if (processName === 'flex-hourly-default-process' && transactionId) {
+                return true;
+              }
+            }
+            return false;
+          };
+          console.log(shouldDisableButton(), 'shouldDisableButton');
           const panelCard = (
             <div className={css.detailsContainerDesktop}>
               <div className={css.detailsAspectWrapper}>
@@ -311,11 +321,8 @@ export class BookingTimeFormComponent extends Component {
                   )}
                 </p>
                 <div className={submitButtonClasses}>
-                  <PrimaryButton
-                    type="submit"
-                    disabled={isStockZero || transactionId || subscriptionId}
-                  >
-                    {transactionId || subscriptionId ? (
+                  <PrimaryButton type="submit" disabled={shouldDisableButton()}>
+                    {shouldDisableButton() ? (
                       <FormattedMessage id="BookingTimeForm.BookingTimeForm.alreadyRegisterLabel" />
                     ) : isStockZero ? (
                       'All class tickets are sold!'

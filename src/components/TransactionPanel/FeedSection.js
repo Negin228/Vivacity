@@ -28,11 +28,13 @@ const FeedSection = props => {
     startUrl,
     zoomLoading,
     zoomError,
+    isSubscription,
   } = props;
 
   const txTransitions = currentTransaction.attributes.transitions
     ? currentTransaction.attributes.transitions
     : [];
+  console.log(txTransitions, 'txTransitions');
   const hasOlderMessages = totalMessagePages > oldestMessagePageFetched;
 
   const showFeed =
@@ -97,7 +99,7 @@ const FeedSection = props => {
           </ExternalLink>
         </div>
       ) : null}
-      {isCustomer && joinUrl && !hasCancelTransition ? (
+      {isCustomer && joinUrl && isSubscription ? (
         <div className="mt-4 w-full  bg-marketplaceColor hover:bg-marketplaceColorDark transition duration-100 rounded shadow">
           <ExternalLink
             href={joinUrl}

@@ -92,7 +92,7 @@ const BookingPanel = props => {
   const isCancelled = checkOldTransactionData?.attributes?.lastTransition === 'transition/cancel';
   const transactionId = checkOldTransactionData?.id?.uuid;
   const subscriptionId = checkOldTransactionData?.attributes?.metadata?.subscriptionId;
-
+  console.log(checkOldTransactionData, 'checkOldTransactionData panel');
   const joinUrl =
     join_url && transactionId && !isCancelled ? (
       <div className="mt-4 w-full  bg-marketplaceColor hover:bg-marketplaceColorDark transition duration-100 rounded shadow">
@@ -250,6 +250,7 @@ const BookingPanel = props => {
             formattedDate={formattedDate}
             monthlyPrice={monthlyPrice}
             subscriptionId={subscriptionId}
+            checkOldTransactionData={checkOldTransactionData}
           />
         ) : null}
       </ModalInMobile>
