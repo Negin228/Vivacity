@@ -272,9 +272,10 @@ export class TransactionPanelComponent extends Component {
     const isProviderBanned = isProviderLoaded && currentProvider.attributes.banned;
     const isProviderDeleted = isProviderLoaded && currentProvider.attributes.deleted;
     const userId = currentProvider.id.uuid;
-    const isSubscription = currentTransaction?.attributes?.processName === 'flex-subscription';
+    const isSubscription = currentTransaction?.attributes?.metadata?.subscriptionId;
     const subscriptionId = currentTransaction?.attributes?.metadata?.subscriptionId;
     const transactionId = currentTransaction?.id?.uuid;
+    console.log(currentTransaction, 'currentTransaction');
 
     const stateDataFn = tx => {
       if (txIsEnquired(tx)) {
