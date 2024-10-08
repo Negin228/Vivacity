@@ -28,6 +28,7 @@ import {
   AvatarLarge,
   BookingPanel,
   Button,
+  IconSpinner,
   NamedLink,
   ReviewModal,
   UserDisplayName,
@@ -98,6 +99,7 @@ export class TransactionPanelComponent extends Component {
       start_url: null,
       zoomLoading: true,
       zoomError: null,
+      isLoading: false,
     };
     this.isMobSaf = false;
     this.sendMessageFormName = 'TransactionPanel.SendMessageForm';
@@ -240,14 +242,18 @@ export class TransactionPanelComponent extends Component {
         transactionId,
         userId,
       };
+      this.setState({ isLoading: true });
       cancelSubscription(body)
         .then(response => {
           // Handle success
           console.log('Subscription cancelled successfully:', response);
+          this.setState({ isLoading: false });
+          window.location.reload();
         })
         .catch(error => {
           // Handle error
           console.error('Error cancelling subscription:', error);
+          this.setState({ isLoading: false });
         });
     };
     const currentTransaction = ensureTransaction(transaction);
@@ -520,8 +526,9 @@ export class TransactionPanelComponent extends Component {
               {isSubscription && isCustomer ? (
                 <Button
                   onClick={() => handleCancelSubscription(subscriptionId, transactionId, userId)}
+                  disabled={this.state.isLoading}
                 >
-                  Cancel Subscription
+                  {this.state.isLoading ? <IconSpinner /> : 'Cancel Subscription'}
                 </Button>
               ) : null}
 

@@ -119,10 +119,10 @@ export class BookingTimeFormComponent extends Component {
             formattedPrice,
             formattedDate,
             monthlyPrice,
+            subscriptionId,
           } = fieldRenderProps;
 
           console.log(values);
-
           const newMonthlyPrice = new Money(monthlyPrice, config.currency);
           const formattedMonthlyPrice = formatMoney(intl, newMonthlyPrice);
           if (loading) return null;
@@ -212,6 +212,11 @@ export class BookingTimeFormComponent extends Component {
             paymentMethodOptions.push({ label: 'Pay Per Session', value: 'per_session' });
           }
           console.log(paymentMethodOptions);
+
+          const shouldDisableButton =
+            isStockZero ||
+            (values.paymentMethod?.value === 'recurring' && subscriptionId) ||
+            (values.paymentMethod?.value === 'per_session' && transactionId);
           const panelCard = (
             <div className={css.detailsContainerDesktop}>
               <div className={css.detailsAspectWrapper}>
@@ -306,8 +311,11 @@ export class BookingTimeFormComponent extends Component {
                   )}
                 </p>
                 <div className={submitButtonClasses}>
-                  <PrimaryButton type="submit" disabled={isStockZero || transactionId}>
-                    {transactionId ? (
+                  <PrimaryButton
+                    type="submit"
+                    disabled={isStockZero || transactionId || subscriptionId}
+                  >
+                    {transactionId || subscriptionId ? (
                       <FormattedMessage id="BookingTimeForm.BookingTimeForm.alreadyRegisterLabel" />
                     ) : isStockZero ? (
                       'All class tickets are sold!'

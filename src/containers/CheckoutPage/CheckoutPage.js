@@ -36,6 +36,7 @@ import {
   AvatarMedium,
   BookingBreakdown,
   Button,
+  IconSpinner,
   Logo,
   NamedLink,
   NamedRedirect,
@@ -108,6 +109,7 @@ export class CheckoutPageComponent extends Component {
       pageData: {},
       dataLoaded: false,
       submitting: false,
+      isLoadingRecurring: false,
     };
     this.stripe = null;
 
@@ -115,6 +117,7 @@ export class CheckoutPageComponent extends Component {
     this.loadInitialData = this.loadInitialData.bind(this);
     this.handlePaymentIntent = this.handlePaymentIntent.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmitRecurring = this.handleSubmitRecurring.bind(this);
   }
 
   componentDidMount() {
@@ -480,8 +483,20 @@ export class CheckoutPageComponent extends Component {
   handleSubmitRecurring(userId, priceId, lisitingId) {
     const { dispatch } = this.props;
     console.log(userId, 'userId');
-    dispatch(stripeRecurringPaymentRequest(userId, priceId, lisitingId));
+    this.setState({ isLoadingRecurring: true }); // Set loading state to true
+    dispatch(stripeRecurringPaymentRequest(userId, priceId, lisitingId))
+      .then(response => {
+        // Handle success
+        console.log('Payment successful:', response);
+        this.setState({ isLoadingRecurring: false }); // Set loading state to false
+      })
+      .catch(error => {
+        // Handle error
+        console.error('Payment error:', error);
+        this.setState({ isLoadingRecurring: false }); // Set loading state to false
+      });
   }
+
   onStripeInitialized(stripe) {
     this.stripe = stripe;
 
@@ -558,7 +573,8 @@ export class CheckoutPageComponent extends Component {
     const data = listing?.attributes?.publicData;
     console.log(data, 'data');
     console.log(isRecurring, 'isRecurring');
-
+    const { isLoadingRecurring } = this.state;
+    console.log(isLoadingRecurring, 'isLoadingRecurring');
     const pageProps = { title, scrollingDisabled };
     const topbar = (
       <div className={css.topbar}>
@@ -828,8 +844,11 @@ export class CheckoutPageComponent extends Component {
                 </p>
               ) : null}
               {isRecurring ? (
-                <Button onClick={() => this.handleSubmitRecurring(userId, priceId, listingId)}>
-                  Subscribe
+                <Button
+                  onClick={() => this.handleSubmitRecurring(userId, priceId, listingId)}
+                  disabled={isLoadingRecurring}
+                >
+                  {isLoadingRecurring ? <IconSpinner /> : 'Subscribe'}
                 </Button>
               ) : showPaymentForm ? (
                 <StripePaymentForm
