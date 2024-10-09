@@ -29,6 +29,10 @@ const FeedSection = props => {
     zoomLoading,
     zoomError,
     isSubscription,
+    subscriptionId,
+    transactionId,
+    isPerMonth,
+    isPerSession,
   } = props;
 
   const txTransitions = currentTransaction.attributes.transitions
@@ -99,7 +103,8 @@ const FeedSection = props => {
           </ExternalLink>
         </div>
       ) : null}
-      {isCustomer && joinUrl && isSubscription ? (
+      {(isCustomer && joinUrl && (isSubscription && subscriptionId)) ||
+      (isPerSession && transactionId) ? (
         <div className="mt-4 w-full  bg-marketplaceColor hover:bg-marketplaceColorDark transition duration-100 rounded shadow">
           <ExternalLink
             href={joinUrl}

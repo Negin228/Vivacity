@@ -247,8 +247,10 @@ export class TransactionPanelComponent extends Component {
         .then(response => {
           // Handle success
           console.log('Subscription cancelled successfully:', response);
-          this.setState({ isLoading: false });
-          window.location.reload();
+          setTimeout(() => {
+            this.setState({ isLoading: false });
+            window.location.reload();
+          }, 5000);
         })
         .catch(error => {
           // Handle error
@@ -275,7 +277,9 @@ export class TransactionPanelComponent extends Component {
     const isSubscription = currentTransaction?.attributes?.metadata?.subscriptionId;
     const subscriptionId = currentTransaction?.attributes?.metadata?.subscriptionId;
     const transactionId = currentTransaction?.id?.uuid;
-    console.log(currentTransaction, 'currentTransaction');
+    const processName = currentTransaction?.attributes?.processName;
+    const isPerSession = processName === 'flex-hourly-default-process';
+    const isPerMonth = processName === 'flex-subscription';
 
     const stateDataFn = tx => {
       if (txIsEnquired(tx)) {
@@ -483,6 +487,10 @@ export class TransactionPanelComponent extends Component {
               zoomLoading={this.state.zoomLoading}
               zoomError={this.state.zoomError}
               isSubscription={isSubscription}
+              subscriptionId={subscriptionId}
+              transactionId={transactionId}
+              isPerMonth={isPerMonth}
+              isPerSession={isPerSession}
             />
             {showSendMessageForm ? (
               <SendMessageForm
