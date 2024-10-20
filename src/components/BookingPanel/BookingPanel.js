@@ -93,8 +93,20 @@ const BookingPanel = props => {
   const transactionId = checkOldTransactionData?.id?.uuid;
   const subscriptionId = checkOldTransactionData?.attributes?.metadata?.subscriptionId;
   console.log(checkOldTransactionData, 'checkOldTransactionData panel');
+  const shouldShowJoinUrl = () => {
+    if (checkOldTransactionData) {
+      const processName = checkOldTransactionData.attributes.processName;
+      if (processName === 'flex-subscription' && subscriptionId) {
+        return true;
+      }
+      if (processName === 'flex-hourly-default-process' && transactionId) {
+        return true;
+      }
+    }
+    return false;
+  };
   const joinUrl =
-    join_url && transactionId && !isCancelled ? (
+    join_url && shouldShowJoinUrl() ? (
       <div className="mt-4 w-full  bg-marketplaceColor hover:bg-marketplaceColorDark transition duration-100 rounded shadow">
         <ExternalLink
           href={join_url}
