@@ -87,20 +87,13 @@ const EditListingDescriptionPanel = props => {
         timezone: publicData.timezone
           ? config.custom.timezones?.find(i => i.key == publicData?.timezone)
           : undefined,
-        // timezone: publicData.timezone ? publicData.timezone : undefined,
         start_date: publicData.startDateString ? new Date(publicData.startDateString) : undefined,
         time: publicData.startDateString ? new Date(publicData.startDateString) : undefined,
         stock: currentStock,
         class_duration: publicData.classDuration ? publicData.classDuration : undefined,
         type: config.custom.typeOptions?.find(option => option.key === publicData.type),
         otherWorkoutType: publicData.otherWorkoutType,
-        recurrence_type: publicData.recurrenceType,
-        repeat_interval: publicData.repeatInterval,
-        end_recurrence: publicData.endRecurrence,
-        end_date: publicData.endDate ? new Date(publicData.endDate) : undefined,
-        end_times: publicData.endTimes,
         weekly_days: publicData.weeklyDays,
-        monthly_day: publicData.monthlyDay,
         payment_type: publicData.paymentType,
         monthly_price: isRecurringOnly
           ? price
@@ -120,20 +113,13 @@ const EditListingDescriptionPanel = props => {
       timezone: publicData.timezone
         ? config.custom.timezones?.find(i => i.key == publicData?.timezone)
         : undefined,
-      // timezone: publicData.timezone ? publicData.timezone : undefined,
       start_date: publicData.startDateString ? new Date(publicData.startDateString) : undefined,
       stock: currentStock,
       class_duration: publicData.classDuration ? publicData.classDuration : undefined,
       type: config.custom.typeOptions?.find(option => option.key === publicData.type),
       otherWorkoutType: publicData.otherWorkoutType,
       time: publicData.startDateString ? new Date(publicData.startDateString) : undefined,
-      recurrence_type: publicData.recurrenceType,
-      repeat_interval: publicData.repeatInterval,
-      end_recurrence: publicData.endRecurrence,
-      end_date: publicData.endDate ? new Date(publicData.endDate) : undefined,
-      end_times: publicData.endTimes,
       weekly_days: publicData.weeklyDays,
-      monthly_day: publicData.monthlyDay,
       payment_type: publicData.paymentType,
       monthly_price: isRecurringOnly
         ? price
@@ -170,13 +156,7 @@ const EditListingDescriptionPanel = props => {
             class_duration,
             type,
             otherWorkoutType,
-            recurrence_type,
-            repeat_interval,
-            end_recurrence,
-            end_date,
-            end_times,
             weekly_days,
-            monthly_day,
             payment_type,
             monthly_price,
           } = values;
@@ -249,17 +229,10 @@ const EditListingDescriptionPanel = props => {
               yogaStylesFilter: fullName + yogaStylesFilter?.toString(),
               startDateString,
               paymentType: payment_type,
-              recurrenceType: recurrence_type,
-              repeatInterval: payment_type?.some(type => type.value === 'recurring')
-                ? repeat_interval
+
+              weeklyDays: payment_type?.some(type => type.value === 'recurring')
+                ? weekly_days
                 : null,
-              endRecurrence: payment_type?.some(type => type.value === 'recurring')
-                ? end_recurrence
-                : null,
-              endDate: end_recurrence?.value === 'end_date' ? end_date?.toISOString() : null,
-              endTimes: end_recurrence?.value === 'end_times' ? end_times : null,
-              weeklyDays: recurrence_type?.value === '2' ? weekly_days : null,
-              monthlyDay: recurrence_type?.value === '3' ? monthly_day : null,
               monthlyPrice: payment_type?.some(type => type.value === 'recurring')
                 ? monthly_price.amount
                 : null,
@@ -279,13 +252,9 @@ const EditListingDescriptionPanel = props => {
             type,
             otherWorkoutType,
             time: hasZoom ? new Date(publicData?.startDate) : start_date,
-            recurrence_type,
-            repeat_interval,
-            end_recurrence,
-            end_date,
-            end_times,
+
             weekly_days,
-            monthly_day,
+
             payment_type,
             monthly_price,
           });

@@ -67,12 +67,7 @@ module.exports = async (req, res) => {
       timezone: listingTimezone,
       classDuration,
       recurrenceType,
-      repeatInterval,
-      endRecurrence,
-      endDate,
-      endTimes,
       weeklyDays,
-      monthlyDay,
       paymentType,
     } = listing?.attributes?.publicData ?? {};
     // console.log({ timezone, startDate });
@@ -142,16 +137,9 @@ module.exports = async (req, res) => {
     // Add recurrence settings if they exist
     if (type) {
       meetingParams.recurrence = {
-        type: parseInt(recurrenceType?.value, 10),
-        repeat_interval: parseInt(repeatInterval, 10),
-        end_date_time:
-          endRecurrence?.value === 'end_date'
-            ? moment(endDate).format('YYYY-MM-DDTHH:mm:ssZ')
-            : undefined,
-        end_times: endRecurrence?.value === 'end_times' ? parseInt(endTimes, 10) : undefined,
-        weekly_days:
-          recurrenceType?.value === '2' ? weeklyDays.map(day => day.value).join(',') : undefined,
-        monthly_day: recurrenceType?.value === '3' ? parseInt(monthlyDay, 10) : undefined,
+        type: 2,
+        repeat_interval: 1,
+        weekly_days: weeklyDays.map(day => day.value).join(','),
       };
       // Remove undefined properties from the recurrence object
       Object.keys(meetingParams.recurrence).forEach(

@@ -4,7 +4,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 // Cancels a subscription
 module.exports = async (req, res) => {
-  const { subscriptionId, transactionId, userId } = req.body;
+  const { subscriptionId, userId } = req.body;
   console.log('subscriptionId', subscriptionId);
   console.log(userId, 'userId');
   const integration = await getIntegrationSdk();
