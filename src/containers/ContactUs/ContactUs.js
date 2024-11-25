@@ -32,6 +32,9 @@ function ContactUs() {
         email,
         message,
       });
+
+      console.log('API Response:', response.data);
+      
       const { success } = response.data;
 
       if (success)
@@ -42,6 +45,7 @@ function ContactUs() {
           },
         });
     } catch (e) {
+      console.log('API Error:', e);
       const error = e.response?.data?.message || e.message;
       setErrorMessage(error);
     } finally {
