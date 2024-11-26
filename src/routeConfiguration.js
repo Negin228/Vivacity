@@ -31,14 +31,16 @@ const StripePayoutPage = loadable(() => import(/* webpackChunkName: "StripePayou
 const TermsOfServicePage = loadable(() => import(/* webpackChunkName: "TermsOfServicePage" */ './containers/TermsOfServicePage/TermsOfServicePage'));
 const TransactionPage = loadable(() => import(/* webpackChunkName: "TransactionPage" */ './containers/TransactionPage/TransactionPage'));
 const ManageListingsPage = loadable(() => import(/* webpackChunkName: "ManageListingsPage" */ './containers/ManageListingsPage/ManageListingsPage'));
-// Styleguide helps you to review current components and develop new ones
+// Styleguide helps you to review current components and develop new onewebpackChunkName
 const StyleguidePage = loadable(() => import(/* webpackChunkName: "StyleguidePage" */ './containers/StyleguidePage/StyleguidePage'));
 const HowItWorks = loadable(() => import(/* webpackChunkName: "HowItWorks" */ './containers/HowItWorks/HowItWorks'));
 const ContactUs = loadable(() => import(/* webpackChunkName: "ContactUs" */ './containers/ContactUs/ContactUs'));
-const SuccessPage = loadable(() => import(/* webpackChunkName: "SuccessPage" */ './containers/ContactUs/SuccessPage'));
+
 const ZoomErrorPage = loadable(() => import(/* webpackChunkName: "ZoomErrorPage" */ './containers/ZoomErrorPage/ZoomErrorPage'));
 const ZoomUsagePage = loadable(() => import(/* webpackChunkName: "ZoomUsagePage" */ './containers/ZoomUsagePage/ZoomUsagePage'));
-
+const SuccessPage = loadable(() => import(/* webpackChunkName: "SuccessPage" */ './containers/ContactUs/SuccessPage'));
+const SuccessPageMembership = loadable(() => import(/* webpackChunkName: "SuccessPageMembership" */ './containers/MembershipPage/SuccessPage'));
+const declinePage = loadable(() => import(/* webpackChunkName: "SuccessPage" */ './containers/MembershipPage/CancelPage'));
 export const ACCOUNT_SETTINGS_PAGES = [
   'ContactDetailsPage',
   'PasswordChangePage',
@@ -377,6 +379,18 @@ const routeConfiguration = () => {
       authPage: 'LoginPage',
       component: EmailVerificationPage,
       loadData: pageDataLoadingAPI.EmailVerificationPage.loadData,
+    },
+    {
+      path: '/membership/cancel',
+      name: 'declinePage',
+      auth: true,
+      component: declinePage,
+    },
+    {
+      path: '/membership/success',
+      name: 'SuccessPageMembership',
+      auth: true,
+      component: SuccessPageMembership,
     },
   ];
 };

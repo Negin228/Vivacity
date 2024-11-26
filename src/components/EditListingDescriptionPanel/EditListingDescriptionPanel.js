@@ -44,6 +44,10 @@ const EditListingDescriptionPanel = props => {
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
   const { description, title, price, publicData } = currentListing.attributes;
+  console.log(price, 'price');
+  const payment_type = publicData?.paymentType;
+  const monthly_price = publicData?.monthlyPrice;
+  console.log(monthly_price, 'monthly_price');
   const currentStockRaw = currentListing.currentStock?.attributes?.quantity;
   const currentStock = typeof currentStockRaw != null ? currentStockRaw : 1;
   const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
@@ -66,23 +70,38 @@ const EditListingDescriptionPanel = props => {
   const yogaStyles = publicData && publicData.yogaStyles;
 
   const initialValues = React.useMemo(() => {
+    const isRecurringOnly = payment_type?.length === 1 && payment_type[0].value === 'recurring';
+    const isPerSessionOnly = payment_type?.length === 1 && payment_type[0].value === 'per_session';
+    const hasBoth = payment_type?.length === 2;
+    const priceValue = isRecurringOnly ? null : isPerSessionOnly || hasBoth ? price : null;
+    const formattedMonthlyPrice = publicData.monthlyPrice
+      ? new Money(publicData.monthlyPrice, config.currency)
+      : null;
     if (!initialProps) {
       return {
         title,
         description,
         languages: publicData.languages,
         yogaStyles: yogaStyles || [],
-        price: publicData.type === config.isPaid ? price : null,
+        price: publicData.type === config.isPaid ? priceValue : null,
         timezone: publicData.timezone
           ? config.custom.timezones?.find(i => i.key == publicData?.timezone)
           : undefined,
-        // timezone: publicData.timezone ? publicData.timezone : undefined,
         start_date: publicData.startDateString ? new Date(publicData.startDateString) : undefined,
         time: publicData.startDateString ? new Date(publicData.startDateString) : undefined,
         stock: currentStock,
         class_duration: publicData.classDuration ? publicData.classDuration : undefined,
         type: config.custom.typeOptions?.find(option => option.key === publicData.type),
         otherWorkoutType: publicData.otherWorkoutType,
+        weekly_days: publicData.weeklyDays,
+        payment_type: publicData.paymentType,
+        monthly_price: isRecurringOnly
+          ? price
+          : isPerSessionOnly
+          ? null
+          : hasBoth
+          ? formattedMonthlyPrice
+          : null,
       };
     }
     return {
@@ -90,17 +109,26 @@ const EditListingDescriptionPanel = props => {
       description,
       languages: publicData.languages,
       yogaStyles: yogaStyles || [],
-      price: publicData.type === config.isPaid ? price : null,
+      price: publicData.type === config.isPaid ? priceValue : null,
       timezone: publicData.timezone
         ? config.custom.timezones?.find(i => i.key == publicData?.timezone)
         : undefined,
-      // timezone: publicData.timezone ? publicData.timezone : undefined,
       start_date: publicData.startDateString ? new Date(publicData.startDateString) : undefined,
       stock: currentStock,
       class_duration: publicData.classDuration ? publicData.classDuration : undefined,
       type: config.custom.typeOptions?.find(option => option.key === publicData.type),
       otherWorkoutType: publicData.otherWorkoutType,
       time: publicData.startDateString ? new Date(publicData.startDateString) : undefined,
+      weekly_days: publicData.weeklyDays,
+      payment_type: publicData.paymentType,
+      monthly_price: isRecurringOnly
+        ? price
+        : isPerSessionOnly
+        ? null
+        : hasBoth
+        ? formattedMonthlyPrice
+        : null,
+
       ...initialProps,
     };
   }, [initialProps]);
@@ -128,6 +156,9 @@ const EditListingDescriptionPanel = props => {
             class_duration,
             type,
             otherWorkoutType,
+            weekly_days,
+            payment_type,
+            monthly_price,
           } = values;
 
           const hasStockQuantityChanged = stock && currentStockRaw !== stock;
@@ -158,7 +189,11 @@ const EditListingDescriptionPanel = props => {
           const startDateToIso = moment.unix(startDateUnix).toISOString();
 
           const priceMaybe =
-            type?.key === config.isPaid ? { price } : { price: new Money(0, config.currency) };
+            type?.key === config.isPaid
+              ? payment_type?.length === 1 && payment_type[0].value === 'recurring'
+                ? { price: monthly_price }
+                : { price }
+              : { price: new Money(0, config.currency) };
           const updateValues = {
             ...stockUpdateMaybe,
             title: title,
@@ -193,6 +228,14 @@ const EditListingDescriptionPanel = props => {
               otherWorkoutType: yogaStyles?.includes('other') ? otherWorkoutType : null,
               yogaStylesFilter: fullName + yogaStylesFilter?.toString(),
               startDateString,
+              paymentType: payment_type,
+
+              weeklyDays: payment_type?.some(type => type.value === 'recurring')
+                ? weekly_days
+                : null,
+              monthlyPrice: payment_type?.some(type => type.value === 'recurring')
+                ? monthly_price.amount
+                : null,
             },
           };
           setInitialProps({
@@ -209,6 +252,11 @@ const EditListingDescriptionPanel = props => {
             type,
             otherWorkoutType,
             time: hasZoom ? new Date(publicData?.startDate) : start_date,
+
+            weekly_days,
+
+            payment_type,
+            monthly_price,
           });
 
           onSubmit(updateValues);

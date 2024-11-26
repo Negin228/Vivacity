@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { array, arrayOf, bool, func, number, object, string } from 'prop-types';
 import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
+import { cancelSubscription } from '../../util/api';
 import classNames from 'classnames';
 import {
   TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY,
@@ -12,6 +13,7 @@ import {
   txIsPaymentPending,
   txIsRequested,
   txHasBeenDelivered,
+  txIsSubscriptionConfirmed,
 } from '../../util/transaction';
 import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
 import {
@@ -25,6 +27,8 @@ import { formatMoney } from '../../util/currency';
 import {
   AvatarLarge,
   BookingPanel,
+  Button,
+  IconSpinner,
   NamedLink,
   ReviewModal,
   UserDisplayName,
@@ -49,6 +53,7 @@ import PanelHeading, {
   HEADING_DECLINED,
   HEADING_CANCELED,
   HEADING_DELIVERED,
+  HEADING_SUSCRIPTION_CONFIRMED,
 } from './PanelHeading';
 
 import css from './TransactionPanel.module.css';
@@ -94,6 +99,7 @@ export class TransactionPanelComponent extends Component {
       start_url: null,
       zoomLoading: true,
       zoomError: null,
+      isLoading: false,
     };
     this.isMobSaf = false;
     this.sendMessageFormName = 'TransactionPanel.SendMessageForm';
@@ -229,6 +235,29 @@ export class TransactionPanelComponent extends Component {
       fetchLineItemsError,
     } = this.props;
 
+    const handleCancelSubscription = async (subscriptionId, transactionId, userId) => {
+      console.log(subscriptionId, transactionId, userId);
+      const body = {
+        subscriptionId,
+        transactionId,
+        userId,
+      };
+      this.setState({ isLoading: true });
+      await cancelSubscription(body)
+        .then(response => {
+          // Handle success
+          console.log('Subscription cancelled successfully:', response);
+          setTimeout(() => {
+            this.setState({ isLoading: false });
+            window.location.reload();
+          }, 5000);
+        })
+        .catch(error => {
+          // Handle error
+          console.error('Error cancelling subscription:', error);
+          this.setState({ isLoading: false });
+        });
+    };
     const currentTransaction = ensureTransaction(transaction);
     const currentListing = ensureListing(currentTransaction.listing);
     const currentProvider = ensureUser(currentTransaction.provider);
@@ -244,6 +273,13 @@ export class TransactionPanelComponent extends Component {
     const isProviderLoaded = !!currentProvider.id;
     const isProviderBanned = isProviderLoaded && currentProvider.attributes.banned;
     const isProviderDeleted = isProviderLoaded && currentProvider.attributes.deleted;
+    const userId = currentProvider.id.uuid;
+    const isSubscription = currentTransaction?.attributes?.metadata?.subscriptionId;
+    const subscriptionId = currentTransaction?.attributes?.metadata?.subscriptionId;
+    const transactionId = currentTransaction?.id?.uuid;
+    const processName = currentTransaction?.attributes?.processName;
+    const isPerSession = processName === 'flex-hourly-default-process';
+    const isPerMonth = processName === 'flex-subscription';
 
     const stateDataFn = tx => {
       if (txIsEnquired(tx)) {
@@ -273,6 +309,12 @@ export class TransactionPanelComponent extends Component {
           headingState: HEADING_REQUESTED,
           showDetailCardHeadings: isCustomer,
           showSaleButtons: isProvider && !isCustomerBanned,
+        };
+      } else if (txIsSubscriptionConfirmed(tx)) {
+        return {
+          headingState: HEADING_SUSCRIPTION_CONFIRMED,
+          showDetailCardHeadings: isCustomer,
+          showAddress: isCustomer,
         };
       } else if (txIsAccepted(tx)) {
         return {
@@ -327,17 +369,20 @@ export class TransactionPanelComponent extends Component {
     const isNightly = unitType === LINE_ITEM_NIGHT;
     const isDaily = unitType === LINE_ITEM_DAY;
 
-    const unitTranslationKey = isNightly
+    const unitTranslationKey = isSubscription
+      ? 'TransactionPanel.perSubscription'
+      : isNightly
       ? 'TransactionPanel.perNight'
       : isDaily
       ? 'TransactionPanel.perDay'
       : 'TransactionPanel.perUnit';
 
+    console.log(unitTranslationKey, 'unitTranslationKey');
     const price = currentListing.attributes.price;
     const bookingSubTitle = price
       ? `${formatMoney(intl, price)} ${intl.formatMessage({ id: unitTranslationKey })}`
       : '';
-
+    console.log();
     const firstImage =
       currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
 
@@ -441,6 +486,11 @@ export class TransactionPanelComponent extends Component {
               startUrl={this.state.start_url}
               zoomLoading={this.state.zoomLoading}
               zoomError={this.state.zoomError}
+              isSubscription={isSubscription}
+              subscriptionId={subscriptionId}
+              transactionId={transactionId}
+              isPerMonth={isPerMonth}
+              isPerSession={isPerSession}
             />
             {showSendMessageForm ? (
               <SendMessageForm
@@ -483,6 +533,15 @@ export class TransactionPanelComponent extends Component {
                 geolocation={geolocation}
                 showAddress={stateData.showAddress}
               />
+              {isSubscription && isCustomer ? (
+                <Button
+                  onClick={() => handleCancelSubscription(subscriptionId, transactionId, userId)}
+                  disabled={this.state.isLoading}
+                >
+                  {this.state.isLoading ? <IconSpinner /> : 'Cancel Subscription'}
+                </Button>
+              ) : null}
+
               {stateData.showBookingPanel ? (
                 <BookingPanel
                   className={css.bookingPanel}

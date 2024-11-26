@@ -156,3 +156,17 @@ export const getZoomFromAPI = params => {
   return get('/api/zoom', urlParams);
 };
 export const createUserFromAPI = body => post('/api/sign-up', body);
+
+export const stripeRecurringPayment = body => {
+  return post('/api/checkout-stripe-recurring', body);
+};
+
+export const createStripeProductAndPrice = body => {
+  console.log('hello', body);
+  return post('/api/create-stripe-product-and-price', body);
+};
+
+export const cancelSubscription = body => {
+  console.log('cancelSubscription');
+  return post('/api/cancel-stripe-recurring', body);
+};

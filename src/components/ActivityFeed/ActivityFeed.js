@@ -17,6 +17,7 @@ import {
   TRANSITION_REVIEW_1_BY_PROVIDER,
   TRANSITION_REVIEW_2_BY_CUSTOMER,
   TRANSITION_REVIEW_2_BY_PROVIDER,
+  TRANSITION_CONFIRM_SUBSCRIPTION,
   transitionIsReviewed,
   txIsDelivered,
   txIsInFirstReviewBy,
@@ -27,6 +28,7 @@ import {
   txRoleIsCustomer,
   getUserTxRole,
   isRelevantPastTransition,
+  txIsSubscriptionConfirmed,
 } from '../../util/transaction';
 import { propTypes } from '../../util/types';
 import * as log from '../../util/log';
@@ -112,9 +114,13 @@ const resolveTransitionMessage = (
   onOpenReviewModal
 ) => {
   const isOwnTransition = transition.by === ownRole;
+  console.log(ownRole, 'ownRole');
+  console.log(isOwnTransition, 'isOwnTransition');
   const currentTransition = transition.transition;
+  console.log(currentTransition, 'currentTransition');
   const displayName = otherUsersName;
   const isCustomer = txRoleIsCustomer(ownRole);
+  const isProvider = txRoleIsProvider(ownRole);
   switch (currentTransition) {
     case TRANSITION_CONFIRM_PAYMENT:
       return isOwnTransition ? (
@@ -122,6 +128,18 @@ const resolveTransitionMessage = (
       ) : (
         <FormattedMessage
           id="ActivityFeed.transitionRequest"
+          values={{ displayName, listingTitle }}
+        />
+      );
+    case TRANSITION_CONFIRM_SUBSCRIPTION:
+      return isProvider ? (
+        <FormattedMessage
+          id="ActivityFeed.ownTransitionConfirmedSubscription"
+          values={{ displayName, listingTitle }}
+        />
+      ) : (
+        <FormattedMessage
+          id="ActivityFeed.transitionConfirmedSubscription"
           values={{ displayName, listingTitle }}
         />
       );
@@ -225,7 +243,7 @@ const Transition = props => {
     ? deletedListing
     : currentTransaction.listing.attributes.title;
   const lastTransition = currentTransaction.attributes.lastTransition;
-
+  console.log('lastTransition', lastTransition);
   const ownRole = getUserTxRole(currentUser.id, currentTransaction);
 
   const otherUsersName = txRoleIsProvider(ownRole) ? (

@@ -12,6 +12,7 @@ import {
 import { fetchCurrentUser } from '../../ducks/user.duck';
 import * as log from '../../util/log';
 import moment from 'moment';
+import { createStripeProductAndPrice } from '../../util/api';
 const { UUID } = sdkTypes;
 
 const requestAction = actionType => params => ({ type: actionType, payload: { params } });
@@ -504,8 +505,10 @@ export const requestPublishListingDraft = listingId => async (dispatch, getState
     };
     await dispatch(requestAddAvailabilityException(params));
     const response = await sdk.ownListings.publishDraft({ id: listingId }, { expand: true });
+    await dispatch(createStripeProductRequest(listing, listingId));
     await dispatch(addMarketplaceEntities(response));
     await dispatch(publishListingSuccess(response));
+
     return response;
     // .then(response => {
     //   // Add the created listing to the marketplace data
@@ -518,6 +521,53 @@ export const requestPublishListingDraft = listingId => async (dispatch, getState
     // });
   } catch (e) {
     dispatch(publishListingError(storableError(e)));
+  }
+};
+
+export const createStripeProductRequest = (listing, listingId) => async (
+  dispatch,
+  getState,
+  sdk
+) => {
+  try {
+    const { publicData } = listing.data.data.attributes;
+    if (publicData?.paymentType?.length === 1 && publicData.paymentType[0].value === 'recurring') {
+      console.log('recurring');
+      const {
+        title: listingTitle,
+        description: listingDescription,
+        price: { amount },
+      } = listing.data.data.attributes;
+      const stripeAccount = getState().user.currentUser.stripeAccount.attributes.stripeAccountId;
+      console.log(stripeAccount, 'stripeAccount');
+      // Call the new route to create Stripe product and price
+      const response = await createStripeProductAndPrice({
+        listingTitle,
+        listingDescription,
+        amount,
+        listingId,
+        stripeAccount,
+      });
+      console.log(response);
+    } else if (publicData?.paymentType?.some(type => type.value === 'recurring')) {
+      console.log('recurring but could be both');
+      const { title: listingTitle, description: listingDescription } = listing.data.data.attributes;
+      const monthlyPrice = publicData?.monthlyPrice;
+      console.log(monthlyPrice, 'monthlyPrice');
+      const stripeAccount = getState().user.currentUser.stripeAccount.attributes.stripeAccountId;
+      console.log(stripeAccount, 'stripeAccount');
+      // Call the new route to create Stripe product and price
+      const response = await createStripeProductAndPrice({
+        listingTitle,
+        listingDescription,
+        monthlyPrice,
+        listingId,
+        stripeAccount,
+      });
+      console.log(response);
+    }
+  } catch (error) {
+    console.error('Error 554', error);
   }
 };
 

@@ -13,6 +13,7 @@ import {
   txHasBeenDelivered,
   txIsPaymentExpired,
   txIsPaymentPending,
+  txIsSubscriptionConfirmed,
 } from '../../util/transaction';
 import { propTypes, DATE_TYPE_DATETIME } from '../../util/types';
 import { createSlug, stringify } from '../../util/urlHelpers';
@@ -66,6 +67,7 @@ export const txState = (intl, tx, type) => {
       }),
     };
   } else if (txIsRequested(tx)) {
+    console.log(tx, 'txx');
     const requested = isOrder
       ? {
           nameClassName: css.nameNotEmphasized,
@@ -145,6 +147,16 @@ export const txState = (intl, tx, type) => {
       stateClassName: css.stateNoActionNeeded,
       state: intl.formatMessage({
         id: 'InboxPage.stateDelivered',
+      }),
+    };
+  } else if (txIsSubscriptionConfirmed(tx)) {
+    return {
+      nameClassName: css.nameNotEmphasized,
+      bookingClassName: css.bookingNoActionNeeded,
+      lastTransitionedAtClassName: css.lastTransitionedAtNotEmphasized,
+      stateClassName: css.stateSucces,
+      state: intl.formatMessage({
+        id: 'InboxPage.stateSubscriptionConfirmed',
       }),
     };
   } else {

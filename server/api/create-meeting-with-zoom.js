@@ -61,10 +61,16 @@ module.exports = async (req, res) => {
 
     listingResponse = denormalizeResponseData(listingResponse);
     const listing = listingResponse.data;
-    const { startDate, startDateString, timezone: listingTimezone, classDuration } =
-      listing?.attributes?.publicData ?? {};
+    const {
+      startDate,
+      startDateString,
+      timezone: listingTimezone,
+      classDuration,
+      recurrenceType,
+      weeklyDays,
+      paymentType,
+    } = listing?.attributes?.publicData ?? {};
     // console.log({ timezone, startDate });
-
     let duration;
     switch (classDuration.key) {
       case '30_min':
@@ -109,6 +115,7 @@ module.exports = async (req, res) => {
     //   .format('HH:mm:ss');
 
     const start_time = startDate;
+    const type = paymentType.some(type => type.value === 'recurring'); // Set type to 8 if recurring, otherwise 2
     //  moment(startDate)
     //   .tz(zoomTimezone)
     //   .tz(listingTimezone, true)
@@ -119,18 +126,31 @@ module.exports = async (req, res) => {
     // console.log('start_time', start_time);
     // return;
 
-    const meetingParams = JSON.stringify({
+    const meetingParams = {
       start_time: moment.tz(startDate, listingTimezone).format('YYYY-MM-DDTHH:mm:ssZ'),
       // start_time,
       timezone: listingTimezone,
-      type: 2,
+      type: type ? 8 : 2,
       duration,
       topic: listing.attributes.title.slice(0, 199),
-    });
-    console.log('meetingParams', meetingParams);
+    };
+    // Add recurrence settings if they exist
+    if (type) {
+      meetingParams.recurrence = {
+        type: 2,
+        repeat_interval: 1,
+        weekly_days: weeklyDays.map(day => day.value).join(','),
+      };
+      // Remove undefined properties from the recurrence object
+      Object.keys(meetingParams.recurrence).forEach(
+        key => meetingParams.recurrence[key] === undefined && delete meetingParams.recurrence[key]
+      );
+    }
+
+    console.log('meetingParams', JSON.stringify(meetingParams));
     const meetingRespData = await fetch(`https://api.zoom.us/v2/users/${zoomUserId}/meetings`, {
       method: 'POST',
-      body: meetingParams,
+      body: JSON.stringify(meetingParams),
 
       headers: {
         'Content-Type': 'application/json',

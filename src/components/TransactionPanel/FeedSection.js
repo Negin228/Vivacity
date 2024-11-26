@@ -28,17 +28,27 @@ const FeedSection = props => {
     startUrl,
     zoomLoading,
     zoomError,
+    isSubscription,
+    subscriptionId,
+    transactionId,
+    isPerMonth,
+    isPerSession,
   } = props;
 
   const txTransitions = currentTransaction.attributes.transitions
     ? currentTransaction.attributes.transitions
     : [];
+  console.log(txTransitions, 'txTransitions');
   const hasOlderMessages = totalMessagePages > oldestMessagePageFetched;
 
   const showFeed =
     messages.length > 0 || txTransitions.length > 0 || initialMessageFailed || fetchMessagesError;
 
   const classes = classNames(rootClassName || css.feedContainer, className);
+
+  const hasCancelTransition = txTransitions.some(
+    transition => transition.transition === 'transition/cancel'
+  );
 
   // const txMetadata = currentTransaction?.attributes?.metadata ?? {};
   // const { join_url, start_url } = txMetadata;
@@ -93,7 +103,8 @@ const FeedSection = props => {
           </ExternalLink>
         </div>
       ) : null}
-      {isCustomer && joinUrl ? (
+      {(isCustomer && joinUrl && (isSubscription && subscriptionId)) ||
+      (isPerSession && transactionId) ? (
         <div className="mt-4 w-full  bg-marketplaceColor hover:bg-marketplaceColorDark transition duration-100 rounded shadow">
           <ExternalLink
             href={joinUrl}
