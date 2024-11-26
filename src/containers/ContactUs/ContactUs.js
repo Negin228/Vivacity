@@ -32,6 +32,7 @@ function ContactUs() {
         email,
         message,
       });
+
       const { success } = response.data;
 
       if (success)

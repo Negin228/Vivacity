@@ -93,7 +93,7 @@ const HowItWorks = () => {
               </ul>
 
               </div>
-              {/* <h3 className={css.subtitle}>Are you a yoga teacher?</h3> */}
+              {/* <h3 className={css.subtitle}>Are you a fitness instructor?</h3> */}
                 <div>
                 <h2>Additional Notes:</h2>
                 <ul>
