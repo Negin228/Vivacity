@@ -19,7 +19,7 @@ export const TRANSITION_REQUEST_PAYMENT = 'transition/request-payment';
 // then transition that with a request.
 export const TRANSITION_ENQUIRE = 'transition/enquire';
 export const TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY = 'transition/request-payment-after-enquiry';
-
+export const TRANSITION_CONFIRM_SUBSCRIPTION = 'transition/confirm-subscription';
 // Stripe SDK might need to ask 3D security from customer, in a separate front-end step.
 // Therefore we need to make another transition to Marketplace API,
 // to tell that the payment is confirmed.
@@ -87,6 +87,7 @@ const STATE_ENQUIRY = 'enquiry';
 const STATE_PENDING_PAYMENT = 'pending-payment';
 const STATE_PAYMENT_EXPIRED = 'payment-expired';
 const STATE_PREAUTHORIZED = 'preauthorized';
+const STATE_SUBSCRIPTION_CONFIRMED = 'subscription-confirmed';
 const STATE_DECLINED = 'declined';
 const STATE_ACCEPTED = 'accepted';
 const STATE_CANCELED = 'canceled';
@@ -131,6 +132,7 @@ const stateDescription = {
       on: {
         [TRANSITION_EXPIRE_PAYMENT]: STATE_PAYMENT_EXPIRED,
         [TRANSITION_CONFIRM_PAYMENT]: STATE_PREAUTHORIZED,
+        [TRANSITION_CONFIRM_SUBSCRIPTION]: STATE_SUBSCRIPTION_CONFIRMED,
       },
     },
 
@@ -140,6 +142,12 @@ const stateDescription = {
         [TRANSITION_DECLINE]: STATE_DECLINED,
         [TRANSITION_EXPIRE]: STATE_DECLINED,
         [TRANSITION_ACCEPT]: STATE_ACCEPTED,
+      },
+    },
+    [STATE_SUBSCRIPTION_CONFIRMED]: {
+      on: {
+        [TRANSITION_COMPLETE]: STATE_DELIVERED,
+        [TRANSITION_CANCEL]: STATE_CANCELED,
       },
     },
 
@@ -234,6 +242,9 @@ export const txIsPaymentExpired = tx =>
 export const txIsRequested = tx =>
   getTransitionsToState(STATE_PREAUTHORIZED).includes(txLastTransition(tx));
 
+export const txIsSubscriptionConfirmed = tx =>
+  getTransitionsToState(STATE_SUBSCRIPTION_CONFIRMED).includes(txLastTransition(tx));
+
 export const txIsAccepted = tx =>
   getTransitionsToState(STATE_ACCEPTED).includes(txLastTransition(tx));
 
@@ -308,6 +319,7 @@ export const isRelevantPastTransition = transition => {
     TRANSITION_REVIEW_1_BY_PROVIDER,
     TRANSITION_REVIEW_2_BY_CUSTOMER,
     TRANSITION_REVIEW_2_BY_PROVIDER,
+    TRANSITION_CONFIRM_SUBSCRIPTION,
   ].includes(transition);
 };
 

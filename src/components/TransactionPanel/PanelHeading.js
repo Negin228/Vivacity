@@ -14,6 +14,7 @@ export const HEADING_ACCEPTED = 'accepted';
 export const HEADING_DECLINED = 'declined';
 export const HEADING_CANCELED = 'canceled';
 export const HEADING_DELIVERED = 'delivered';
+export const HEADING_SUSCRIPTION_CONFIRMED = 'suscription-confirmed';
 
 const createListingLink = (listingId, label, listingDeleted, searchParams = {}, className = '') => {
   if (!listingDeleted) {
@@ -104,7 +105,7 @@ const PanelHeading = props => {
     listingDeleted,
     isCustomerBanned,
   } = props;
-
+  console.log(panelHeadingState);
   const isCustomer = props.transactionRole === 'customer';
 
   const defaultRootClassName = isCustomer ? css.headingOrder : css.headingSale;
@@ -240,6 +241,20 @@ const PanelHeading = props => {
         <HeadingProvider
           className={titleClasses}
           id="TransactionPanel.saleCancelledTitle"
+          values={{ customerName, listingLink }}
+        />
+      );
+    case HEADING_SUSCRIPTION_CONFIRMED:
+      return isCustomer ? (
+        <HeadingCustomer
+          className={titleClasses}
+          id="TransactionPanel.orderSuscriptionConfirmedTitle"
+          values={{ customerName, listingLink }}
+        />
+      ) : (
+        <HeadingProvider
+          className={titleClasses}
+          id="TransactionPanel.saleSuscriptionConfirmedTitle"
           values={{ customerName, listingLink }}
         />
       );

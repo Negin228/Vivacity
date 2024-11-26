@@ -35,6 +35,8 @@ import { TRANSITION_ENQUIRE, txIsPaymentPending, txIsPaymentExpired } from '../.
 import {
   AvatarMedium,
   BookingBreakdown,
+  Button,
+  IconSpinner,
   Logo,
   NamedLink,
   NamedRedirect,
@@ -55,9 +57,11 @@ import {
   confirmPayment,
   sendMessage,
 } from './CheckoutPage.duck';
+import { stripeRecurringPaymentRequest } from './CheckoutPage.duck';
 import { storeData, storedData, clearData } from './CheckoutPageSessionHelpers';
 import css from './CheckoutPage.module.css';
 import { types as sdkTypes } from '../../util/sdkLoader';
+import { on } from 'nodemailer/lib/xoauth2';
 
 const { Money } = sdkTypes;
 const STORAGE_KEY = 'CheckoutPage';
@@ -105,6 +109,7 @@ export class CheckoutPageComponent extends Component {
       pageData: {},
       dataLoaded: false,
       submitting: false,
+      isLoadingRecurring: false,
     };
     this.stripe = null;
 
@@ -112,6 +117,7 @@ export class CheckoutPageComponent extends Component {
     this.loadInitialData = this.loadInitialData.bind(this);
     this.handlePaymentIntent = this.handlePaymentIntent.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmitRecurring = this.handleSubmitRecurring.bind(this);
   }
 
   componentDidMount() {
@@ -146,7 +152,7 @@ export class CheckoutPageComponent extends Component {
       fetchStripeCustomer,
       history,
     } = this.props;
-
+    console.log(bookingData, 'bookingData');
     // Fetch currentUser with stripeCustomer entity
     // Note: since there's need for data loading in "componentWillMount" function,
     //       this is added here instead of loadData static function.
@@ -164,6 +170,7 @@ export class CheckoutPageComponent extends Component {
       storeData(bookingData, bookingDates, listing, transaction, STORAGE_KEY);
     }
     // NOTE: stored data can be empty if user has already successfully completed transaction.
+
     const pageData = hasDataInProps
       ? { bookingData, listing, transaction }
       : storedData(STORAGE_KEY);
@@ -473,6 +480,23 @@ export class CheckoutPageComponent extends Component {
       });
   }
 
+  handleSubmitRecurring(userId, priceId, lisitingId) {
+    const { dispatch } = this.props;
+    console.log(userId, 'userId');
+    this.setState({ isLoadingRecurring: true }); // Set loading state to true
+    dispatch(stripeRecurringPaymentRequest(userId, priceId, lisitingId))
+      .then(response => {
+        // Handle success
+        console.log('Payment successful:', response);
+        this.setState({ isLoadingRecurring: false }); // Set loading state to false
+      })
+      .catch(error => {
+        // Handle error
+        console.error('Payment error:', error);
+        this.setState({ isLoadingRecurring: false }); // Set loading state to false
+      });
+  }
+
   onStripeInitialized(stripe) {
     this.stripe = stripe;
 
@@ -530,15 +554,27 @@ export class CheckoutPageComponent extends Component {
 
     const isLoading = !this.state.dataLoaded || speculateTransactionInProgress;
 
-    const { listing, bookingDates, transaction } = this.state.pageData;
+    const { listing, bookingDates, transaction, bookingData } = this.state.pageData;
     const existingTransaction = ensureTransaction(transaction);
     const speculatedTransaction = ensureTransaction(speculatedTransactionMaybe, {}, null);
     const currentListing = ensureListing(listing);
     const currentAuthor = ensureUser(currentListing.author);
-
+    const userId = currentAuthor?.id?.uuid;
     const listingTitle = currentListing.attributes.title;
+    const listingDescription = currentListing.attributes.description;
     const title = intl.formatMessage({ id: 'CheckoutPage.title' }, { listingTitle });
-
+    console.log(listing, 'listing');
+    const isRecurring = bookingData?.paymentMethod?.value === 'recurring';
+    console.log(bookingData, 'bookingDatasdadasd');
+    const listingId = listing?.id?.uuid;
+    console.log(listingId, 'listingId');
+    const priceId = listing?.attributes?.publicData?.priceId;
+    const monthlyPrice = listing?.attributes?.publicData?.monthlyPrice;
+    const data = listing?.attributes?.publicData;
+    console.log(data, 'data');
+    console.log(isRecurring, 'isRecurring');
+    const { isLoadingRecurring } = this.state;
+    console.log(isLoadingRecurring, 'isLoadingRecurring');
     const pageProps = { title, scrollingDisabled };
     const topbar = (
       <div className={css.topbar}>
@@ -742,7 +778,8 @@ export class CheckoutPageComponent extends Component {
     const price = currentListing.attributes.price ?? new Money(100, config.currency);
     const formattedPrice = formatMoney(intl, price);
     const detailsSubTitle = `${formattedPrice} ${intl.formatMessage({ id: unitTranslationKey })}`;
-
+    const newMonthlyPrice = new Money(monthlyPrice, config.currency);
+    const formattedMonthlyPrice = formatMoney(intl, newMonthlyPrice);
     const showInitialMessageInput = !(
       existingTransaction && existingTransaction.attributes.lastTransition === TRANSITION_ENQUIRE
     );
@@ -806,7 +843,14 @@ export class CheckoutPageComponent extends Component {
                   />
                 </p>
               ) : null}
-              {showPaymentForm ? (
+              {isRecurring ? (
+                <Button
+                  onClick={() => this.handleSubmitRecurring(userId, priceId, listingId)}
+                  disabled={isLoadingRecurring}
+                >
+                  {isLoadingRecurring ? <IconSpinner /> : 'Subscribe'}
+                </Button>
+              ) : showPaymentForm ? (
                 <StripePaymentForm
                   className={css.paymentForm}
                   onSubmit={this.handleSubmit}
@@ -829,6 +873,7 @@ export class CheckoutPageComponent extends Component {
                   isFreeBooking={isFreeBooking}
                 />
               ) : null}
+
               {isPaymentExpired ? (
                 <p className={css.orderError}>
                   <FormattedMessage
@@ -861,7 +906,8 @@ export class CheckoutPageComponent extends Component {
                 </p>
               ) : (
                 <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
-                  <b>Price:</b> {detailsSubTitle}
+                  <b>Price:</b>
+                  {isRecurring ? `${formattedMonthlyPrice} Per Month` : detailsSubTitle}
                 </p>
               )}
               <p className={css.detailsSubtitle}>

@@ -13,8 +13,10 @@ const DetailCardHeadingsMaybe = props => {
     geolocation,
     showAddress,
     startDate,
+    isSubscription,
   } = props;
-
+  console.log(isSubscription);
+  console.log(subTitle);
   return showDetailCardHeadings ? (
     <div className={css.detailCardHeadings}>
       <h2 className={css.detailCardTitle}>{listingTitle}</h2>

@@ -16,12 +16,14 @@ import {
   AvatarMedium,
   IconSpinner,
   ExternalLink,
+  FieldSelectModern,
 } from '../../components';
 import { BookingTimeForm } from '../../forms';
 import moment from 'moment';
 import { ensureListing, ensureUser } from '../../util/data';
 
 import css from './BookingPanel.module.css';
+import { Form } from 'react-final-form';
 
 // This defines when ModalInMobile shows content as Modal
 const MODAL_BREAKPOINT = 1023;
@@ -87,9 +89,24 @@ const BookingPanel = props => {
     zoomLoading,
     zoomError,
   } = props;
+  const isCancelled = checkOldTransactionData?.attributes?.lastTransition === 'transition/cancel';
   const transactionId = checkOldTransactionData?.id?.uuid;
+  const subscriptionId = checkOldTransactionData?.attributes?.metadata?.subscriptionId;
+  console.log(checkOldTransactionData, 'checkOldTransactionData panel');
+  const shouldShowJoinUrl = () => {
+    if (checkOldTransactionData) {
+      const processName = checkOldTransactionData.attributes.processName;
+      if (processName === 'flex-subscription' && subscriptionId) {
+        return true;
+      }
+      if (processName === 'flex-hourly-default-process' && transactionId) {
+        return true;
+      }
+    }
+    return false;
+  };
   const joinUrl =
-    join_url && transactionId ? (
+    join_url && shouldShowJoinUrl() ? (
       <div className="mt-4 w-full  bg-marketplaceColor hover:bg-marketplaceColorDark transition duration-100 rounded shadow">
         <ExternalLink
           href={join_url}
@@ -107,6 +124,7 @@ const BookingPanel = props => {
   const showBookingTimeForm = hasListingState && !isClosed;
   const showClosedListingHelpText = listing.id && isClosed;
   const { formattedPrice, priceTitle } = priceData(price, intl);
+  const monthlyPrice = listing.attributes.publicData?.monthlyPrice;
   const isBook = !!parse(location.search).book;
   const { publicData } = listing.attributes;
   // console.log('BookingPanel props', publicData);
@@ -148,39 +166,10 @@ const BookingPanel = props => {
         </span>
       </div>
     ) : null;
+
   const formattedDate = convertTime(publicData?.startDateString, publicData.timezone);
   // const formattedDate = convertTime(publicData.startDate, publicData.timezone);
   // moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
-  const panelCard = (
-    <div className={css.detailsContainerDesktop}>
-      <div className={css.detailsAspectWrapper}>
-        <ResponsiveImage
-          rootClassName={css.rootForImage}
-          alt={title}
-          image={firstImage}
-          variants={['landscape-crop', 'landscape-crop2x']}
-        />
-      </div>
-
-      <div className={css.detailsHeadings}>
-        <h2 className={css.detailsTitle}>{title}</h2>
-
-        {isFreeBooking ? (
-          <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
-            Free
-          </p>
-        ) : (
-          <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
-            <b>Price:</b>
-            {formattedPrice} per person
-          </p>
-        )}
-        <p className={css.detailsSubtitle}>
-          <b>Start date:</b> {formattedDate}
-        </p>
-      </div>
-    </div>
-  );
   return (
     <div className={classes}>
       <ModalInMobile
@@ -238,12 +227,13 @@ const BookingPanel = props => {
           </div>
         </div> */}
         {loading}
-        {panelCard}
+        {/* {panelCard} */}
         {showBookingTimeForm ? (
           <BookingTimeForm
             className={css.bookingForm}
             formId="BookingPanel"
             submitButtonWrapperClassName={css.submitButtonWrapper}
+            listing={listing}
             unitType={unitType}
             onSubmit={onSubmit}
             price={price}
@@ -264,8 +254,15 @@ const BookingPanel = props => {
             bookingType={bookingType}
             transactionId={transactionId}
             joinUrl={joinUrl}
-            panelCard={panelCard}
+            // panelCard={panelCard}
             loading={loading}
+            title={title}
+            firstImage={firstImage}
+            formattedPrice={formattedPrice}
+            formattedDate={formattedDate}
+            monthlyPrice={monthlyPrice}
+            subscriptionId={subscriptionId}
+            checkOldTransactionData={checkOldTransactionData}
           />
         ) : null}
       </ModalInMobile>

@@ -54,6 +54,22 @@ const EditListingDescriptionFormComponent = props => (
         values,
         form,
       } = formRenderProps;
+      console.log(values, 'form values');
+      const recurrenceTypeCheck = values?.recurrence_type?.value;
+      let maxRecurrence;
+      switch (recurrenceTypeCheck) {
+        case '1':
+          maxRecurrence = 99;
+          break;
+        case '2':
+          maxRecurrence = 50;
+          break;
+        case '3':
+          maxRecurrence = 10;
+          break;
+        default:
+          maxRecurrence = 60; // Default value if recurrence type is not set
+      }
 
       const unitType = config.bookingUnitType;
       const isNightly = unitType === LINE_ITEM_NIGHT;
@@ -218,7 +234,22 @@ const EditListingDescriptionFormComponent = props => (
             placeholder="Select a type"
             validate={fieldSelectModernRequired('Please select a type')}
           />
-          {values?.type?.key === config.isPaid ? (
+          <FieldSelectModern
+            className={css.features}
+            id="payment_type"
+            name="payment_type"
+            label="Payment Type (You can select One or Both) "
+            options={[
+              { value: 'per_session', label: 'Per Session' },
+              { value: 'recurring', label: 'Subscription' },
+            ]}
+            placeholder="Select payment type"
+            validate={fieldSelectModernRequired('Please select a payment type')}
+            isMulti
+            isSearchable={true}
+          />
+          {values?.type?.key === config.isPaid &&
+          values?.payment_type?.some(type => type.value === 'per_session') ? (
             <FieldCurrencyInput
               id="price"
               name="price"
@@ -230,16 +261,136 @@ const EditListingDescriptionFormComponent = props => (
               style={{ marginBottom: '32px' }}
             />
           ) : null}
-          {/* date and availability section */}
-          <fieldset disabled={hasZoom} className={css.fieldset}>
-            {/* <FieldTimeZoneSelect
-              id="timezone"
-              name="timezone"
-              label="Time Zone"
-              placeholder="Select time zone"
+          {values?.type?.key === config.isPaid &&
+          values?.payment_type?.some(type => type.value === 'recurring') ? (
+            <FieldCurrencyInput
+              id="monthly_price"
+              name="monthly_price"
+              className={css.priceInput}
+              label="Monthly Price"
+              placeholder="Enter monthly price"
+              currencyConfig={config.currencyConfig}
+              validate={priceValidators}
               style={{ marginBottom: '32px' }}
-              disabled={hasZoom}
-            /> */}
+            />
+          ) : null}
+          {/* date and availability section */}
+
+          <FieldTextInput
+            className={css.title}
+            id="stock"
+            name="stock"
+            label="Maximum Capacity"
+            placeholder="How many students can attend this class?"
+            type="number"
+            min={0}
+            validate={stockValidator}
+            onKeyDown={e => (e.keyCode === 189 || e.keyCode === 190) && e.preventDefault()}
+          />
+          {setStockError ? <p className={css.error}>{stockErrorMessage}</p> : null}
+          {/* Recurrence section */}
+          {/* {values?.payment_type?.some(type => type.value === 'recurring') && (
+            <FieldSelectModern
+              className={css.features}
+              id="recurrence_type"
+              name="recurrence_type"
+              label="Recurrence Type ( Do you want the meeting to repeat? )"
+              options={[
+                { value: '1', label: 'Daily' },
+                { value: '2', label: 'Weekly' },
+                { value: '3', label: 'Monthly' },
+              ]}
+              placeholder="Select recurrence type"
+              validate={fieldSelectModernRequired('Please select a recurrence type')}
+            />
+          )} */}
+
+          {/* {values?.payment_type?.some(type => type.value === 'recurring') && (
+            <>
+              <FieldTextInput
+                id="repeat_interval"
+                name="repeat_interval"
+                className={css.title}
+                type="number"
+                label="Repeat Interval (number of days, weeks, or months that should pass before the meeting repeats.)"
+                placeholder="Enter repeat interval."
+                validate={required('Please enter repeat interval')}
+                min={1}
+                max={maxRecurrence}
+              />
+              <FieldSelectModern
+                className={css.features}
+                id="end_recurrence"
+                name="end_recurrence"
+                label="End of Recurrence"
+                options={[
+                  { value: 'end_date', label: 'End by Date' },
+                  { value: 'end_times', label: 'End after X occurrences' },
+                ]}
+                placeholder="Select end of recurrence"
+                validate={fieldSelectModernRequired('Please select an end of recurrence')}
+              />
+              {values?.end_recurrence?.value === 'end_date' ? (
+                <Datepicker
+                  className={css.title}
+                  id="end_date"
+                  name="end_date"
+                  label="End Date"
+                  placeholder="Choose end date"
+                  minDate={values?.start_date ? new Date(values.start_date) : new Date()}
+                  dateFormat="MM/dd/yyyy"
+                  validate={composeValidators(required('End date is required'))}
+                />
+              ) : null}
+              {values?.end_recurrence?.value === 'end_times' ? (
+                <FieldTextInput
+                  id="end_times"
+                  name="end_times"
+                  className={css.title}
+                  type="number"
+                  label="Occurrences"
+                  placeholder="Enter number of occurrences"
+                  validate={required('Please enter number of occurrences')}
+                  min={1}
+                  max={60}
+                />
+              ) : null}
+              
+              {values?.recurrence_type?.value === '3' ? (
+                <>
+                  <FieldTextInput
+                    id="monthly_day"
+                    name="monthly_day"
+                    className={css.title}
+                    type="number"
+                    label="Day of the Month"
+                    placeholder="Enter day of the month"
+                    min={1}
+                    max={31}
+                  />
+                </>
+              ) : null}
+            </>
+          )} */}
+          {values?.payment_type?.some(type => type.value === 'recurring') && (
+            <FieldSelectModern
+              className={css.features}
+              id="weekly_days"
+              name="weekly_days"
+              label="Days of the Week (You can select multiple days)"
+              options={[
+                { value: '1', label: 'Sunday' },
+                { value: '2', label: 'Monday' },
+                { value: '3', label: 'Tuesday' },
+                { value: '4', label: 'Wednesday' },
+                { value: '5', label: 'Thursday' },
+                { value: '6', label: 'Friday' },
+                { value: '7', label: 'Saturday' },
+              ]}
+              isMulti
+            />
+          )}
+          <fieldset disabled={hasZoom} className={css.fieldset}>
             <FieldSelectModern
               className={css.features}
               id="timezone"
@@ -293,18 +444,6 @@ const EditListingDescriptionFormComponent = props => (
               disabled={hasZoom}
             />
           </fieldset>
-          <FieldTextInput
-            className={css.title}
-            id="stock"
-            name="stock"
-            label="Maximum Capacity"
-            placeholder="How many students can attend this class?"
-            type="number"
-            min={0}
-            validate={stockValidator}
-            onKeyDown={e => (e.keyCode === 189 || e.keyCode === 190) && e.preventDefault()}
-          />
-          {setStockError ? <p className={css.error}>{stockErrorMessage}</p> : null}
           <Button
             className={css.submitButton}
             type="submit"

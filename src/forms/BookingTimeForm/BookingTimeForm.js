@@ -7,11 +7,21 @@ import { FormattedMessage, intlShape, injectIntl } from '../../util/reactIntl';
 import { timestampToDate } from '../../util/dates';
 import { propTypes } from '../../util/types';
 import config from '../../config';
-import { Form, IconSpinner, PrimaryButton } from '../../components';
+import { types as sdkTypes } from '../../util/sdkLoader';
+const { Money } = sdkTypes;
+import { formatMoney } from '../../util/currency';
+import {
+  FieldSelectModern,
+  Form,
+  IconSpinner,
+  PrimaryButton,
+  ResponsiveImage,
+} from '../../components';
 import EstimatedBreakdownMaybe from './EstimatedBreakdownMaybe';
 import FieldDateAndTimeInput from './FieldDateAndTimeInput';
 
 import css from './BookingTimeForm.module.css';
+import { required } from '../../util/validators';
 
 export class BookingTimeFormComponent extends Component {
   constructor(props) {
@@ -49,7 +59,6 @@ export class BookingTimeFormComponent extends Component {
       });
     }
   }
-
   render() {
     const { rootClassName, className, price: unitPrice, bookingType, ...rest } = this.props;
     const classes = classNames(rootClassName || css.root, className);
@@ -103,9 +112,20 @@ export class BookingTimeFormComponent extends Component {
             isStockZero,
             transactionId,
             joinUrl,
-            panelCard,
             loading,
+            listing,
+            title,
+            firstImage,
+            formattedPrice,
+            formattedDate,
+            monthlyPrice,
+            subscriptionId,
+            checkOldTransactionData,
           } = fieldRenderProps;
+          console.log(checkOldTransactionData, 'checkOldTransactionData form');
+          console.log(values);
+          const newMonthlyPrice = new Money(monthlyPrice, config.currency);
+          const formattedMonthlyPrice = formatMoney(intl, newMonthlyPrice);
           if (loading) return null;
           const startTime = values && values.bookingStartTime ? values.bookingStartTime : null;
           const endTime = values && values.bookingEndTime ? values.bookingEndTime : null;
@@ -172,16 +192,87 @@ export class BookingTimeFormComponent extends Component {
             startDateInputProps,
             endDateInputProps,
           };
+          let paymentMethodOptions = [];
 
+          const paymentType = listing?.attributes?.publicData?.paymentType;
+
+          const isRecurringOnly = paymentType?.length === 1 && paymentType[0].value === 'recurring';
+          const isPerSessionOnly =
+            paymentType?.length === 1 && paymentType[0].value === 'per_session';
+          const hasBoth =
+            paymentType?.length === 2 &&
+            paymentType.some(type => type.value === 'recurring') &&
+            paymentType.some(type => type.value === 'per_session');
+
+          if (isRecurringOnly) {
+            paymentMethodOptions.push({ label: 'Subscription', value: 'recurring' });
+          } else if (isPerSessionOnly) {
+            paymentMethodOptions.push({ label: 'Pay Per Session', value: 'per_session' });
+          } else if (hasBoth) {
+            paymentMethodOptions.push({ label: 'Subscription', value: 'recurring' });
+            paymentMethodOptions.push({ label: 'Pay Per Session', value: 'per_session' });
+          }
+          console.log(paymentMethodOptions);
+
+          const shouldDisableButton = () => {
+            if (checkOldTransactionData) {
+              const processName = checkOldTransactionData.attributes.processName;
+              if (processName === 'flex-subscription' && subscriptionId) {
+                return true;
+              }
+              if (processName === 'flex-hourly-default-process' && transactionId) {
+                return true;
+              }
+            }
+            return false;
+          };
+          console.log(shouldDisableButton(), 'shouldDisableButton');
+          const panelCard = (
+            <div className={css.detailsContainerDesktop}>
+              <div className={css.detailsAspectWrapper}>
+                <ResponsiveImage
+                  rootClassName={css.rootForImage}
+                  alt={title}
+                  image={firstImage}
+                  variants={['landscape-crop', 'landscape-crop2x']}
+                />
+              </div>
+
+              <div className={css.detailsHeadings}>
+                <h2 className={css.detailsTitle}>{title}</h2>
+                {isFreeBooking ? (
+                  <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
+                    Free
+                  </p>
+                ) : (
+                  <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
+                    <b>Price: </b>
+                    {values?.paymentMethod?.value === 'recurring'
+                      ? `${formattedMonthlyPrice} Per Month`
+                      : `${formattedPrice} ${isRecurringOnly ? 'Per Month' : 'Per Session'}`}
+                  </p>
+                )}
+                <p className={css.detailsSubtitle}>
+                  <b>Start date:</b> {formattedDate}
+                </p>
+              </div>
+            </div>
+          );
           return (
-            <Form onSubmit={handleSubmit} className={classes} enforcePagePreloadFor="CheckoutPage">
-              <FormSpy
-                subscription={{ values: true }}
-                onChange={values => {
-                  this.handleOnChange(values);
-                }}
-              />
-              {/* {monthlyTimeSlots && timeZone ? (
+            <>
+              {panelCard}
+              <Form
+                onSubmit={handleSubmit}
+                className={classes}
+                enforcePagePreloadFor="CheckoutPage"
+              >
+                <FormSpy
+                  subscription={{ values: true }}
+                  onChange={values => {
+                    this.handleOnChange(values);
+                  }}
+                />
+                {/* {monthlyTimeSlots && timeZone ? (
                 <FieldDateAndTimeInput
                   {...dateInputProps}
                   className={css.bookingDates}
@@ -196,34 +287,53 @@ export class BookingTimeFormComponent extends Component {
                   timeZone={timeZone}
                 />
               ) : null} */}
-              {bookingInfoMaybe}
-              {loadingSpinnerMaybe}
-              {bookingInfoErrorMaybe}
-
-              <p className={css.smallPrint}>
-                {isStockZero ? null : (
-                  <FormattedMessage
-                    id={
-                      isOwnListing
-                        ? 'BookingTimeForm.ownListing'
-                        : 'BookingTimeForm.youWontBeChargedInfo'
-                    }
-                  />
-                )}
-              </p>
-              <div className={submitButtonClasses}>
-                <PrimaryButton type="submit" disabled={isStockZero || transactionId}>
-                  {transactionId ? (
-                    <FormattedMessage id="BookingTimeForm.BookingTimeForm.alreadyRegisterLabel" />
-                  ) : isStockZero ? (
-                    'All class tickets are sold!'
-                  ) : (
-                    <FormattedMessage id="BookingTimeForm.requestToBook" />
+                {bookingInfoMaybe}
+                {loadingSpinnerMaybe}
+                {bookingInfoErrorMaybe}
+                <FieldSelectModern
+                  id="paymentMethod"
+                  name="paymentMethod"
+                  label="Payment Method"
+                  className={css.select}
+                  options={paymentMethodOptions}
+                  validate={required(
+                    intl.formatMessage({
+                      id: 'ProductOrderForm.paymentMethodRequired',
+                    })
                   )}
-                </PrimaryButton>
-                {joinUrl}
-              </div>
-            </Form>
+                  placeholder={intl.formatMessage({
+                    id: 'ProductOrderForm.paymentMethodPlaceholder',
+                  })}
+                  isSearchable={false}
+                  // defaultValue={paymentMethodOptions[0]}
+                />
+
+                <br />
+                <p className={css.smallPrint}>
+                  {isStockZero ? null : (
+                    <FormattedMessage
+                      id={
+                        isOwnListing
+                          ? 'BookingTimeForm.ownListing'
+                          : 'BookingTimeForm.youWontBeChargedInfo'
+                      }
+                    />
+                  )}
+                </p>
+                <div className={submitButtonClasses}>
+                  <PrimaryButton type="submit" disabled={shouldDisableButton()}>
+                    {shouldDisableButton() ? (
+                      <FormattedMessage id="BookingTimeForm.BookingTimeForm.alreadyRegisterLabel" />
+                    ) : isStockZero ? (
+                      'All class tickets are sold!'
+                    ) : (
+                      <FormattedMessage id="BookingTimeForm.requestToBook" />
+                    )}
+                  </PrimaryButton>
+                  {joinUrl}
+                </div>
+              </Form>
+            </>
           );
         }}
       />

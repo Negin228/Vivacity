@@ -67,12 +67,205 @@ const integrationSdk = flexIntegrationSdk.createInstance({
   clientId,
   clientSecret,
 });
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const options = {
   auth: {
     api_key: process.env.SENDGRID_API_KEY,
   },
 };
+// const handlePaymentIntentSucceeded = async paymentIntent => {
+//   try {
+//     const { id, metadata, charges } = paymentIntent;
 
+//     const chargeId = charges?.data[0]?.id;
+//     const { transaction_id, stripeAccount, paymentMethod, type, userId, priceId } = metadata;
+//     const isAffiliation = type == 'affiliation';
+//     const isGiftCard = type == 'gift_card';
+//     if (isGiftCard) {
+//       await handleGiftCard(metadata);
+//       return;
+//     }
+//     if (isAffiliation && userId) {
+//       await integrationSdk.users.updateProfile({
+//         id: userId,
+//         metadata: {
+//           affiliation: true,
+//           affiliationPriceId: priceId,
+//         },
+//       });
+//       console.log('affiliation updated successfully');
+//     } else {
+//       await integrationSdk.transactions.transition(
+//         {
+//           id: transaction_id,
+//           transition: 'transition/confirm-payment',
+//           params: {
+//             metadata: {
+//               payment_method: paymentMethod,
+//               chargeId,
+//             },
+//           },
+//         },
+//         {
+//           expand: true,
+//         }
+//       );
+
+//       console.log('transitioned');
+//     }
+//   } catch (e) {
+//     console.log(e?.data?.errors);
+//   }
+// };
+const updateUserSubscriptionCreated = async dataObject => {
+  try {
+    // Extract metadata from the subscription object
+    const { id, metadata, current_period_start, current_period_end } = dataObject || {};
+    const { userId, transactionId, priceId, plan } = metadata || {};
+    // Check if metadata exists and log it
+    if (metadata) {
+      console.log('Subscription Metadata:', metadata);
+      console.log('Transaction ID:', transactionId);
+
+      // Proceed with transitioning the transaction using the SDK
+      await integrationSdk.transactions.transition(
+        {
+          id: transactionId,
+          transition: 'transition/confirm-subscription',
+          params: {
+            metadata: {
+              subscriptionId: id,
+              current_period_end,
+              current_period_start,
+              plan,
+              priceId,
+              membership: true,
+            },
+          },
+        },
+        {
+          expand: true,
+        }
+      );
+      // Log success
+      console.log('Transaction successfully transitioned.');
+    } else {
+      console.warn('No metadata found in subscription object.');
+    }
+  } catch (e) {
+    // Log detailed error information for debugging
+    console.error('Error transitioning transaction:', e?.data?.errors || e.message || e);
+  }
+};
+
+const updateUserSubscriptionDeleted = async dataObject => {
+  const { id, metadata } = dataObject || {};
+  const { transactionId } = metadata || {};
+
+  if (!transactionId) {
+    console.error('No transactionId found in metadata.');
+    return;
+  }
+
+  try {
+    // Fetch the transaction details
+    const transaction = await integrationSdk.transactions.show({ id: transactionId });
+    console.log('Transaction status:', transaction.status);
+
+    const lastTransition =
+      transaction.data.data.attributes.lastTransition === 'transition/confirm-subscription';
+
+    // Function to update transaction metadata
+    const updateTransactionMetadata = async () => {
+      return await integrationSdk.transactions.updateMetadata(
+        {
+          id: transactionId,
+          metadata: {
+            subscriptionId: null,
+            oldSubscriptionId: id,
+            membership: false,
+          },
+        },
+        { expand: true }
+      );
+    };
+
+    let result;
+    if (lastTransition) {
+      // Transition the transaction if the last transition is 'confirm-subscription'
+      result = await integrationSdk.transactions.transition(
+        {
+          id: transactionId,
+          transition: 'transition/cancel',
+          params: {
+            metadata: {
+              subscriptionId: null,
+              oldSubscriptionId: id,
+              membership: false,
+            },
+          },
+        },
+        { expand: true }
+      );
+      console.log('Transaction successfully transitioned.');
+    } else {
+      // Update the transaction metadata if no transition is needed
+      result = await updateTransactionMetadata();
+      console.log('Transaction metadata updated successfully:', result);
+    }
+  } catch (error) {
+    // Log detailed error information for debugging
+    console.error(
+      'Error updating transaction metadata:',
+      error?.data?.errors || error.message || error
+    );
+  }
+};
+app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, res) => {
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      req.headers['stripe-signature'],
+      webhookSecret
+    );
+  } catch (err) {
+    console.error(`⚠️  Webhook signature verification failed: ${err.message}`);
+    return res.sendStatus(400); // Return 400 for failed signature verification
+  }
+
+  // Extract the Stripe object from the event
+  const dataObject = event.data.object;
+
+  try {
+    switch (event.type) {
+      case 'customer.subscription.created':
+        // Log the entire dataObject to inspect the structure
+        console.log('Subscription Data Object:', dataObject);
+
+        // Check metadata in case it's not present directly on dataObject
+        const metadata = dataObject.metadata || dataObject.subscription_details?.metadata || {};
+        console.log('Subscription Metadata:', metadata);
+
+        await updateUserSubscriptionCreated(dataObject);
+        break;
+      case 'customer.subscription.updated':
+        await updateUserSubscriptionCreated(dataObject);
+        break;
+      case 'customer.subscription.deleted':
+        await updateUserSubscriptionDeleted(dataObject);
+        break;
+      default:
+        console.warn(`Unhandled event type: ${event.type}`);
+    }
+    return res.sendStatus(200);
+  } catch (e) {
+    console.error(`Error processing event: ${e.message}`);
+    return res.sendStatus(400);
+  }
+});
 const transporter = nodemailer.createTransport(sgTransport(options));
 // load sitemap and robots file structure
 // and write those into files
