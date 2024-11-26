@@ -140,6 +140,7 @@ module.exports = async (req, res) => {
         type: 2,
         repeat_interval: 1,
         weekly_days: weeklyDays.map(day => day.value).join(','),
+        end_times: 60,
       };
       // Remove undefined properties from the recurrence object
       Object.keys(meetingParams.recurrence).forEach(
