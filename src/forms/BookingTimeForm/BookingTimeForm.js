@@ -191,7 +191,7 @@ export class BookingTimeFormComponent extends Component {
           let paymentMethodOptions = [];
 
           const paymentType = listing?.attributes?.publicData?.paymentType;
-
+          console.log(paymentType, 'paymentType');
           const isRecurringOnly = paymentType?.length === 1 && paymentType[0].value === 'recurring';
           const isPerSessionOnly =
             paymentType?.length === 1 && paymentType[0].value === 'per_session';
@@ -206,6 +206,8 @@ export class BookingTimeFormComponent extends Component {
             paymentMethodOptions.push({ label: 'Pay Per Session', value: 'per_session' });
           } else if (hasBoth) {
             paymentMethodOptions.push({ label: 'Subscription', value: 'recurring' });
+            paymentMethodOptions.push({ label: 'Pay Per Session', value: 'per_session' });
+          } else {
             paymentMethodOptions.push({ label: 'Pay Per Session', value: 'per_session' });
           }
           console.log(paymentMethodOptions);
