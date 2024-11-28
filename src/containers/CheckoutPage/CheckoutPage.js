@@ -778,8 +778,12 @@ export class CheckoutPageComponent extends Component {
     const price = currentListing.attributes.price ?? new Money(100, config.currency);
     const formattedPrice = formatMoney(intl, price);
     const detailsSubTitle = `${formattedPrice} ${intl.formatMessage({ id: unitTranslationKey })}`;
-    const newMonthlyPrice = new Money(monthlyPrice, config.currency);
-    const formattedMonthlyPrice = formatMoney(intl, newMonthlyPrice);
+    let formattedMonthlyPrice = null;
+    if (monthlyPrice) {
+      const newMonthlyPrice = new Money(monthlyPrice, config.currency);
+      formattedMonthlyPrice = formatMoney(intl, newMonthlyPrice);
+    }
+
     const showInitialMessageInput = !(
       existingTransaction && existingTransaction.attributes.lastTransition === TRANSITION_ENQUIRE
     );
