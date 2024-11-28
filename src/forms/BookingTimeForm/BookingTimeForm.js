@@ -35,10 +35,6 @@ export class BookingTimeFormComponent extends Component {
     this.props.onSubmit(e);
   }
 
-  // When the values of the form are updated we need to fetch
-  // lineItems from FTW backend for the EstimatedTransactionMaybe
-  // In case you add more fields to the form, make sure you add
-  // the values here to the bookingData object.
   handleOnChange(formValues) {
     const { bookingStartTime, bookingEndTime } = formValues.values;
     const startDate = bookingStartTime ? timestampToDate(bookingStartTime) : null;
@@ -47,8 +43,6 @@ export class BookingTimeFormComponent extends Component {
     const listingId = this.props.listingId;
     const isOwnListing = this.props.isOwnListing;
 
-    // We expect values bookingStartTime and bookingEndTime to be strings
-    // which is the default case when the value has been selected through the form
     const isSameTime = bookingStartTime === bookingEndTime;
 
     if (bookingStartTime && bookingEndTime && !isSameTime && !this.props.fetchLineItemsInProgress) {
@@ -59,6 +53,7 @@ export class BookingTimeFormComponent extends Component {
       });
     }
   }
+
   render() {
     const { rootClassName, className, price: unitPrice, bookingType, ...rest } = this.props;
     const classes = classNames(rootClassName || css.root, className);
@@ -124,8 +119,13 @@ export class BookingTimeFormComponent extends Component {
           } = fieldRenderProps;
           console.log(checkOldTransactionData, 'checkOldTransactionData form');
           console.log(values);
-          const newMonthlyPrice = new Money(monthlyPrice, config.currency);
-          const formattedMonthlyPrice = formatMoney(intl, newMonthlyPrice);
+
+          let formattedMonthlyPrice = null;
+          if (monthlyPrice) {
+            const newMonthlyPrice = new Money(monthlyPrice, config.currency);
+            formattedMonthlyPrice = formatMoney(intl, newMonthlyPrice);
+          }
+
           if (loading) return null;
           const startTime = values && values.bookingStartTime ? values.bookingStartTime : null;
           const endTime = values && values.bookingEndTime ? values.bookingEndTime : null;
@@ -137,12 +137,8 @@ export class BookingTimeFormComponent extends Component {
             id: 'BookingTimeForm.bookingEndTitle',
           });
 
-          // const startDate = startTime ? timestampToDate(startTime) : null;
           const endDate = endTime ? timestampToDate(endTime) : null;
 
-          // This is the place to collect breakdown estimation data. See the
-          // EstimatedBreakdownMaybe component to change the calculations
-          // for customized payment processes.
           const bookingData =
             startDate && endDate
               ? {
@@ -195,7 +191,7 @@ export class BookingTimeFormComponent extends Component {
           let paymentMethodOptions = [];
 
           const paymentType = listing?.attributes?.publicData?.paymentType;
-
+          console.log(paymentType, 'paymentType');
           const isRecurringOnly = paymentType?.length === 1 && paymentType[0].value === 'recurring';
           const isPerSessionOnly =
             paymentType?.length === 1 && paymentType[0].value === 'per_session';
@@ -210,6 +206,8 @@ export class BookingTimeFormComponent extends Component {
             paymentMethodOptions.push({ label: 'Pay Per Session', value: 'per_session' });
           } else if (hasBoth) {
             paymentMethodOptions.push({ label: 'Subscription', value: 'recurring' });
+            paymentMethodOptions.push({ label: 'Pay Per Session', value: 'per_session' });
+          } else {
             paymentMethodOptions.push({ label: 'Pay Per Session', value: 'per_session' });
           }
           console.log(paymentMethodOptions);
@@ -272,21 +270,6 @@ export class BookingTimeFormComponent extends Component {
                     this.handleOnChange(values);
                   }}
                 />
-                {/* {monthlyTimeSlots && timeZone ? (
-                <FieldDateAndTimeInput
-                  {...dateInputProps}
-                  className={css.bookingDates}
-                  listingId={listingId}
-                  bookingStartLabel={bookingStartLabel}
-                  onFetchTimeSlots={onFetchTimeSlots}
-                  monthlyTimeSlots={monthlyTimeSlots}
-                  values={values}
-                  intl={intl}
-                  form={form}
-                  pristine={pristine}
-                  timeZone={timeZone}
-                />
-              ) : null} */}
                 {bookingInfoMaybe}
                 {loadingSpinnerMaybe}
                 {bookingInfoErrorMaybe}
@@ -305,7 +288,6 @@ export class BookingTimeFormComponent extends Component {
                     id: 'ProductOrderForm.paymentMethodPlaceholder',
                   })}
                   isSearchable={false}
-                  // defaultValue={paymentMethodOptions[0]}
                 />
 
                 <br />
