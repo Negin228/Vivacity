@@ -12,6 +12,7 @@ import {
   Page,
   SectionHero,
   SectionHowItWorks,
+  SectionWhyChooseVivacity,
   SectionLocations,
   SectionUpcomingClasses,
   LayoutSingleColumn,
