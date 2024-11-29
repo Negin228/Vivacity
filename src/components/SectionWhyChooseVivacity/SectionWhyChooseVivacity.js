@@ -19,44 +19,50 @@ const SectionWhyChooseVivacity = props => {
   const classes = classNames(rootClassName || css.root, className);
   return (
     <div className={classes}>
-      <div className={css.steps}>
-        <div className={css.step}>
-        <h2 className={css.stepTitle}>
-        <FormattedMessage id="SectionWhyChooseVivacity.titleLineOne" />
-        </h2>
-        <p>
-        <FormattedMessage id="SectionWhyChooseVivacity.titleLineTwo" />
-        </p>
+        <div className={css.content}>
+          <h2 className={css.contentTitle}>
+            <FormattedMessage id="SectionWhyChooseVivacity.titleLineOne" />
+          </h2>
+          <p>
+            <FormattedMessage id="SectionWhyChooseVivacity.titleLineTwo" />
+          </p>
         </div>
-      </div>         
-      <div className={css.content}>
-        <FormattedMessage id="SectionWhyChooseVivacity.titleLineTwo" />
-      </div>
-      <div className={css.content}>
-        <FormattedMessage id="SectionWhyChooseVivacity.titleLineThree" />
-      </div>
-      <div className={css.content}>
-        <FormattedMessage id="SectionWhyChooseVivacity.titleLineFour" />
-      </div>
-      <div className={css.content}>
-        <FormattedMessage id="SectionWhyChooseVivacity.titleLineFive" />
-      </div>
-      <div className={css.content}>
-        <FormattedMessage id="SectionWhyChooseVivacity.titleLineSix" />
-      </div>
-      <div className={css.content}>
-        <FormattedMessage id="SectionWhyChooseVivacity.titleLineSeven" />
-      </div>
-      <div className={css.content}>
-        <FormattedMessage id="SectionWhyChooseVivacity.titleLineEight" />
-      </div>
-      <div className={css.content}>
-        <FormattedMessage id="SectionWhyChooseVivacity.titleLineNine" />
-      </div>
-      <div className={css.content}>
-        <FormattedMessage id="SectionWhyChooseVivacity.titleLineTen" />
-      </div>
-    </div>
+        <div className={css.content}>
+          <h2 className={css.contentTitle}>
+            <FormattedMessage id="SectionWhyChooseVivacity.titleLineThree" />
+          </h2>
+          <p>
+            <FormattedMessage id="SectionWhyChooseVivacity.titleLineFour" />
+          </p>
+        </div>
+          <div className={css.content}>
+          <h2 className={css.contentTitle}>
+            <FormattedMessage id="SectionWhyChooseVivacity.titleLineFive" />
+          </h2>
+          <p>
+            <FormattedMessage id="SectionWhyChooseVivacity.titleLineSix" />
+          </p>
+        </div>
+        <div className={css.content}>
+          <h2 className={css.contentTitle}>
+            <FormattedMessage id="SectionWhyChooseVivacity.titleLineSeven" />
+          </h2>
+          <p>
+            <FormattedMessage id="SectionWhyChooseVivacity.titleLineEight" />
+          </p>
+        </div>
+        <div className={css.content}>
+          <h2 className={css.contentTitle}>
+            <FormattedMessage id="SectionWhyChooseVivacity.titleLineNine" />
+          </h2>
+          <p>
+            <FormattedMessage id="SectionWhyChooseVivacity.titleLineTen" />
+          </p>
+        </div>
+
+  
+      </div>  
+  
   );
 };
 
