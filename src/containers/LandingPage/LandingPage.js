@@ -110,6 +110,13 @@ export const LandingPageComponent = props => {
                 />
               </div>
             </li>
+
+            <li className={css.section}>
+              <div className={css.sectionContent}>
+                <SectionWhyChooseVivacity
+                />
+              </div>
+                    
           </ul>
         </LayoutWrapperMain>
         <LayoutWrapperFooter>
