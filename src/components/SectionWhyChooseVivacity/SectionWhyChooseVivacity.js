@@ -32,22 +32,22 @@ const SectionWhyChooseVivacity = props => {
         <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineFour" />
       </div>
       <div className={css.content}>
-        <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineFive" />
+        <FormattedMessage id="SectionWhyChooseVivacity.titleLineFive" />
       </div>
       <div className={css.content}>
-        <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineSix" />
+        <FormattedMessage id="SectionWhyChooseVivacity.titleLineSix" />
       </div>
       <div className={css.content}>
-        <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineSeven" />
+        <FormattedMessage id="SectionWhyChooseVivacity.titleLineSeven" />
       </div>
       <div className={css.content}>
-        <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineEight" />
+        <FormattedMessage id="SectionWhyChooseVivacity.titleLineEight" />
       </div>
       <div className={css.content}>
-        <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineNine" />
+        <FormattedMessage id="SectionWhyChooseVivacity.titleLineNine" />
       </div>
       <div className={css.content}>
-        <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineTen" />
+        <FormattedMessage id="SectionWhyChooseVivacity.titleLineTen" />
       </div>
 /*
       <div className={css.steps}>
