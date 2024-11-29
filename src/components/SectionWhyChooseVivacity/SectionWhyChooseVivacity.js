@@ -83,8 +83,9 @@ const SectionWhyChooseVivacity = props => {
         {routeLink('SearchPage', 'Are you an instructor? Schedule a class!')}
         {/* <FormattedMessage id="SectionWhyChooseVivacity.createListingLink" /> */}
       </div>
+*/      
     </div>
-*/
+
 
   );
 };
