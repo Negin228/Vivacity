@@ -82,7 +82,7 @@ const SectionWhyChooseVivacity = props => {
 /*  
       <div className={css.createListingLink}>
         {routeLink('SearchPage', 'Are you an instructor? Schedule a class!')}
-        {/* <FormattedMessage id="SectionWhyChooseVivacity.createListingLink" /> */}
+        {<FormattedMessage id="SectionWhyChooseVivacity.createListingLink" />}
       </div>
 */
     </div>
