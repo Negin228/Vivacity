@@ -34,19 +34,19 @@ const SectionWhyChooseVivacity = props => {
       <div className={css.content}>
         <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineFive" />
       </div>
-        <div className={css.content}>
+      <div className={css.content}>
         <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineSix" />
       </div>
-        <div className={css.content}>
+      <div className={css.content}>
         <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineSeven" />
       </div>
-        <div className={css.content}>
+      <div className={css.content}>
         <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineEight" />
       </div>
-        <div className={css.content}>
+      <div className={css.content}>
         <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineNine" />
       </div>
-        <div className={css.content}>
+      <div className={css.content}>
         <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineTen" />
       </div>
 /*
@@ -78,15 +78,14 @@ const SectionWhyChooseVivacity = props => {
           </p>
         </div>
       </div> 
-
+*/
+/*  
       <div className={css.createListingLink}>
         {routeLink('SearchPage', 'Are you an instructor? Schedule a class!')}
         {/* <FormattedMessage id="SectionWhyChooseVivacity.createListingLink" /> */}
       </div>
-*/      
+*/
     </div>
-
-
   );
 };
 
