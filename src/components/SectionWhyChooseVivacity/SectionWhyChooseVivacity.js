@@ -28,7 +28,28 @@ const SectionWhyChooseVivacity = props => {
       <div className={css.content}>
         <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineThree" />
       </div>
-
+      <div className={css.content}>
+        <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineFour" />
+      </div>
+      <div className={css.content}>
+        <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineFive" />
+      </div>
+        <div className={css.content}>
+        <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineSix" />
+      </div>
+        <div className={css.content}>
+        <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineSeven" />
+      </div>
+        <div className={css.content}>
+        <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineEight" />
+      </div>
+        <div className={css.content}>
+        <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineNine" />
+      </div>
+        <div className={css.content}>
+        <FormattedMessage id="SecSectionWhyChooseVivacity.titleLineTen" />
+      </div>
+/*
       <div className={css.steps}>
         <div className={css.step}>
           <h2 className={css.stepTitle}>
@@ -56,11 +77,13 @@ const SectionWhyChooseVivacity = props => {
             <FormattedMessage id="SectionWhyChooseVivacity.part3Text" />
           </p>
         </div>
-      </div>
+      </div> 
+
       <div className={css.createListingLink}>
         {routeLink('SearchPage', 'Are you an instructor? Schedule a class!')}
         {/* <FormattedMessage id="SectionWhyChooseVivacity.createListingLink" /> */}
       </div>
+*/
     </div>
   );
 };
