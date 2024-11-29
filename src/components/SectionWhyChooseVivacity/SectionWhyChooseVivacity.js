@@ -35,7 +35,7 @@ const SectionWhyChooseVivacity = props => {
             <FormattedMessage id="SectionWhyChooseVivacity.titleLineFour" />
           </p>
         </div>
-          <div className={css.content}>
+        <div className={css.content}>
           <h2 className={css.contentTitle}>
             <FormattedMessage id="SectionWhyChooseVivacity.titleLineFive" />
           </h2>
