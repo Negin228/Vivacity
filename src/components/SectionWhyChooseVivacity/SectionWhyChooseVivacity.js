@@ -19,44 +19,41 @@ const SectionWhyChooseVivacity = props => {
   const classes = classNames(rootClassName || css.root, className);
   return (
     <div className={classes}>
+      <div className={css.title}>
+        <FormattedMessage id="SectionWhyChooseVivacity.titleLineOne" />
+      </div>     
+
+    
         <div className={css.content}>
           <h2 className={css.contentTitle}>
-            <FormattedMessage id="SectionWhyChooseVivacity.titleLineOne" />
-          </h2>
-          <p>
             <FormattedMessage id="SectionWhyChooseVivacity.titleLineTwo" />
-          </p>
-        </div>
-        <div className={css.content}>
-          <h2 className={css.contentTitle}>
+          </h2>
+          <p>
             <FormattedMessage id="SectionWhyChooseVivacity.titleLineThree" />
-          </h2>
-          <p>
+          </p>
+        </div>
+        <div className={css.content}>
+          <h2 className={css.contentTitle}>
             <FormattedMessage id="SectionWhyChooseVivacity.titleLineFour" />
-          </p>
-        </div>
-        <div className={css.content}>
-          <h2 className={css.contentTitle}>
+          </h2>
+          <p>
             <FormattedMessage id="SectionWhyChooseVivacity.titleLineFive" />
-          </h2>
-          <p>
+          </p>
+        </div>
+        <div className={css.content}>
+          <h2 className={css.contentTitle}>
             <FormattedMessage id="SectionWhyChooseVivacity.titleLineSix" />
-          </p>
-        </div>
-        <div className={css.content}>
-          <h2 className={css.contentTitle}>
+          </h2>
+          <p>
             <FormattedMessage id="SectionWhyChooseVivacity.titleLineSeven" />
-          </h2>
-          <p>
-            <FormattedMessage id="SectionWhyChooseVivacity.titleLineEight" />
           </p>
         </div>
         <div className={css.content}>
           <h2 className={css.contentTitle}>
-            <FormattedMessage id="SectionWhyChooseVivacity.titleLineNine" />
+            <FormattedMessage id="SectionWhyChooseVivacity.titleLineEight" />
           </h2>
           <p>
-            <FormattedMessage id="SectionWhyChooseVivacity.titleLineTen" />
+            <FormattedMessage id="SectionWhyChooseVivacity.titleLineNine" />
           </p>
         </div>
 
