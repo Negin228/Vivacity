@@ -19,11 +19,9 @@ const SectionWhyChooseVivacity = props => {
   const classes = classNames(rootClassName || css.root, className);
   return (
     <div className={classes}>
-      <div className={css.title}>
-        <FormattedMessage id="SectionWhyChooseVivacity.titleLineOne" />
-      </div>     
-
-    
+        <div className={css.title}>
+          <FormattedMessage id="SectionWhyChooseVivacity.titleLineOne" />
+        </div>     
         <div className={css.content}>
           <h2 className={css.contentTitle}>
             <FormattedMessage id="SectionWhyChooseVivacity.titleLineTwo" />
