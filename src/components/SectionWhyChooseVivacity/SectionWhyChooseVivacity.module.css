@@ -37,7 +37,7 @@
   }
 }
 
-.createListingLink {
+.JoinVivacityTodayLink {
   margin-top: 18px;
 
   @media (--viewportMedium) {
