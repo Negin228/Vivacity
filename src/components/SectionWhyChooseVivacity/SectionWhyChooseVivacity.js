@@ -23,12 +23,12 @@ const SectionWhyChooseVivacity = props => {
           <FormattedMessage id="SectionWhyChooseVivacity.titleLineOne" />
         </div>     
         <div className={css.content}>
-        <p>
           <h2 className={css.contentTitle}>
             <FormattedMessage id="SectionWhyChooseVivacity.titleLineTwo" />
           </h2>
+          <p>
             <FormattedMessage id="SectionWhyChooseVivacity.titleLineThree" />
-        </p>
+          </p>
         </div>
         <div className={css.content}>
           <h2 className={css.contentTitle}>
