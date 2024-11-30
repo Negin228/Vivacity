@@ -19,6 +19,8 @@ const SectionWhyChooseVivacity = props => {
   const classes = classNames(rootClassName || css.root, className);
   return (
     <div className={classes}>
+    <div className={css.step}>
+    
         <div className={css.title}>
           <FormattedMessage id="SectionWhyChooseVivacity.titleLineOne" />
         </div>     
@@ -58,9 +60,15 @@ const SectionWhyChooseVivacity = props => {
         <div className={css.JoinVivacityTodayLink}>
            {routeLink('SignupPage', 'Join Vivacity Today!')}
         </div>
+      <div className={css.step}>
+        <img
+        alt="ListingX"
+        src="src/assets/images/landingpageimageworkout.jpg"
+        srcSet="src/assets/images/landingpageimageworkout.jpg 400w, src/assets/images/landingpageimageworkout-2x.jpg 800w" />
 
-  
-      </div>  
+      </div>
+      </div> 
+      </div>
   
   );
 };
