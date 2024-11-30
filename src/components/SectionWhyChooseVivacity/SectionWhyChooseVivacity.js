@@ -54,11 +54,9 @@ const SectionWhyChooseVivacity = props => {
             <FormattedMessage id="SectionWhyChooseVivacity.titleLineNine" />
           </p>
         </div>
-        
-        <div className={css.content}>
-          <p>
+  
+        <div className={css.JoinVivacityTodayLink}>
            {routeLink('SignupPage', 'Join Vivacity Today!')}
-          </p>
         </div>
 
   
