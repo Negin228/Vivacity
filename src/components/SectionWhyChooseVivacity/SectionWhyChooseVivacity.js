@@ -14,62 +14,62 @@ const SectionWhyChooseVivacity = props => {
       <NamedLink name={name}>
         <span>{text}</span>
       </NamedLink>
-    );
+      );
   };
   const classes = classNames(rootClassName || css.root, className);
   return (
     <div className={classes}>
-    <div className={css.steps}>
-
-    <div className={css.step}>
-    
-        <div className={css.title}>
-          <FormattedMessage id="SectionWhyChooseVivacity.titleLineOne" />
-        </div>     
-        <div className={css.content}>
-          <h2 className={css.contentTitle}>
-            <FormattedMessage id="SectionWhyChooseVivacity.titleLineTwo" />
-          </h2>
-          <p>
-            <FormattedMessage id="SectionWhyChooseVivacity.titleLineThree" />
-          </p>
-        </div>
-        <div className={css.content}>
-          <h2 className={css.contentTitle}>
-            <FormattedMessage id="SectionWhyChooseVivacity.titleLineFour" />
-          </h2>
-          <p>
-            <FormattedMessage id="SectionWhyChooseVivacity.titleLineFive" />
-          </p>
-        </div>
-        <div className={css.content}>
-          <h2 className={css.contentTitle}>
-            <FormattedMessage id="SectionWhyChooseVivacity.titleLineSix" />
-          </h2>
-          <p>
-            <FormattedMessage id="SectionWhyChooseVivacity.titleLineSeven" />
-          </p>
-        </div>
-        <div className={css.content}>
-          <h2 className={css.contentTitle}>
-            <FormattedMessage id="SectionWhyChooseVivacity.titleLineEight" />
-          </h2>
-          <p>
-            <FormattedMessage id="SectionWhyChooseVivacity.titleLineNine" />
-          </p>
-        </div>
+        <div className={css.steps}>
+            <div className={css.step}>
+                <div className={css.title}>
+                  <FormattedMessage id="SectionWhyChooseVivacity.titleLineOne" />
+                </div>     
+                <div className={css.content}>
+                  <h2 className={css.contentTitle}>
+                   <FormattedMessage id="SectionWhyChooseVivacity.titleLineTwo" />
+                  </h2>
+                  <p>
+                    <FormattedMessage id="SectionWhyChooseVivacity.titleLineThree" />
+                  </p>
+                </div>
+                <div className={css.content}>
+                  <h2 className={css.contentTitle}>
+                    <FormattedMessage id="SectionWhyChooseVivacity.titleLineFour" />
+                  </h2>
+                  <p>
+                    <FormattedMessage id="SectionWhyChooseVivacity.titleLineFive" />
+                  </p>
+                </div>
+                <div className={css.content}>
+                  <h2 className={css.contentTitle}>
+                    <FormattedMessage id="SectionWhyChooseVivacity.titleLineSix" />
+                  </h2>
+                  <p>
+                    <FormattedMessage id="SectionWhyChooseVivacity.titleLineSeven" />
+                  </p>
+                </div>
+                <div className={css.content}>
+                  <h2 className={css.contentTitle}>
+                    <FormattedMessage id="SectionWhyChooseVivacity.titleLineEight" />
+                  </h2>
+                  <p>
+                    <FormattedMessage id="SectionWhyChooseVivacity.titleLineNine" />
+                  </p>
+                </div>
   
-        <div className={css.JoinVivacityTodayLink}>
-           {routeLink('SignupPage', 'Join Vivacity Today!')}
-        </div>
-      <div className={css.step}>
-        <img
-        alt="Vivacity Workout"
-        src="/vivacityworkoutpic.jpg"
-        srcSet="/vivacityworkoutpic.jpg 400w, /vivacityworkoutpic-2x.jpg 800w" />
-      </div>
-      </div>
-      </div> 
+                <div className={css.JoinVivacityTodayLink}>
+                 {routeLink('SignupPage', 'Join Vivacity Today!')}
+                </div>
+              </div>
+              /*  
+              <div className={css.step}>
+                <img
+                alt="Vivacity Workout"
+                src="/vivacityworkoutpic.jpg"
+                srcSet="/vivacityworkoutpic.jpg 400w, /vivacityworkoutpic-2x.jpg 800w" />
+              </div>
+              */
+            </div> 
       </div>
   
   );
