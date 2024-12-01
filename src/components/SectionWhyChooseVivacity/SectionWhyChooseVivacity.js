@@ -65,8 +65,8 @@ const SectionWhyChooseVivacity = props => {
       <div className={css.step}>
         <img
         alt="ListingX"
-        src="../../src/assets/images/landingpageimageworkout.jpg"
-        srcSet="../../src/assets/images/landingpageimageworkout.jpg 400w, src/assets/images/landingpageimageworkout-2x.jpg 800w" />
+        src="/vivacityworkoutpic.jpeg"
+        srcSet="/vivacityworkoutpic.jpeg 400w, /vivacityworkoutpic-2x.jpeg 800w" />
       </div>
       </div>
       </div> 
