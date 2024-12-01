@@ -61,14 +61,6 @@ const SectionWhyChooseVivacity = props => {
                  {routeLink('SignupPage', 'Join Vivacity Today!')}
                 </div>
               </div>
-              /*  
-              <div className={css.step}>
-                <img
-                alt="Vivacity Workout"
-                src="/vivacityworkoutpic.jpg"
-                srcSet="/vivacityworkoutpic.jpg 400w, /vivacityworkoutpic-2x.jpg 800w" />
-              </div>
-              */
             </div> 
       </div>
   
