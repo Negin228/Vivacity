@@ -5,9 +5,9 @@ import { FormattedMessage } from '../../util/reactIntl';
 import { propTypes } from '../../util/types';
 import { OwnListingLink } from '../../components';
 import { NamedLink } from '../../components';
-import css from './SectionHowItWorks.module.css';
+import css from './SectionTestimonials.module.css';
 
-const SectionHowItWorks = props => {
+const SectionTestimonials = props => {
   const { rootClassName, className, currentUserListing, currentUserListingFetched } = props;
   const routeLink = (name, text) => {
     return (
@@ -20,63 +20,45 @@ const SectionHowItWorks = props => {
   return (
     <div className={classes}>
       <div className={css.title}>
-        <FormattedMessage id="SectionHowItWorks.titleLineOne" />
+        <P> What Do Vivacity Students Say?
       </div>         
       <div className={css.content}>
-        <FormattedMessage id="SectionHowItWorks.titleLineTwo" />
-      </div>
-      <div className={css.content}>
-        <FormattedMessage id="SectionHowItWorks.titleLineThree" />
+        <P> We value feedback from our students. Here's what they shared with us.</P>
       </div>
 
       <div className={css.steps}>
         <div className={css.step}>
-          <h2 className={css.stepTitle}>
-            <FormattedMessage id="SectionHowItWorks.part1Title" />
-          </h2>
-          <p>
-            Start by {routeLink('SignupPage', 'signing up')} as a student. Then browse our catalogue and find the live online workout class that fits in your schedule. Simply book the session and enjoy! All our classes are live, engaging, and most importantly, fun!
-          </p>
+          <h2 className={css.stepTitle}>Clarissa Peterson</h2>
         </div>
 
         <div className={css.step}>
           <h2 className={css.stepTitle}>
-            <FormattedMessage id="SectionHowItWorks.part2Title" />
+            <P> Love the Energy </P>
           </h2>
-          <p>
-            <FormattedMessage id="SectionHowItWorks.part2Text" />
-          </p>
+          <p> This is the best class I have ever attended </p>
         </div>
 
         <div className={css.step}>
-          <h2 className={css.stepTitle}>
-            <FormattedMessage id="SectionHowItWorks.part3Title" />
-          </h2>
-          <p>
-            <FormattedMessage id="SectionHowItWorks.part3Text" />
-          </p>
+          <h2 className={css.stepTitle}>Couldnt be happier</h2>
+          <p>Best ever teacher. Loved it X.</p>
         </div>
-      </div>
-      <div className={css.createListingLink}>
-        {routeLink('SearchPage', 'Are you an instructor? Schedule a class!')}
-        {/* <FormattedMessage id="SectionHowItWorks.createListingLink" /> */}
       </div>
     </div>
   );
 };
 
-SectionHowItWorks.defaultProps = {
+SectionTestimonials.defaultProps = {
   rootClassName: null,
   className: null,
   currentUserListing: null,
   currentUserListingFetched: false,
 };
 
-SectionHowItWorks.propTypes = {
+SectionTestimonials.propTypes = {
   rootClassName: string,
   className: string,
   currentUserListing: propTypes.ownListing,
   currentUserListingFetched: bool,
 };
 
-export default SectionHowItWorks;
+export default SectionTestimonials;
