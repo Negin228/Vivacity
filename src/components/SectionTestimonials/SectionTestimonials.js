@@ -6,14 +6,10 @@ const SectionTestimonials = (props) => {
   const { rootClassName, className } = props;
 
   const testimonials = [
-    { text: 'This platform is amazing! It helped me achieve my fitness goals in no time.', name: 'X' },
-    { text: 'I love how interactive the classes are. The instructors are very supportive.', name: 'Y' },
-    { text: 'A wonderful experience! I highly recommend Vivacity to everyone.', name: 'Z' },
-    { text: 'The live feedback from instructors is fantastic. I’ve seen great results.', name: 'A' },
-    { text: 'The community aspect is incredible. I feel so motivated every time.', name: 'B' },
-    { text: 'Great experience! I’m excited to join more classes.', name: 'C' },
-    { text: 'This platform has completely transformed my fitness routine.', name: 'D' },
-    { text: 'Such a convenient way to work out from home with expert guidance.', name: 'E' },
+    { text: 'The split class is my favorite! The best thing is that everyone can progress from where they stand right now! I feel an inch longer after these sessions!', name: 'Mina' },
+    { text: 'The flex-mobility class is truly exceptional. Often, we underestimate the significance of flexibility, but Arta brings a keen focus to every detail. The exercises are both challenging and enjoyable, making this class a delightful journey towards improved flexibility.', name: 'S.K' },
+    { text: 'She is amazing! I really love how she holds the entire class professionally and treats every single participant with their level of flexibility.', name: 'Saeedeh' },
+    { text: 'Best ever trainer!! She not only describes everything perfectly, but also observes you individually, making sure even the slightest contraction of your muscles are in the right places ;)', name: 'Negar' },
   ];
 
   const classes = classNames(rootClassName || css.root, className);
@@ -21,12 +17,13 @@ const SectionTestimonials = (props) => {
   return (
     <div className={classes}>
       <div className={css.title}>
-        <p>What Do Vivacity Students Say?</p>
+        <h2>Testimonials from Our Fitness Community</h2>
       </div>
+  /*
       <div className={css.content}>
         <p>We value feedback from our students. Here's what they shared with us:</p>
       </div>
-
+  */
       <div className={css.steps}>
         {testimonials.map((testimonial, index) => (
           <div key={index} className={css.step}>
