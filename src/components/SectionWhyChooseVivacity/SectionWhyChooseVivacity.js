@@ -7,6 +7,28 @@ import { OwnListingLink } from '../../components';
 import { NamedLink } from '../../components';
 import css from './SectionWhyChooseVivacity.module.css';
 
+document.addEventListener("DOMContentLoaded", () => {
+  const collapsibleButtons = document.querySelectorAll(".collapsible-button");
+
+  collapsibleButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const content = button.nextElementSibling;
+      content.classList.toggle("active");
+
+      // Adjust max-height dynamically
+      if (content.classList.contains("active")) {
+        content.style.maxHeight = content.scrollHeight + "px";
+      } else {
+        content.style.maxHeight = null;
+      }
+    });
+  });
+});
+
+
+
+
+
 const SectionWhyChooseVivacity = props => {
   const { rootClassName, className, currentUserListing, currentUserListingFetched } = props;
   const routeLink = (name, text) => {
@@ -22,23 +44,21 @@ const SectionWhyChooseVivacity = props => {
                 <div className={css.title}>
                   <FormattedMessage id="SectionWhyChooseVivacity.titleLineOne" />
                 </div>     
+                
                 <div className={css.content}>
 
-  
-                <button class="contentTitle" onclick="toggleContent(this)">
-                  <h2 className={css.contentTitle}>
-                   <FormattedMessage id="SectionWhyChooseVivacity.titleLineTwo" />
-                  </h2>
-                </button>
-
-                <div>
-                  <p>
-                    <FormattedMessage id="SectionWhyChooseVivacity.titleLineThree" />
-                  </p>
-                </div>
-
-
-  
+                  <div class="collapsible-container">
+                    <button class="collapsible-button">
+                      <h2 className={css.contentTitle}>
+                       <FormattedMessage id="SectionWhyChooseVivacity.titleLineTwo" />
+                      </h2>
+                    </button>
+                    <div class="collapsible-content">
+                      <p>
+                        <FormattedMessage id="SectionWhyChooseVivacity.titleLineThree" />
+                      </p>
+                    </div>
+                  </div>
                 </div>
                 <div className={css.content}>
                   <h2 className={css.contentTitle}>
