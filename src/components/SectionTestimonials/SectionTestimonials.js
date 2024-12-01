@@ -3,45 +3,46 @@ import { bool, string } from 'prop-types';
 import classNames from 'classnames';
 import { FormattedMessage } from '../../util/reactIntl';
 import { propTypes } from '../../util/types';
-import { OwnListingLink } from '../../components';
 import { NamedLink } from '../../components';
 import css from './SectionTestimonials.module.css';
 
 const SectionTestimonials = props => {
-  const { rootClassName, className, currentUserListing, currentUserListingFetched } = props;
-  const routeLink = (name, text) => {
-    return (
-      <NamedLink name={name}>
-        <span>{text}</span>
-      </NamedLink>
-    );
-  };
+  const { rootClassName, className } = props;
+
+  const testimonials = [
+    {
+      text: "This platform is amazing! It helped me achieve my fitness goals in no time.",
+      name: "X"
+    },
+    {
+      text: "I love how interactive the classes are. The instructors are very supportive.",
+      name: "Y"
+    },
+    {
+      text: "A wonderful experience! I highly recommend Vivacity to everyone.",
+      name: "Z"
+    }
+  ];
+
   const classes = classNames(rootClassName || css.root, className);
+
   return (
     <div className={classes}>
       <div className={css.title}>
-        <P> What Do Vivacity Students Say?
-      </div>         
+        <p>What Do Vivacity Students Say?</p>
+      </div>
       <div className={css.content}>
-        <P> We value feedback from our students. Here's what they shared with us.</P>
+        <p>We value feedback from our students. Here's what they shared with us:</p>
       </div>
 
       <div className={css.steps}>
-        <div className={css.step}>
-          <h2 className={css.stepTitle}>Clarissa Peterson</h2>
-        </div>
-
-        <div className={css.step}>
-          <h2 className={css.stepTitle}>
-            <P> Love the Energy </P>
-          </h2>
-          <p> This is the best class I have ever attended </p>
-        </div>
-
-        <div className={css.step}>
-          <h2 className={css.stepTitle}>Couldnt be happier</h2>
-          <p>Best ever teacher. Loved it X.</p>
-        </div>
+        {testimonials.map((testimonial, index) => (
+          <div key={index} className={css.step}>
+            <div className={css.stars}>★★★★★</div>
+            <p className={css.testimonial-text}>"{testimonial.text}"</p>
+            <p className={css.testimonial-name}>{testimonial.name}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -50,15 +51,11 @@ const SectionTestimonials = props => {
 SectionTestimonials.defaultProps = {
   rootClassName: null,
   className: null,
-  currentUserListing: null,
-  currentUserListingFetched: false,
 };
 
 SectionTestimonials.propTypes = {
   rootClassName: string,
   className: string,
-  currentUserListing: propTypes.ownListing,
-  currentUserListingFetched: bool,
 };
 
 export default SectionTestimonials;
