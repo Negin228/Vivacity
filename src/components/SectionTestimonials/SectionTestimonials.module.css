@@ -1,8 +1,7 @@
 @import '../../styles/propertySets.css';
 
 .title {
-  font-size: 32px;  /* Adjust this depending on your design */
-  font-weight: bold;
+  @apply --marketplaceH1FontStyles;
   margin-top: 0;
 }
 
