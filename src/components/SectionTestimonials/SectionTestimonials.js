@@ -21,6 +21,26 @@ const SectionTestimonials = props => {
     {
       text: "A wonderful experience! I highly recommend Vivacity to everyone.",
       name: "Z"
+    },
+    {
+      text: "The live feedback from instructors is fantastic. I’ve seen great results.",
+      name: "A"
+    },
+    {
+      text: "The community aspect is incredible. I feel so motivated every time.",
+      name: "B"
+    },
+    {
+      text: "Great experience! I’m excited to join more classes.",
+      name: "C"
+    },
+    {
+      text: "This platform has completely transformed my fitness routine.",
+      name: "D"
+    },
+    {
+      text: "Such a convenient way to work out from home with expert guidance.",
+      name: "E"
     }
   ];
 
