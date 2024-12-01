@@ -25,6 +25,8 @@ const SectionWhyChooseVivacity = props => {
       </div>
 
       <div className={css.content}>
+
+  
         <div className={css.collapsibleContainer}>
           <button
             className={classNames(css.collapsibleButton, {
@@ -55,6 +57,100 @@ const SectionWhyChooseVivacity = props => {
             </p>
           </div>
         </div>
+        <div className={css.collapsibleContainer}>
+          <button
+            className={classNames(css.collapsibleButton, {
+              [css.active]: isExpanded, // Add active class if expanded
+            })}
+            onClick={toggleCollapsible}
+            aria-expanded={isExpanded}
+          >
+            <h2 className={css.contentTitle}>
+              <FormattedMessage id="SectionWhyChooseVivacity.titleLineFour" />
+            </h2>
+            {/* Display + or - based on isExpanded state */}
+            <span className={css.collapsibleIcon}>
+              {isExpanded ? '-' : '+'}
+            </span>
+          </button>
+          <div
+            className={classNames(css.collapsibleContent, {
+              [css.active]: isExpanded,
+            })}
+            style={{
+              maxHeight: isExpanded ? '200px' : '0', // Control max height for collapse/expand
+              overflow: 'hidden',
+            }}
+          >
+            <p>
+              <FormattedMessage id="SectionWhyChooseVivacity.titleLineFive" />
+            </p>
+          </div>
+        </div>
+
+        <div className={css.collapsibleContainer}>
+          <button
+            className={classNames(css.collapsibleButton, {
+              [css.active]: isExpanded, // Add active class if expanded
+            })}
+            onClick={toggleCollapsible}
+            aria-expanded={isExpanded}
+          >
+            <h2 className={css.contentTitle}>
+              <FormattedMessage id="SectionWhyChooseVivacity.titleLineSix" />
+            </h2>
+            {/* Display + or - based on isExpanded state */}
+            <span className={css.collapsibleIcon}>
+              {isExpanded ? '-' : '+'}
+            </span>
+          </button>
+          <div
+            className={classNames(css.collapsibleContent, {
+              [css.active]: isExpanded,
+            })}
+            style={{
+              maxHeight: isExpanded ? '200px' : '0', // Control max height for collapse/expand
+              overflow: 'hidden',
+            }}
+          >
+            <p>
+              <FormattedMessage id="SectionWhyChooseVivacity.titleLineSeven" />
+            </p>
+          </div>
+        </div>
+
+                    <div className={css.collapsibleContainer}>
+          <button
+            className={classNames(css.collapsibleButton, {
+              [css.active]: isExpanded, // Add active class if expanded
+            })}
+            onClick={toggleCollapsible}
+            aria-expanded={isExpanded}
+          >
+            <h2 className={css.contentTitle}>
+              <FormattedMessage id="SectionWhyChooseVivacity.titleLineEight" />
+            </h2>
+            {/* Display + or - based on isExpanded state */}
+            <span className={css.collapsibleIcon}>
+              {isExpanded ? '-' : '+'}
+            </span>
+          </button>
+          <div
+            className={classNames(css.collapsibleContent, {
+              [css.active]: isExpanded,
+            })}
+            style={{
+              maxHeight: isExpanded ? '200px' : '0', // Control max height for collapse/expand
+              overflow: 'hidden',
+            }}
+          >
+            <p>
+              <FormattedMessage id="SectionWhyChooseVivacity.titleLineNine" />
+            </p>
+          </div>
+        </div>
+            
+            
       </div>
 
       <div className={css.JoinVivacityTodayLink}>
