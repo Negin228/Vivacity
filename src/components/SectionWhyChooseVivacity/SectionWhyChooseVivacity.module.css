@@ -5,6 +5,44 @@
   margin-top: 0;
 }
 
+.collapsible-container {
+  margin: 20px 0;
+}
+
+.collapsible-button {
+  font-family: var(--fontFamily, Arial, sans-serif);
+  font-weight: var(--fontWeightSemiBold);
+  font-size: 16px;
+  line-height: 24px;
+  background-color: var(--marketplaceColor, #007bff);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: left;
+  width: 100%;
+}
+
+.collapsible-button:hover {
+  background-color: var(--marketplaceColorHover, #0056b3);
+}
+
+.collapsible-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  background-color: #f1f1f1;
+  padding: 0 20px;
+  font-family: var(--fontFamily);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.collapsible-content.active {
+  max-height: 200px; /* Adjust based on content */
+  padding: 10px 20px;
+}
 
 
 .JoinVivacityTodayLink {
