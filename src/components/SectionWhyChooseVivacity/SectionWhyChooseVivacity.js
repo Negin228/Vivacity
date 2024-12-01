@@ -19,8 +19,6 @@ const SectionWhyChooseVivacity = props => {
   const classes = classNames(rootClassName || css.root, className);
   return (
     <div className={classes}>
-        <div className={css.steps}>
-            <div className={css.step}>
                 <div className={css.title}>
                   <FormattedMessage id="SectionWhyChooseVivacity.titleLineOne" />
                 </div>     
@@ -60,8 +58,6 @@ const SectionWhyChooseVivacity = props => {
                 <div className={css.JoinVivacityTodayLink}>
                  {routeLink('SignupPage', 'Join Vivacity Today!')}
                 </div>
-              </div>
-            </div> 
       </div>
   
   );
