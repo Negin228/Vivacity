@@ -17,13 +17,9 @@ const SectionTestimonials = (props) => {
   return (
     <div className={classes}>
       <div className={css.title}>
-        <h2>Testimonials from Our Fitness Community</h2>
+        <h1>Testimonials from Our Fitness Community</h1>
       </div>
-  /*
-      <div className={css.content}>
-        <p>We value feedback from our students. Here's what they shared with us:</p>
-      </div>
-  */
+
       <div className={css.steps}>
         {testimonials.map((testimonial, index) => (
           <div key={index} className={css.step}>
