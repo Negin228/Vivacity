@@ -13,6 +13,7 @@ import {
   SectionHero,
   SectionHowItWorks,
   SectionWhyChooseVivacity,
+  SectionTestimonials,
   SectionLocations,
   SectionUpcomingClasses,
   LayoutSingleColumn,
@@ -114,6 +115,15 @@ export const LandingPageComponent = props => {
             <li className={css.section}>
               <div className={css.sectionContent}>
                 <SectionWhyChooseVivacity
+                  currentUserListing={currentUserListing}
+                  currentUserListingFetched={currentUserListingFetched}
+                />
+              </div>
+            </li>
+            
+            <li className={css.section}>
+              <div className={css.sectionContent}>
+                <SectionTestimonials
                   currentUserListing={currentUserListing}
                   currentUserListingFetched={currentUserListingFetched}
                 />
