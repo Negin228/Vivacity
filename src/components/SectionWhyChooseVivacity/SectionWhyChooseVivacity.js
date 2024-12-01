@@ -23,12 +23,22 @@ const SectionWhyChooseVivacity = props => {
                   <FormattedMessage id="SectionWhyChooseVivacity.titleLineOne" />
                 </div>     
                 <div className={css.content}>
+
+  
+                <button class="contentTitle" onclick="toggleContent(this)">
                   <h2 className={css.contentTitle}>
                    <FormattedMessage id="SectionWhyChooseVivacity.titleLineTwo" />
                   </h2>
+                </button>
+
+                <div>
                   <p>
                     <FormattedMessage id="SectionWhyChooseVivacity.titleLineThree" />
                   </p>
+                </div>
+
+
+  
                 </div>
                 <div className={css.content}>
                   <h2 className={css.contentTitle}>
