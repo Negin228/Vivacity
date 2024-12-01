@@ -123,10 +123,7 @@ export const LandingPageComponent = props => {
             
             <li className={css.section}>
               <div className={css.sectionContent}>
-                <SectionTestimonials
-                  currentUserListing={currentUserListing}
-                  currentUserListingFetched={currentUserListingFetched}
-                />
+                <SectionTestimonials/>
               </div>
             </li>
                     
