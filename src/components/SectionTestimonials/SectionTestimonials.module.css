@@ -1,7 +1,8 @@
 @import '../../styles/propertySets.css';
 
 .title {
-  @apply --marketplaceH1FontStyles;
+  font-size: 32px;  /* Adjust this depending on your design */
+  font-weight: bold;
   margin-top: 0;
 }
 
@@ -14,11 +15,11 @@
   grid-template-columns: repeat(1, 1fr); /* Default to 1 column */
   gap: 20px;
 
-  @media (--viewportMedium) {
+  @media (min-width: 768px) {
     grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
   }
 
-  @media (--viewportLarge) {
+  @media (min-width: 1024px) {
     grid-template-columns: repeat(4, 1fr); /* 4 columns on large screens */
   }
 }
@@ -39,7 +40,7 @@
   margin-bottom: 10px;
 }
 
-.testimonial-text {
+.testimonialText {
   font-style: italic;
   font-size: 16px;
   text-align: center;
@@ -47,7 +48,7 @@
   color: #555;
 }
 
-.testimonial-name {
+.testimonialName {
   font-weight: bold;
   color: #333;
 }
