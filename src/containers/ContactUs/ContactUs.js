@@ -26,7 +26,7 @@ function ContactUs() {
     setErrorMessage(null);
 
     try {
-      const response = await axios.post('/contact', {
+      const response = await axios.post('/contact-us', {
         name,
         userType,
         email,
