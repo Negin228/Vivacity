@@ -32,8 +32,10 @@ function ContactUs() {
         email,
         message,
       });
-
+      
+      console.log('Response from server:', response); // Add this line for debugging
       const { success } = response.data;
+      
 
       if (success)
         history.push({
@@ -43,6 +45,7 @@ function ContactUs() {
           },
         });
     } catch (e) {
+      console.error('Error during form submission:', e.response || e); // Add this line for debugging
       const error = e.response?.data?.message || e.message;
       setErrorMessage(error);
     } finally {
