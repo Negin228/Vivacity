@@ -402,9 +402,8 @@ app.post('/deauthorize-zoom/:key', middlewares, async (req, res) => {
   return res.status(200).end();
 });
 
-app.post('*', async (req, res) => {
-  if (req.url.includes('/contact-us')) {
-    const { name, email, userType, message } = req.body;
+app.post('/contact-us', bodyParser.json(), async (req, res) => {
+  const { name, email, userType, message } = req.body;
 
     if (!userType || !message)
       return res.status(422).send({ message: 'Please fill all the fields' });
