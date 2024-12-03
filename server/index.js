@@ -425,12 +425,11 @@ app.post('*', async (req, res) => {
       `;
       const sent = await transporter.sendMail({
         //TODO: Replace it by admin's email
-        from: process.env.SENDGRID_SENDER_EMAIL,
-        to: process.env.SENDGRID_SENDER_EMAIL,
+        from: email,
+        to: 'contact@vivacity.studio',
         subject: 'Vivacity contact form message',
         replyTo: email ? email : '',
         text: userType,
-
         html: mailBody,
       });
       return res.send({ message: 'Message sent successfully', success: true });
