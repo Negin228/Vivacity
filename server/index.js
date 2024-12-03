@@ -406,37 +406,46 @@ app.post('/contact-us', bodyParser.json(), async (req, res) => {
   const { name, email, userType, message } = req.body;
   console.log('Request received:', req.body);
 
-    if (!userType || !message)
-      return res.status(422).send({ message: 'Please fill all the fields' });
-    // Check if the environment variable is set
-    if (!process.env.SENDGRID_SENDER_EMAIL) {
-        console.error('Environment variable SENDGRID_SENDER_EMAIL is not set');
-        return res.status(500).send({ message: 'Server configuration error', success: false });
-    }
-    try {
-      const mailBody = `
+  // Validate required fields
+  if (!userType || !message || !name || !email) {
+    return res.status(422).send({ message: 'Please fill all the fields' });
+  }
+
+  // Check environment variable
+  if (!process.env.SENDGRID_SENDER_EMAIL) {
+    console.error('Environment variable SENDGRID_SENDER_EMAIL is not set');
+    return res
+      .status(500)
+      .send({ message: 'Server configuration error', success: false });
+  }
+
+  try {
+    const mailBody = `
       <h3>
-      The following user contacted via contact form.
+        The following user contacted via contact form:
       </h3>
       ${name ? `<strong>Name:</strong> ${name}` : ''} <br />
-      ${email ? `<strong>Email:</strong>  ${email}` : ''} <br/> 
-      <strong>User type: </strong> ${userType} <br/> 
+      ${email ? `<strong>Email:</strong> ${email}` : ''} <br/> 
+      <strong>User type:</strong> ${userType} <br/> 
       <strong>Message:</strong> ${message} <br/>
-      `;
-      const sent = await transporter.sendMail({
-        //TODO: Replace it by admin's email
-        from: email,
-        to: 'contact@vivacity.studio',
-        subject: 'Vivacity contact form message',
-        replyTo: email ? email : '',
-        text: userType,
-        html: mailBody,
-      });
-      return res.send({ message: 'Message sent successfully', success: true });
-      } catch (e) {
-    console.error('Email sending error:', e.message); // Log the error message
-    return res.status(500).send({ message: 'Message sending failed', success: false });
-    }
+    `;
+
+    const sent = await transporter.sendMail({
+      from: process.env.SENDGRID_SENDER_EMAIL, // Use a verified sender address
+      to: 'contact@vivacity.studio',
+      subject: 'Vivacity Contact Form Message',
+      replyTo: email, // Add user email for reply-to
+      text: `User Type: ${userType}\nMessage: ${message}`,
+      html: mailBody,
+    });
+
+    console.log('Email sent:', sent);
+    return res.send({ message: 'Message sent successfully', success: true });
+  } catch (e) {
+    console.error('Email sending error:', e.message);
+    return res
+      .status(500)
+      .send({ message: 'Message sending failed', success: false });
   }
 });
 app.get('*', async (req, res) => {
