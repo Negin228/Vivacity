@@ -361,7 +361,7 @@ export class TransactionPanelComponent extends Component {
       ? deletedListingTitle
       : currentListing.attributes.title;
     console.log(publicData?.startDate, 'startDate');
-    const formattedDate = convertTime(publicData?.startDateString, publicData.timezone);
+    const formattedDate = convertTime(publicData?.startDateString, publicData?.timezone);
     console.log(formattedDate, 'formattedDate');
     // const formattedDate = convertTime(publicData.startDate, publicData.timezone);
     //  moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
