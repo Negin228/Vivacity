@@ -1,0 +1,56 @@
+@import '../../styles/propertySets.css';
+
+.title {
+  @apply --marketplaceH1FontStyles;
+  margin-top: 0;
+}
+
+.content {
+  margin-bottom: 30px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr); /* Default to 1 column */
+  gap: 20px;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns on large screens */
+  }
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.stars {
+  font-size: 24px;
+  color: gold;
+  margin-bottom: 10px;
+}
+
+.testimonialText {
+  font-style: italic;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.testimonialName {
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #555;
+}

@@ -403,12 +403,16 @@ app.post('/deauthorize-zoom/:key', middlewares, async (req, res) => {
 });
 
 app.post('*', async (req, res) => {
-  if (req.url.startsWith('/contact')) {
+  if (req.url.startsWith('/contact-us')) {
     const { name, email, userType, message } = req.body;
 
     if (!userType || !message)
       return res.status(422).send({ message: 'Please fill all the fields' });
-
+    // Check if the environment variable is set
+    if (!process.env.SENDGRID_SENDER_EMAIL) {
+        console.error('Environment variable SENDGRID_SENDER_EMAIL is not set');
+        return res.status(500).send({ message: 'Server configuration error', success: false });
+    }
     try {
       const mailBody = `
       <h3>
@@ -430,9 +434,9 @@ app.post('*', async (req, res) => {
         html: mailBody,
       });
       return res.send({ message: 'Message sent successfully', success: true });
-    } catch (e) {
-      console.log(e);
-      return res.status(500).send({ message: 'Message sending failed', success: false });
+      } catch (e) {
+    console.error('Email sending error:', e.message); // Log the error message
+    return res.status(500).send({ message: 'Message sending failed', success: false });
     }
   }
 });

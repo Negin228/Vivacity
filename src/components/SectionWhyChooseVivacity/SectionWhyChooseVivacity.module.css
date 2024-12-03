@@ -1,0 +1,92 @@
+@import '../../styles/propertySets.css';
+
+/* Title Styling */
+.title {
+  @apply --marketplaceH1FontStyles;
+  margin-top: 0;
+}
+
+/* Collapsible Container Styles */
+.collapsibleContainer {
+  @apply --propertySetBorderStyles; /* Assuming this class exists for border styling */
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+/* Button Styles */
+.collapsibleButton {
+  @apply --propertySetButtonBackground; /* Assuming this exists for button background */
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding: 15px;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+}
+
+.collapsibleButton:hover {
+  @apply --propertySetButtonHoverBackground; /* Assuming hover background style exists */
+}
+
+.collapsibleButton h2 {
+  @apply --propertySetTitleFontStyles; /* Assuming this exists for title font styling */
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+/* Collapsible Content Styles */
+.collapsibleButton {
+  background-color: #f7f7f7;
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding: 15px;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Space between the title and the icon */
+}
+
+/* Add styles for the collapsible icon */
+.collapsibleIcon {
+  font-size: 1.5rem;  /* Adjust size of the icon */
+  transition: transform 0.3s ease;  /* Smooth transition for the icon */
+}
+
+/* Collapsible content styles */
+.collapsibleContent {
+  max-height: 0; /* Initially collapsed */
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding: 0 15px;
+  background-color: #fff;
+}
+
+.collapsibleContent p {
+  margin: 15px 0;
+}
+
+/* Active state for the collapsible content */
+.collapsibleContent.active {
+  padding: 15px;
+}
+
+/* Style the button when active, change + to - */
+.collapsibleButton.active .collapsibleIcon {
+  transform: rotate(45deg); /* Rotate to show a - when expanded */
+}
+
+/* Hover effect for the button */
+.collapsibleButton:hover {
+  background-color: #eaeaea;
+}
+.JoinVivacityTodayLink {
+  margin-top: 18px;
+
+  @media (--viewportMedium) {
+    margin-top: 24px; }}
