@@ -20,7 +20,7 @@ function ContactUs() {
   const history = useHistory();
 
   const handleSubmit = async formValues => {
-    const { fullName, email, message, userType } = formValues;
+    const { fullName, userType, email, message } = formValues;
     const name = fullName || '';
     setSubmitting(true);
     setErrorMessage(null);
