@@ -403,7 +403,7 @@ app.post('/deauthorize-zoom/:key', middlewares, async (req, res) => {
 });
 
 app.post('*', async (req, res) => {
-  if (req.url.startsWith('/contact-us')) {
+  if (req.url.includes('/contact-us')) {
     const { name, email, userType, message } = req.body;
 
     if (!userType || !message)
