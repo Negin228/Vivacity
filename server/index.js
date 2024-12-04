@@ -404,6 +404,7 @@ app.post('/deauthorize-zoom/:key', middlewares, async (req, res) => {
 
 app.post('/contact-us', bodyParser.json(), async (req, res) => {
   const { name, email, userType, message } = req.body;
+  console.log('SENDGRID_SENDER_EMAIL:', process.env.SENDGRID_SENDER_EMAIL);
   console.log('Request received:', req.body);
 
   // Validate required fields
