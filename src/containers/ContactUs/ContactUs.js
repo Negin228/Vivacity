@@ -30,7 +30,7 @@ function ContactUs() {
     setSubmitting(true);
     setErrorMessage(null);
   try {
-    const response = await axios.post('process.env.REACT_APP_CANONICAL_ROOT_URL/contact-us', {
+    const response = await axios.post('/contact-us', {
       name,
       userType,
       email,
