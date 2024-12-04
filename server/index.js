@@ -47,13 +47,7 @@ const sdkUtils = require('./api-util/sdk');
 const flexIntegrationSdk = require('sharetribe-flex-integration-sdk');
 const cors = require('cors');
 
-const corsOptions = {
-  origin: 'https://vivacity.studio', // Allow your frontend domain
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type'],
-};
 
-app.use(cors(corsOptions));
 
 const buildPath = path.resolve(__dirname, '..', 'build');
 const env = process.env.REACT_APP_ENV;
