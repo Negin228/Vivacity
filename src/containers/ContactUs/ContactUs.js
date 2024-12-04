@@ -30,7 +30,7 @@ function ContactUs() {
     setSubmitting(true);
     setErrorMessage(null);
     try {
-      const response = await axios.post(`${process.env.REACT_APP_ENV}/contact-us`, {
+      const response = await axios.post(`https://vivacity.studio/contact-us`, {
         name,
         userType,
         email,
