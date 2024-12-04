@@ -26,6 +26,8 @@ app.use(
   })
 );
 app.use('/contact-us', cors()); 
+console.log('Allowed Origin:', process.env.REACT_APP_CANONICAL_ROOT_URL);
+console.log('Backend:', process.env.REACT_APP_ENV);
 
 app.use(cookieParser());
 app.use('/.well-known', wellKnownRouter);
