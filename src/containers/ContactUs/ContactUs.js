@@ -15,14 +15,6 @@ import { composeValidators, emailFormatValid, required } from '../../util/valida
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 
-const cors = require('cors');
-app.use(cors({
-  origin: 'https://vivacity.studio', // Allow requests from your frontend domain
-}));
-
-
-
-
 function ContactUs() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -34,13 +26,16 @@ function ContactUs() {
     setSubmitting(true);
     setErrorMessage(null);
 
-    try {
-      const response = await axios.post('/contact-us', {
-        name,
-        userType,
-        email,
-        message,
-      });
+  const baseUrl = BASE_URL ? { baseURL: BASE_URL } : {};  // If BASE_URL is defined, set baseURL, otherwise an empty object
+
+  try {
+    const response = await axios.post('/contact-us', {
+      name,
+      userType,
+      email,
+      message,
+    }, baseUrl);  // Use the conditional baseUrl
+
 
       const { success } = response.data;
 
