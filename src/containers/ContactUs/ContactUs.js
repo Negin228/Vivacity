@@ -25,16 +25,13 @@ function ContactUs() {
     const name = fullName || '';
     setSubmitting(true);
     setErrorMessage(null);
-
-  const baseUrl = BASE_URL ? { baseURL: BASE_URL } : {};  // If BASE_URL is defined, set baseURL, otherwise an empty object
-
-  try {
-    const response = await axios.post('/contact-us', {
+ try {
+    const response = await axios.post('https://vivacity-dev.herokuapp.com/contact-us', {
       name,
       userType,
       email,
       message,
-    }, baseUrl);  // Use the conditional baseUrl
+    });
 
 
       const { success } = response.data;
