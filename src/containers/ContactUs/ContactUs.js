@@ -24,17 +24,28 @@ function ContactUs() {
   const history = useHistory();
 
   
-  const handleSubmit = async formValues => {
-    const { fullName, email, message, userType } = formValues;
-    const name = fullName || '';
-    setSubmitting(true);
-    setErrorMessage(null);
-    try {
-      const response = await axios.post(`https://vivacity.studio/contact-us`, {
-        name,
-        userType,
-        email,
-        message,
+const env = process.env.REACT_APP_ENV; // Gets the current environment (e.g., development, production)
+const dev = process.env.REACT_APP_ENV === 'development'; // Boolean to check if it's a development environment
+
+const handleSubmit = async (formValues) => {
+  const { fullName, email, message, userType } = formValues;
+  const name = fullName || '';
+  setSubmitting(true);
+  setErrorMessage(null);
+
+  // Log the environment for debugging (only in development)
+  if (dev) {
+    console.log('Environment:', env);
+    console.log('Submitting form:', { name, userType, email, message });
+  }
+
+  try {
+    const apiUrl = `${env}/contact-us`;
+    const response = await axios.post(apiUrl, {
+      name,
+      userType,
+      email,
+      message,
     });
 
 
