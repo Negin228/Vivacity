@@ -67,7 +67,7 @@ function ContactUs() {
       if (success) {
         history.push({
           pathname: '/success',
-        p  arams: { success },
+          params: { success },
         });
       }
     } catch (e) {
