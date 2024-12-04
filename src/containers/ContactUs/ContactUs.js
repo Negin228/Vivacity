@@ -24,36 +24,53 @@ function ContactUs() {
   const history = useHistory();
 
   
-  const handleSubmit = async formValues => {
-    const { fullName, email, message, userType } = formValues;
-    const name = fullName || '';
-    setSubmitting(true);
-    setErrorMessage(null);
-    try {
-      const response = await axios.post('/contact-us', {
-        name,
-        userType,
-        email,
-        message,
+const handleSubmit = async formValues => {
+  const { fullName, email, message, userType } = formValues;
+  const name = fullName || '';
+  
+  // Basic validation to ensure no fields are empty
+  if (!name || !email || !message || !userType) {
+    setErrorMessage("Please fill in all the fields.");
+    return;
+  }
+
+  setSubmitting(true);
+  setErrorMessage(null);
+  console.log("Submitting data:", {
+  name,
+  userType,
+  email,
+  message,});
+  try {
+    const response = await axios.post('/contact-us', {
+    name,
+    userType,
+    email,
+    message,
+    }, {
+    headers: {
+    'Content-Type': 'application/json',
+    },
     });
 
+    const { success } = response.data;
 
-      const { success } = response.data;
-
-      if (success)
-        history.push({
-          pathname: '/success',
-          params: {
-            success,
-          },
-        });
-    } catch (e) {
-      const error = e.response?.data?.message || e.message;
-      setErrorMessage(error);
-    } finally {
-      setSubmitting(false);
+    if (success) {
+      history.push({
+        pathname: '/success',
+        params: {
+          success,
+        },
+      });
     }
-  };
+  } catch (e) {
+    const error = e.response?.data?.message || e.message;
+    setErrorMessage(error);
+  } finally {
+    setSubmitting(false);
+  }
+};
+
   return (
     <StaticPage
       title="Contact Us"
