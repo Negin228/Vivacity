@@ -26,7 +26,7 @@ function ContactUs() {
     setSubmitting(true);
     setErrorMessage(null);
  try {
-    const response = await axios.post('https://vivacity-dev.herokuapp.com/contact-us', {
+    const response = await axios.post('/contact-us', {
       name,
       userType,
       email,
