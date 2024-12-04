@@ -47,7 +47,14 @@ const sdkUtils = require('./api-util/sdk');
 const flexIntegrationSdk = require('sharetribe-flex-integration-sdk');
 const cors = require('cors');
 
-
+app.use(
+  cors({
+    origin: process.env.REACT_APP_CANONICAL_ROOT_URL,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
 
 const buildPath = path.resolve(__dirname, '..', 'build');
 const env = process.env.REACT_APP_ENV;
