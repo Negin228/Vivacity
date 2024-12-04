@@ -29,12 +29,12 @@ function ContactUs() {
     const name = fullName || '';
     setSubmitting(true);
     setErrorMessage(null);
-  try {
-    const response = await axios.post('/contact-us', {
-      name,
-      userType,
-      email,
-      message,
+    try {
+      const response = await axios.post('/contact-us', {
+        name,
+        userType,
+        email,
+        message,
     });
 
 
