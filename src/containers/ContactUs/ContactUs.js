@@ -19,19 +19,6 @@ function ContactUs() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const history = useHistory();
-
-  const express = require('express');
-  const cors = require('cors');
-  const app = express();
-
-  const corsOptions = {
-    origin: 'https://vivacity.studio', // Replace with your frontend domain
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],  
-    };
-
-  app.use(cors(corsOptions));
-
   
   const handleSubmit = async formValues => {
     const { fullName, email, message, userType } = formValues;
