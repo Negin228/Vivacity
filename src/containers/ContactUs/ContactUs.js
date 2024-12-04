@@ -15,18 +15,22 @@ import { composeValidators, emailFormatValid, required } from '../../util/valida
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 
+console.log('Allowed Origin:', process.env.REACT_APP_CANONICAL_ROOT_URL);
+console.log('Backend:', process.env.REACT_APP_ENV);
+
 function ContactUs() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const history = useHistory();
+
   
   const handleSubmit = async formValues => {
     const { fullName, email, message, userType } = formValues;
     const name = fullName || '';
     setSubmitting(true);
     setErrorMessage(null);
- try {
-    const response = await axios.post('/contact-us', {
+  try {
+    const response = await axios.post('process.env.REACT_APP_CANONICAL_ROOT_URL/contact-us', {
       name,
       userType,
       email,
