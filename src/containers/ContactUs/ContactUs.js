@@ -14,6 +14,15 @@ import FieldInput from './FieldInput';
 import { composeValidators, emailFormatValid, required } from '../../util/validators';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+
+const cors = require('cors');
+app.use(cors({
+  origin: 'https://vivacity.studio', // Allow requests from your frontend domain
+}));
+
+
+
+
 function ContactUs() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
