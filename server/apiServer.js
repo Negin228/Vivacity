@@ -31,6 +31,9 @@ app.use(cookieParser());
 app.use('/.well-known', wellKnownRouter);
 app.use('/api', apiRouter);
 
+app.use('/api', cors({ origin: process.env.REACT_APP_CANONICAL_ROOT_URL }), apiRouter);
+
+
 app.listen(PORT, () => {
   console.log(`API server listening on ${PORT}`);
 });
