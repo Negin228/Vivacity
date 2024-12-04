@@ -21,8 +21,8 @@ app.use(
   cors({
     origin: process.env.REACT_APP_CANONICAL_ROOT_URL,
     credentials: true,
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 app.use(cookieParser());
