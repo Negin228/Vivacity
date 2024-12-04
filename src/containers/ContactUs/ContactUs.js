@@ -23,25 +23,18 @@ function ContactUs() {
   const [errorMessage, setErrorMessage] = useState(null);
   const history = useHistory();
 
-
-const handleSubmit = async (formValues) => {
-  const { fullName, email, message, userType } = formValues;
-  const name = fullName || '';
-  setSubmitting(true);
-  setErrorMessage(null);
-
-  try {
-    const env = process.env.REACT_APP_ENV;
-    console.log('Environment URL:', env); // Debug the environment
-
-    const apiUrl = `${env.replace(/\/$/, '')}/contact-us`; // Ensure no trailing slash in base URL
-    console.log('API URL:', apiUrl);
-
-    const response = await axios.post(apiUrl, {
-      name,
-      userType,
-      email,
-      message,
+  
+  const handleSubmit = async formValues => {
+    const { fullName, email, message, userType } = formValues;
+    const name = fullName || '';
+    setSubmitting(true);
+    setErrorMessage(null);
+    try {
+      const response = await axios.post('/contact-us', {
+        name,
+        userType,
+        email,
+        message,
     });
 
 
