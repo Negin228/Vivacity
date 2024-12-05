@@ -1,42 +1,29 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { Tabs, Tab } from 'react-tabs-scrollable';
-const SimpleTabs = props => {
-  const { trainers = [], style, image, container } = props;
-  const [activeTab, setActiveTab] = React.useState(1);
-  const onTabClick = (e, index) => {
-    setActiveTab(index);
-  };
-  const history = useHistory();
-  // console.log(trainers);
+import PropTypes from 'prop-types';
+import css from './SimpleTabs.module.css';
+
+const SimpleTabs = ({ trainers, image, onImageClick }) => {
   return (
-    <Tabs
-      activeTab={activeTab}
-      onTabClick={onTabClick}
-      tabsScrollAmount={3}
-      animationDuration={300}
-    >
-      {trainers?.map((trainer, index) => (
-        <Tab key={index}>
-          {/* <img src={image} alt="amazon" className={imageStyle} key={index} /> */}
-          <div className={container}>
-            <img
-              onClick={() => history.push(`/u/${trainer?.id?.uuid}`)}
-              src={trainer.trainerProfileImage ? trainer.trainerProfileImage : image}
-              style={{
-                width: '165px',
-                borderRadius: '50%',
-                height: '165px',
-                objectFit: 'cover',
-                cursor: 'pointer',
-              }}
-            />
-            <h2 className={style}>{trainer.trainerName}</h2>
-          </div>
-        </Tab>
+    <div className={css.tabsContainer}>
+      {trainers.map(trainer => (
+        <div key={trainer.id} className={css.trainer}>
+          <img
+            src={trainer.image || image}
+            alt={trainer.name}
+            className={css.image}
+            onClick={() => onImageClick(trainer)}
+          />
+          <div className={css.trainerName}>{trainer.name}</div>
+        </div>
       ))}
-    </Tabs>
+    </div>
   );
+};
+
+SimpleTabs.propTypes = {
+  trainers: PropTypes.array.isRequired,
+  image: PropTypes.string.isRequired,
+  onImageClick: PropTypes.func.isRequired,
 };
 
 export default SimpleTabs;
