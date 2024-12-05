@@ -23,7 +23,6 @@ const SimpleTabs = props => {
             <img
               onClick={() => history.push(`/u/${trainer?.id?.uuid}`)}
               src={trainer.trainerProfileImage ? trainer.trainerProfileImage : image}
-              style={{ width: '165px', borderRadius: '50%', height: '165px', cursor: 'pointer' }}
               style={{
                 width: '165px',
                 borderRadius: '50%',
