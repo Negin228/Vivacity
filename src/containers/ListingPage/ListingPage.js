@@ -391,6 +391,7 @@ export class ListingPageComponent extends Component {
         to={{ hash: '#host' }}
       >
         {authorDisplayName}
+      <img src={trainerImageUrl} alt="Trainer" />
       </NamedLink>
     );
 
