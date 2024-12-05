@@ -156,8 +156,6 @@ class PaymentMethodsForm extends Component {
       // Already submitting or card value incomplete/invalid
       return;
     }
-    // Save billing information to local storage
-    localStorage.setItem('billingInfo', JSON.stringify(values));
 
     const params = {
       stripe: this.stripe,
