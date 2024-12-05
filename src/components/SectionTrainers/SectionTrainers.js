@@ -11,6 +11,14 @@ import SimpleTabs from './SimpleTabs';
 const SectionTrainers = props => {
   const { rootClassName, className, trainers, loading, error } = props;
   const classes = classNames(rootClassName || css.root, className);
+  
+  const handleClick = (trainer) => {
+  console.log('Trainer clicked:', trainer);
+    // Add your click handling logic here
+  };
+
+
+  
   if (error || trainers?.length === 0) {
     return (
       <div>
@@ -34,7 +42,7 @@ const SectionTrainers = props => {
   return (
     <div className={classes}>
       <div className={css.title}>Our Trainers</div>
-      <SimpleTabs trainers={trainers} image={image} style={css.hey} container={css.container} />
+      <SimpleTabs trainers={trainers} image={image} style={css.hey} container={css.container} onImageClick={handleClick} />
     </div>
   );
 };
