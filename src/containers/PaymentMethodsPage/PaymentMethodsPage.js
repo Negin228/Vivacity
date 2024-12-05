@@ -141,10 +141,6 @@ const PaymentMethodsPageComponent = props => {
   const card = hasDefaultPaymentMethod
     ? ensurePaymentMethodCard(currentUser.stripeCustomer.defaultPaymentMethod).attributes.card
     : null;
-  
-  // Load saved billing information from local storage
-  const savedBillingInfo = JSON.parse(localStorage.getItem('billingInfo'));
-  const initalValuesForStripePayment = savedBillingInfo || { name: userName };
 
   const showForm = cardState === 'replaceCard' || !hasDefaultPaymentMethod;
   const showCardDetails = !!hasDefaultPaymentMethod;
