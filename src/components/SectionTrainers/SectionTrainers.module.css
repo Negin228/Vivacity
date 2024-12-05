@@ -57,6 +57,10 @@
   border-radius: 5px;
   padding: 0px 10px;
 }
+.image:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
 .container {
   margin: 0 1rem;
   /* margin: 0rem 3rem; */
