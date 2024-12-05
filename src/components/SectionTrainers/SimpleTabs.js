@@ -10,7 +10,7 @@ const SimpleTabs = props => {
   const history = useHistory();
   // console.log(trainers);
   return (
-<Tabs
+    <Tabs
       activeTab={activeTab}
       onTabClick={onTabClick}
       tabsScrollAmount={3}
@@ -23,6 +23,7 @@ const SimpleTabs = props => {
             <img
               onClick={() => history.push(`/u/${trainer?.id?.uuid}`)}
               src={trainer.trainerProfileImage ? trainer.trainerProfileImage : image}
+              style={{ width: '165px', borderRadius: '50%', height: '165px', cursor: 'pointer' }}
               style={{
                 width: '165px',
                 borderRadius: '50%',
@@ -35,6 +36,8 @@ const SimpleTabs = props => {
           </div>
         </Tab>
       ))}
+    </Tabs>
   );
 };
+
 export default SimpleTabs;
