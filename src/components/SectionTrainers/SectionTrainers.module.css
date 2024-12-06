@@ -39,7 +39,6 @@
   & :hover {
     color: var(--matterColor) !important;
   }
-  //adding lines below
   & img {
     transition: transform 0.3s ease; /* Smooth transition */
   }
@@ -47,7 +46,6 @@
   & img:hover {
     transform: scale(1.1); /* Image scales up by 10% */
   }
-  //end
 }
 
 
