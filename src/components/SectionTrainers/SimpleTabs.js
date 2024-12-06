@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Tabs, Tab } from 'react-tabs-scrollable';
+
 const SimpleTabs = props => {
   const { trainers = [], style, image, container } = props;
   const [activeTab, setActiveTab] = React.useState(1);
@@ -20,6 +21,7 @@ const SimpleTabs = props => {
         <Tab key={index}>
           {/* <img src={image} alt="amazon" className={imageStyle} key={index} /> */}
           <div className={container}>
+          className={css.imageHoverEffect}
             <img
               onClick={() => history.push(`/u/${trainer?.id?.uuid}`)}
               src={trainer.trainerProfileImage ? trainer.trainerProfileImage : image}
