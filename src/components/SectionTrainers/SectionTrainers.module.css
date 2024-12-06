@@ -70,6 +70,13 @@
   transform: scale(1.1);
   transition: transform 0.3s ease;
 }
+
+.imageHoverEffect {
+  transition: transform 0.3s ease;
+}
+.imageHoverEffect:hover {
+  transform: scale(1.1);
+}
 .container {
   margin: 0 1rem;
   /* margin: 0rem 3rem; */
