@@ -9,16 +9,6 @@ import { injectIntl } from '../../util/reactIntl';
 import { IconSpinner } from '../../components';
 
 const SectionUpcomingClasses = ({ loading, error, products, intl }) => {
-    const [showContent, setShowContent] = useState(false);
-
-  useEffect(() => {
-    if (!loading) {
-      setTimeout(() => setShowContent(true), 300); // Add a small delay
-    } else {
-      setShowContent(false);
-    }
-  }, [loading]);
-  
   if (error) {
     return (
       <div>
@@ -29,7 +19,7 @@ const SectionUpcomingClasses = ({ loading, error, products, intl }) => {
     );
   }
 
-  if (!showContent) {
+  if (loading) {
     return (
       <div className={css.loadingContainer}>
         <p>
