@@ -38,7 +38,7 @@ const SectionUpcomingClasses = ({ loading, error, products, intl }) => {
           <h3 className={css.title}>
             {intl.formatMessage({ id: 'SectionUpcomingClasses.title' })}
           </h3>
-          <p>There are no upcoming classes available, please add classes.</p>
+          <p>There are no upcoming classes available at the moment.</p>
         </>
       )}
       <div className={css.container}>
