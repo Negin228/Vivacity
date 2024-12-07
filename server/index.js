@@ -445,7 +445,7 @@ app.post('/contact-us', bodyParser.json(), async (req, res) => {
     });
 
     console.log('Email sent:', sent);
-    return res.send({ message: 'Message sent successfully', success: true });
+    return res.status(200).send({ message: 'Message sent successfully', success: true });
   } catch (e) {
     console.error('Email sending error:', e.message);
     return res
