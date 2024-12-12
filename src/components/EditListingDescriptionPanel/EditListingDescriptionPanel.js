@@ -159,6 +159,7 @@ const EditListingDescriptionPanel = props => {
             weekly_days,
             payment_type,
             monthly_price,
+            time,
           } = values;
 
           const hasStockQuantityChanged = stock && currentStockRaw !== stock;
@@ -194,6 +195,36 @@ const EditListingDescriptionPanel = props => {
                 ? { price: monthly_price }
                 : { price }
               : { price: new Money(0, config.currency) };
+          // Create exception plan for recurring payment type
+          // Helper function to get duration in minutes
+          const getDurationMinutes = duration => {
+            return parseInt(duration?.value?.split('_')[0]) || 0;
+          };
+
+          // Create exception plan for recurring payment type
+          const dayOfWeekMap = {
+            '1': 'sun',
+            '2': 'mon',
+            '3': 'tue',
+            '4': 'wed',
+            '5': 'thu',
+            '6': 'fri',
+            '7': 'sat',
+          };
+
+          const exceptionPlan =
+            payment_type?.some(type => type.value === 'recurring') && weekly_days
+              ? weekly_days.map(day => ({
+                  dayOfWeek: dayOfWeekMap[day.value],
+                  startTime: moment(time).format('HH:mm'), // Remove seconds
+                  endTime: moment(time)
+                    .add(getDurationMinutes(class_duration), 'minutes')
+                    .format('HH:mm'), // Remove seconds
+                  seats: parseInt(stock, 10),
+                }))
+              : [];
+
+          console.log('Exception Plan:', exceptionPlan);
           const updateValues = {
             ...stockUpdateMaybe,
             title: title,
@@ -201,17 +232,10 @@ const EditListingDescriptionPanel = props => {
             availabilityPlan: {
               type: 'availability-plan/time',
               timezone: timezone?.key,
-              entries: [
-                // { dayOfWeek: 'mon', startTime: '09:00', endTime: '17:00', seats: 1 },
-                // { dayOfWeek: 'tue', startTime: '09:00', endTime: '17:00', seats: 1 },
-                // { dayOfWeek: 'wed', startTime: '09:00', endTime: '17:00', seats: 1 },
-                // { dayOfWeek: 'thu', startTime: '09:00', endTime: '17:00', seats: 1 },
-                // { dayOfWeek: 'fri', startTime: '09:00', endTime: '17:00', seats: 1 },
-                // { dayOfWeek: 'sat', startTime: '09:00', endTime: '17:00', seats: 1 },
-                // { dayOfWeek: 'sun', startTime: '09:00', endTime: '17:00', seats: 1 },
-              ],
+              entries: exceptionPlan.length > 0 ? exceptionPlan : [],
             },
             // price: type?.key === config.isPaid ? price : null,
+
             ...priceMaybe,
             publicData: {
               languages: languages,
