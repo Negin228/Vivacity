@@ -256,5 +256,6 @@ export const loadData = (params, search) => {
     'fields.user': ['profile.displayName', 'profile.abbreviatedName'],
     'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
     'limit.images': 1,
+    minStock: 1,
   });
 };

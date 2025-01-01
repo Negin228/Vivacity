@@ -33,8 +33,9 @@ const FeedSection = props => {
     transactionId,
     isPerMonth,
     isPerSession,
+    isAccepted,
   } = props;
-
+  console.log(isAccepted, 'isAccepted');
   const txTransitions = currentTransaction.attributes.transitions
     ? currentTransaction.attributes.transitions
     : [];
@@ -104,7 +105,7 @@ const FeedSection = props => {
         </div>
       ) : null}
       {(isCustomer && joinUrl && (isSubscription && subscriptionId)) ||
-      (isPerSession && transactionId) ? (
+      (isPerSession && transactionId && isAccepted) ? (
         <div className="mt-4 w-full  bg-marketplaceColor hover:bg-marketplaceColorDark transition duration-100 rounded shadow">
           <ExternalLink
             href={joinUrl}

@@ -2,197 +2,211 @@ const fetch = require('cross-fetch');
 const { getSdk, getIntegrationSdk } = require('../api-util/sdk');
 const { denormalizeResponseData } = require('./utils');
 const moment = require('moment-timezone');
+
+// Constants
 const zoomClientId = process.env.REACT_APP_ZOOM_CLIENT_ID;
 const zoomClientSecret = process.env.ZOOM_CLIENT_SECRET;
-
 const ROOT_URL = process.env.REACT_APP_CANONICAL_ROOT_URL;
 const ERROR_PAGE_URL = `${ROOT_URL}/zoom-error?error=true`;
-
 const ROOT_API_URL = ROOT_URL === 'http://localhost:3000' ? 'http://localhost:3500' : ROOT_URL;
 
-module.exports = async (req, res) => {
-  const { code, backurl: backURL } = req.query;
-  const paramsMissing = !code || !backURL;
-  const sdk = getSdk(req, res);
-  const integrationSdk = getIntegrationSdk();
-
-  // console.log({ paramsMissing });
-
-  if (paramsMissing) return res.redirect(ERROR_PAGE_URL);
-
-  const listingId = backURL.split('/')?.[3];
-
-  // console.log({ listingId });
-
-  if (!listingId) return res.redirect(ERROR_PAGE_URL);
-
+// Helper Functions
+const getZoomToken = async (code, backURL) => {
   const data = `${zoomClientId}:${zoomClientSecret}`;
   const hash = Buffer.from(data, 'utf8').toString('base64');
 
-  try {
-    const resD = await fetch(
-      `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${ROOT_API_URL}/api/auth/callback/zoom?backurl=${backURL}`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Basic ${hash}`,
-        },
-      }
-    );
-
-    // console.dir({ resD }, { depth: 420 });
-
-    const data = await resD.json();
-    if (resD.status >= 400) {
-      let e = new Error();
-      e = Object.assign(e, data);
-      throw e;
+  const response = await fetch(
+    `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${ROOT_API_URL}/api/auth/callback/zoom?backurl=${backURL}`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Basic ${hash}` },
     }
+  );
 
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> AUTHORIZATION START >>>>>>>>>>>>>>>>>>>>>>>>');
-    console.dir(data, { depth: 333 });
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> AUTHORIZATION END >>>>>>>>>>>>>>>>>>>>>>>>');
+  const tokenData = await response.json();
+  if (response.status >= 400) throw Object.assign(new Error(), tokenData);
+  return tokenData.access_token;
+};
 
-    const { access_token } = data;
+const getZoomUser = async access_token => {
+  const response = await fetch('https://api.zoom.us/v2/users/me', {
+    headers: { Authorization: `Bearer ${access_token}` },
+  });
 
-    let listingResponse = await sdk.ownListings.show({
-      id: listingId,
-    });
+  const userData = await response.json();
+  if (response.status >= 400) throw Object.assign(new Error(), userData);
+  return userData;
+};
 
+const createZoomMeeting = async (params, userId, access_token) => {
+  const response = await fetch(`https://api.zoom.us/v2/users/${userId}/meetings`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${access_token}`,
+    },
+    body: JSON.stringify(params),
+  });
+
+  const meetingData = await response.json();
+  if (response.status >= 400) throw Object.assign(new Error(), meetingData);
+  return meetingData;
+};
+
+const calculateApiCalls = weeklyDays => {
+  const totalMeetings = weeklyDays.length * 52;
+  return totalMeetings <= 60 ? 1 : Math.ceil(totalMeetings / 60);
+};
+
+const calculateRemainingMeetings = (weeklyDays, seriesNumber) => {
+  const totalMeetings = weeklyDays.length * 52; // Total meetings for a year
+  return totalMeetings - seriesNumber * 60; // Subtract meetings already created
+};
+
+const createAdditionalMeetings = async (
+  lastMeetingDate,
+  params,
+  userId,
+  access_token,
+  seriesNumber,
+  weeklyDays
+) => {
+  const remainingMeetings = calculateRemainingMeetings(weeklyDays, seriesNumber);
+
+  if (remainingMeetings <= 0) return null;
+
+  const nextStartDate = moment(lastMeetingDate)
+    .tz(params.timezone)
+    .add(7, 'days');
+
+  const newParams = {
+    ...params,
+    start_time: nextStartDate.format('YYYY-MM-DDTHH:mm:ssZ'),
+    recurrence: {
+      type: 2,
+      repeat_interval: 1,
+      weekly_days: weeklyDays.map(day => day.value).join(','),
+      end_times: Math.min(60, remainingMeetings),
+    },
+  };
+
+  const newMeeting = await createZoomMeeting(newParams, userId, access_token);
+
+  return newMeeting;
+};
+
+// Main Function
+module.exports = async (req, res) => {
+  const { code, backurl: backURL } = req.query;
+
+  try {
+    // Validate parameters
+    if (!code || !backURL) return res.redirect(ERROR_PAGE_URL);
+
+    const listingId = backURL.split('/')?.[3];
+    if (!listingId) return res.redirect(ERROR_PAGE_URL);
+
+    // Get Zoom token and user details
+    const access_token = await getZoomToken(code, backURL);
+    const zoomUser = await getZoomUser(access_token);
+
+    // Get listing details
+    const sdk = getSdk(req, res);
+    const integrationSdk = getIntegrationSdk();
+
+    let listingResponse = await sdk.ownListings.show({ id: listingId });
     listingResponse = denormalizeResponseData(listingResponse);
     const listing = listingResponse.data;
-    const {
-      startDate,
-      startDateString,
-      timezone: listingTimezone,
-      classDuration,
-      recurrenceType,
-      weeklyDays,
-      paymentType,
-    } = listing?.attributes?.publicData ?? {};
-    // console.log({ timezone, startDate });
-    let duration;
-    switch (classDuration.key) {
-      case '30_min':
-        duration = 30;
-        break;
-      case '60_min':
-        duration = 60;
-        break;
-      case '90_min':
-        duration = 90;
-        break;
-    }
 
-    const resp = await fetch(`https://api.zoom.us/v2/users/me`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
+    const { startDate, timezone: listingTimezone, classDuration, weeklyDays, paymentType } =
+      listing?.attributes?.publicData ?? {};
 
-    // console.dir({ resp }, { depth: 420 });
+    // Calculate duration
+    const duration =
+      {
+        '30_min': 30,
+        '60_min': 60,
+        '90_min': 90,
+      }[classDuration.key] || 60;
 
-    const respData = await resp.json();
-    if (respData.status >= 400) {
-      let e = new Error();
-      e = Object.assign(e, respData);
-      throw e;
-    }
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> USER FETCH START >>>>>>>>>>>>>>>>>>>>>>>>');
-    console.dir(respData, { depth: 333 });
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> USER FETCH END >>>>>>>>>>>>>>>>>>>>>>>>');
-
-    const zoomUserId = respData?.id;
-
-    const zoomTimezone = respData?.timezone;
-
-    // const dateFormat = moment(new Date(startDate))
-    //   .tz(timezone)
-    //   .format('YYYY-MM-DD');
-    // const timeFormat = moment(new Date(startDate))
-    //   .tz(timezone)
-    //   .format('HH:mm:ss');
-
-    const start_time = startDate;
-    const type = paymentType.some(type => type.value === 'recurring'); // Set type to 8 if recurring, otherwise 2
-    //  moment(startDate)
-    //   .tz(zoomTimezone)
-    //   .tz(listingTimezone, true)
-    //   .tz(zoomTimezone)
-    //   .format('YYYY-MM-DDTHH:mm:ss');
-
-    // console.log({ startDate, listingTimezone, zoomTimezone, start_time });
-    // console.log('start_time', start_time);
-    // return;
-
+    // Prepare meeting parameters
+    const isRecurring = paymentType.some(type => type.value === 'recurring');
     const meetingParams = {
       start_time: moment.tz(startDate, listingTimezone).format('YYYY-MM-DDTHH:mm:ssZ'),
-      // start_time,
       timezone: listingTimezone,
-      type: type ? 8 : 2,
+      type: isRecurring ? 8 : 2,
       duration,
       topic: listing.attributes.title.slice(0, 199),
     };
-    // Add recurrence settings if they exist
-    if (type) {
+    let allMeetingUrls = [];
+    let initialMeeting;
+    let lastMeeting;
+    if (isRecurring) {
       meetingParams.recurrence = {
         type: 2,
         repeat_interval: 1,
         weekly_days: weeklyDays.map(day => day.value).join(','),
         end_times: 60,
       };
-      // Remove undefined properties from the recurrence object
-      Object.keys(meetingParams.recurrence).forEach(
-        key => meetingParams.recurrence[key] === undefined && delete meetingParams.recurrence[key]
-      );
+
+      const apiCallsNeeded = calculateApiCalls(weeklyDays);
+      console.log(`Need ${apiCallsNeeded} API calls for ${weeklyDays.length} weekly meetings`);
+      console.log('Array initialized:', allMeetingUrls);
+      initialMeeting = await createZoomMeeting(meetingParams, zoomUser.id, access_token);
+      allMeetingUrls.push({
+        start_url: initialMeeting.start_url,
+        join_url: initialMeeting.join_url,
+        start_date: initialMeeting.occurrences[0].start_time,
+        end_date: initialMeeting.occurrences[initialMeeting.occurrences.length - 1].start_time,
+      });
+
+      let currentMeeting = initialMeeting;
+      for (let i = 1; i < apiCallsNeeded; i++) {
+        const nextMeeting = await createAdditionalMeetings(
+          currentMeeting.occurrences[currentMeeting.occurrences.length - 1].start_time,
+          meetingParams,
+          zoomUser.id,
+          access_token,
+          i,
+          weeklyDays
+        );
+
+        if (nextMeeting && nextMeeting.occurrences?.length > 0) {
+          allMeetingUrls.push({
+            start_url: nextMeeting.start_url,
+            join_url: nextMeeting.join_url,
+            start_date: nextMeeting.occurrences[0].start_time,
+            end_date: nextMeeting.occurrences[nextMeeting.occurrences.length - 1].start_time,
+          });
+          currentMeeting = nextMeeting;
+        }
+      }
+    } else {
+      initialMeeting = await createZoomMeeting(meetingParams, zoomUser.id, access_token);
+      allMeetingUrls.push({
+        start_url: initialMeeting.start_url,
+        join_url: initialMeeting.join_url,
+        start_date: meetingParams.start_time,
+        end_date: meetingParams.start_time,
+      });
+      lastMeeting = initialMeeting;
     }
 
-    console.log('meetingParams', JSON.stringify(meetingParams));
-    const meetingRespData = await fetch(`https://api.zoom.us/v2/users/${zoomUserId}/meetings`, {
-      method: 'POST',
-      body: JSON.stringify(meetingParams),
-
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${access_token}`,
+    // Update listing with meeting URLs
+    await integrationSdk.listings.update({
+      id: listingId,
+      privateData: {
+        zoom: {
+          series: allMeetingUrls,
+        },
+      },
+      publicData: {
+        timeUpdated: false,
       },
     });
-
-    // console.dir({ meetingRespData }, { depth: 420 });
-
-    const meetingData = await meetingRespData.json();
-
-    if (meetingData.status >= 400) {
-      let e = new Error();
-      e = Object.assign(e, meetingData);
-      throw e;
-    }
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MEETING CREATE START >>>>>>>>>>>>>>>>>>>>>>>>');
-    console.dir(meetingData, { depth: 333 });
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MEETING CREATE END >>>>>>>>>>>>>>>>>>>>>>>>');
-
-    const { start_url, join_url } = meetingData;
-
-    if (start_url && join_url) {
-      await integrationSdk.listings.update({
-        id: listingId,
-        privateData: {
-          zoom: {
-            start_url,
-            join_url,
-          },
-        },
-        publicData: {
-          timeUpdated: false,
-        },
-      });
-    }
-
-    if (backURL) return res.redirect(`${ROOT_URL}${backURL}`);
-    return res.redirect(ROOT_URL);
+    return res.redirect(`${ROOT_URL}${backURL}`);
   } catch (err) {
-    console.dir({ err }, { depth: 420 });
+    console.error(err);
     return res.redirect(ERROR_PAGE_URL);
   }
 };

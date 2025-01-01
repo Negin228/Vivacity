@@ -280,6 +280,7 @@ export class TransactionPanelComponent extends Component {
     const processName = currentTransaction?.attributes?.processName;
     const isPerSession = processName === 'flex-hourly-default-process';
     const isPerMonth = processName === 'flex-subscription';
+    const isAccepted = txIsAccepted(currentTransaction);
 
     const stateDataFn = tx => {
       if (txIsEnquired(tx)) {
@@ -485,6 +486,7 @@ export class TransactionPanelComponent extends Component {
               isCustomer={isCustomer}
               joinUrl={this.state.join_url}
               startUrl={this.state.start_url}
+              isAccepted={isAccepted}
               zoomLoading={this.state.zoomLoading}
               zoomError={this.state.zoomError}
               isSubscription={isSubscription}

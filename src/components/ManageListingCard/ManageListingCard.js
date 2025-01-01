@@ -339,13 +339,13 @@ export const ManageListingCardComponent = props => {
         </div>
 
         <div className={css.manageLinks}>
-          <NamedLink
+          {/* <NamedLink
             className={css.manageLink}
             name="EditListingPage"
             params={{ id, slug, type: editListingLinkType, tab: 'description' }}
           >
             <FormattedMessage id="ManageListingCard.editListing" />
-          </NamedLink>
+          </NamedLink> */}
 
           {/* {availabilityEnabled ? (
             <React.Fragment>

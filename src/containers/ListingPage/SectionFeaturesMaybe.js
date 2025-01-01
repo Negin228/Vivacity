@@ -14,6 +14,10 @@ const SectionFeaturesMaybe = props => {
   if (!publicData) {
     return null;
   }
+  console.log(publicData, 'publicData');
+  const weeklyDays = publicData?.weeklyDays;
+  const isRecurring = publicData?.paymentType?.some(type => type.value === 'recurring');
+  console.log(weeklyDays, 'weeklyDays');
   const selectedOptions = publicData && publicData.yogaStyles ? publicData.yogaStyles : [];
   const otherWorkoutType = publicData?.otherWorkoutType;
   const selectedConfigOptions = config.custom.workoutTypesListing.filter(o =>
@@ -52,6 +56,15 @@ const SectionFeaturesMaybe = props => {
         Start Date
       </h2>
       <p>{targetTime}</p>
+      {isRecurring && (
+        <>
+          <h2 className={css.featuresTitle} style={{ marginTop: '16px' }}>
+            Weekly Days
+          </h2>
+          <p>{weeklyDays.map(x => x.label).join(', ')} every week.</p>
+        </>
+      )}
+
       {/* <p>{formattedDate}</p> */}
       <h2 className={css.featuresTitle} style={{ marginTop: '16px' }}>
         <MdAccessTime style={{ marginRight: '10px' }} />

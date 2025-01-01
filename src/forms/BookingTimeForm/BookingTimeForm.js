@@ -22,6 +22,8 @@ import FieldDateAndTimeInput from './FieldDateAndTimeInput';
 
 import css from './BookingTimeForm.module.css';
 import { required } from '../../util/validators';
+import moment from 'moment';
+import { convertTime } from '../../util/urlHelpers';
 
 export class BookingTimeFormComponent extends Component {
   constructor(props) {
@@ -117,6 +119,43 @@ export class BookingTimeFormComponent extends Component {
             subscriptionId,
             checkOldTransactionData,
           } = fieldRenderProps;
+
+          const isDateInPast = (startDateString, timezone) => {
+            const listingTime = moment.tz(startDateString, timezone);
+            const currentTime = moment().tz(timezone);
+            return listingTime.isBefore(currentTime);
+          };
+
+          const getNextClassDate = (startDate, weeklyDays, timezone) => {
+            if (!isDateInPast(startDate, timezone)) {
+              return null;
+            }
+
+            const now = moment().tz(timezone);
+            const availableDays = weeklyDays.map(day => parseInt(day.value)).sort((a, b) => a - b);
+            const currentDay = now.day() + 1;
+            const nextDay = availableDays.find(d => d > currentDay) || availableDays[0];
+            const daysToAdd =
+              nextDay > currentDay ? nextDay - currentDay : 7 - currentDay + nextDay;
+
+            // Use convertTime for consistent formatting
+            const nextDate = now
+              .add(daysToAdd, 'days')
+              .hour(moment.tz(startDate, timezone).hour())
+              .minute(moment.tz(startDate, timezone).minute());
+
+            return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
+          };
+          const nextClass = isDateInPast(
+            listing.attributes.publicData.startDate,
+            listing.attributes.publicData.timezone
+          )
+            ? getNextClassDate(
+                listing.attributes.publicData.startDate,
+                listing.attributes.publicData.weeklyDays,
+                listing.attributes.publicData.timezone
+              )
+            : null;
           console.log(checkOldTransactionData, 'checkOldTransactionData form');
           console.log(values);
 
@@ -191,6 +230,9 @@ export class BookingTimeFormComponent extends Component {
           let paymentMethodOptions = [];
 
           const paymentType = listing?.attributes?.publicData?.paymentType;
+          const { publicData } = listing?.attributes;
+          const weeklyDays = publicData?.weeklyDays;
+
           console.log(paymentType, 'paymentType');
           const isRecurringOnly = paymentType?.length === 1 && paymentType[0].value === 'recurring';
           const isPerSessionOnly =
@@ -225,6 +267,7 @@ export class BookingTimeFormComponent extends Component {
             return false;
           };
           console.log(shouldDisableButton(), 'shouldDisableButton');
+
           const panelCard = (
             <div className={css.detailsContainerDesktop}>
               <div className={css.detailsAspectWrapper}>
@@ -253,6 +296,11 @@ export class BookingTimeFormComponent extends Component {
                 <p className={css.detailsSubtitle}>
                   <b>Start date:</b> {formattedDate}
                 </p>
+                {nextClass && (
+                  <p className={css.detailsSubtitle}>
+                    <b>Next class:</b> {nextClass}
+                  </p>
+                )}
               </div>
             </div>
           );

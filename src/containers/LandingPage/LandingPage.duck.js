@@ -93,6 +93,7 @@ export const getAllListings = () => async (dispatch, getState, sdk) => {
         'variants.square-small2x',
       ],
       'limit.images': 1,
+      minStock: 1,
       perPage: 10,
       // pub_featured: true,
     });

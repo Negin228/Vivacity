@@ -104,8 +104,29 @@ class EditListingPhotosPanel extends Component {
     //     {modalContent}
     //   </Modal>
     // );
+    const getZoomUrls = listing => {
+      const zoomData = listing?.attributes?.privateData?.zoom;
+      if (!zoomData) return null;
 
-    const doesNotHaveZoom = !currentListing?.attributes?.privateData?.zoom;
+      // Handle old format
+      if (zoomData.start_url || zoomData.join_url) {
+        return {
+          start_url: zoomData.start_url,
+          join_url: zoomData.join_url,
+        };
+      }
+
+      // Handle new series format - get first series
+      if (zoomData.series?.[0]) {
+        return {
+          start_url: zoomData.series[0].start_url,
+          join_url: zoomData.series[0].join_url,
+        };
+      }
+
+      return null;
+    };
+    const doesNotHaveZoom = !getZoomUrls(currentListing);
 
     const currentPath = location.pathname;
 
@@ -126,8 +147,9 @@ class EditListingPhotosPanel extends Component {
       </div>
     );
 
-    const startUrl = currentListing?.attributes?.privateData?.zoom?.start_url;
-    const joinUrl = currentListing?.attributes?.privateData?.zoom?.join_url;
+    const zoomUrls = getZoomUrls(currentListing);
+    const startUrl = zoomUrls?.start_url;
+    const joinUrl = zoomUrls?.join_url;
 
     const zoomContent = startUrl && joinUrl && (
       <div className="bg-green-100 mb-8 max-w-lg text-green-700 border border-solid border-green-300 rounded p-4 inline-block">
