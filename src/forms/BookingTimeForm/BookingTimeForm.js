@@ -253,7 +253,8 @@ export class BookingTimeFormComponent extends Component {
             paymentMethodOptions.push({ label: 'Pay Per Session', value: 'per_session' });
           }
           console.log(paymentMethodOptions);
-
+          const isAccepted =
+            checkOldTransactionData?.attributes?.lastTransition === 'transition/accept';
           const shouldDisableButton = () => {
             if (checkOldTransactionData) {
               const processName = checkOldTransactionData.attributes.processName;

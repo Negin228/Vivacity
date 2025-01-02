@@ -61,7 +61,6 @@ import { stripeRecurringPaymentRequest } from './CheckoutPage.duck';
 import { storeData, storedData, clearData } from './CheckoutPageSessionHelpers';
 import css from './CheckoutPage.module.css';
 import { types as sdkTypes } from '../../util/sdkLoader';
-import { on } from 'nodemailer/lib/xoauth2';
 
 const { Money } = sdkTypes;
 const STORAGE_KEY = 'CheckoutPage';
@@ -480,11 +479,11 @@ export class CheckoutPageComponent extends Component {
       });
   }
 
-  handleSubmitRecurring(userId, priceId, lisitingId) {
+  handleSubmitRecurring(userId, priceId, lisitingId, userEmail) {
     const { dispatch } = this.props;
     console.log(userId, 'userId');
     this.setState({ isLoadingRecurring: true }); // Set loading state to true
-    dispatch(stripeRecurringPaymentRequest(userId, priceId, lisitingId))
+    dispatch(stripeRecurringPaymentRequest(userId, priceId, lisitingId, userEmail))
       .then(response => {
         // Handle success
         console.log('Payment successful:', response);
@@ -565,7 +564,7 @@ export class CheckoutPageComponent extends Component {
     const title = intl.formatMessage({ id: 'CheckoutPage.title' }, { listingTitle });
     console.log(listing, 'listing');
     const isRecurring = bookingData?.paymentMethod?.value === 'recurring';
-    console.log(bookingData, 'bookingDatasdadasd');
+    console.log(bookingData, 'bookingData');
     const listingId = listing?.id?.uuid;
     console.log(listingId, 'listingId');
     const priceId = listing?.attributes?.publicData?.priceId;
@@ -803,13 +802,38 @@ export class CheckoutPageComponent extends Component {
     // e.g. {country: 'FI'}
 
     const initalValuesForStripePayment = { name: userName };
+    const isDateInPast = (startDateString, timezone) => {
+      const listingTime = moment.tz(startDateString, timezone);
+      const currentTime = moment().tz(timezone);
+      return listingTime.isBefore(currentTime);
+    };
 
+    const getNextClassDate = (startDate, weeklyDays, timezone) => {
+      if (!isDateInPast(startDate, timezone)) {
+        return null;
+      }
+
+      const now = moment().tz(timezone);
+      const availableDays = weeklyDays.map(day => parseInt(day.value)).sort((a, b) => a - b);
+      const currentDay = now.day() + 1;
+      const nextDay = availableDays.find(d => d > currentDay) || availableDays[0];
+      const daysToAdd = nextDay > currentDay ? nextDay - currentDay : 7 - currentDay + nextDay;
+
+      const nextDate = now
+        .add(daysToAdd, 'days')
+        .hour(moment.tz(startDate, timezone).hour())
+        .minute(moment.tz(startDate, timezone).minute());
+
+      return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
+    };
     const { publicData } = currentListing.attributes;
-
+    const nextClass = isDateInPast(publicData.startDate, publicData.timezone)
+      ? getNextClassDate(publicData.startDate, publicData.weeklyDays, publicData.timezone)
+      : null;
     const formattedDate = convertTime(publicData?.startDateString, publicData.timezone);
     // const formattedDate = convertTime(publicData.startDate, publicData.timezone);
     //  moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
-
+    const userEmail = currentUser?.attributes?.email;
     return (
       <Page {...pageProps}>
         {topbar}
@@ -849,7 +873,7 @@ export class CheckoutPageComponent extends Component {
               ) : null}
               {isRecurring ? (
                 <Button
-                  onClick={() => this.handleSubmitRecurring(userId, priceId, listingId)}
+                  onClick={() => this.handleSubmitRecurring(userId, priceId, listingId, userEmail)}
                   disabled={isLoadingRecurring}
                 >
                   {isLoadingRecurring ? <IconSpinner /> : 'Subscribe'}
@@ -917,6 +941,11 @@ export class CheckoutPageComponent extends Component {
               <p className={css.detailsSubtitle}>
                 <b>Start date:</b> {formattedDate}
               </p>
+              {nextClass && (
+                <p className={css.detailsSubtitle}>
+                  <b>Next class:</b> {nextClass}
+                </p>
+              )}
             </div>
             {speculateTransactionErrorMessage}
             {breakdown}
@@ -997,6 +1026,7 @@ const mapStateToProps = state => {
     initiateOrderError,
     confirmPaymentError,
   } = state.CheckoutPage;
+  console.log(bookingDates, 'bookingDates');
   const { currentUser } = state.user;
   const { confirmCardPaymentError, paymentIntent, retrievePaymentIntentError } = state.stripe;
   return {

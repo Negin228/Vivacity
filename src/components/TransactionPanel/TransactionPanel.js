@@ -530,6 +530,7 @@ export class TransactionPanelComponent extends Component {
               <DetailCardHeadingsMaybe
                 showDetailCardHeadings={stateData.showDetailCardHeadings}
                 listingTitle={listingTitle}
+                listing={currentListing}
                 subTitle={bookingSubTitle}
                 startDate={formattedDate}
                 location={location}
@@ -537,12 +538,14 @@ export class TransactionPanelComponent extends Component {
                 showAddress={stateData.showAddress}
               />
               {isSubscription && isCustomer ? (
-                <Button
-                  onClick={() => handleCancelSubscription(subscriptionId, transactionId, userId)}
-                  disabled={this.state.isLoading}
-                >
-                  {this.state.isLoading ? <IconSpinner /> : 'Cancel Subscription'}
-                </Button>
+                <div className={css.stickyButtonContainer}>
+                  <Button
+                    onClick={() => handleCancelSubscription(subscriptionId, transactionId, userId)}
+                    disabled={this.state.isLoading}
+                  >
+                    {this.state.isLoading ? <IconSpinner /> : 'Cancel Subscription'}
+                  </Button>
+                </div>
               ) : null}
 
               {stateData.showBookingPanel ? (

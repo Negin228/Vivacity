@@ -14,8 +14,8 @@ const rootUrl =
     : process.env.REACT_APP_CANONICAL_ROOT_URL;
 module.exports = async (req, res) => {
   try {
-    const { userId, priceId, listingId, customerTimezone } = req.body;
-
+    const { userId, priceId, listingId, customerTimezone, userEmail } = req.body;
+    console.log(userEmail, 'userEmail');
     console.log(
       '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CHECKOUT STRIPE RECURRING START >>>>>>>>>>>>>>>>>>>>>>>>'
     );
@@ -105,6 +105,7 @@ module.exports = async (req, res) => {
     const session = await stripe.checkout.sessions.create(
       {
         mode: 'subscription',
+        customer_email: userEmail,
         line_items: [
           {
             price: priceId,

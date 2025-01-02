@@ -320,14 +320,14 @@ export const sendMessage = params => (dispatch, getState, sdk) => {
   }
 };
 
-export const stripeRecurringPaymentRequest = (userId, priceId, listingId) => async (
+export const stripeRecurringPaymentRequest = (userId, priceId, listingId, userEmail) => async (
   dispatch,
   getState,
   sdk
 ) => {
   const customerTimezone = getDefaultTimeZoneOnBrowser();
   dispatch(recurringPaymentRequest());
-  return stripeRecurringPayment({ userId, priceId, listingId, customerTimezone })
+  return stripeRecurringPayment({ userId, priceId, listingId, customerTimezone, userEmail })
     .then(response => {
       // Redirect to the Stripe Checkout session URL
       window.location.href = response.url;
