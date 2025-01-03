@@ -22,7 +22,7 @@ const SectionFeaturesMaybe = props => {
   };
 
   const getNextClassDate = (startDate, weeklyDays, timezone) => {
-    if (!isDateInPast(startDate, timezone)) {
+    if (!isDateInPast(startDate, timezone) || !weeklyDays) {
       return null;
     }
 
@@ -41,7 +41,7 @@ const SectionFeaturesMaybe = props => {
   };
 
   const nextClass = isDateInPast(publicData.startDate, publicData.timezone)
-    ? getNextClassDate(publicData.startDate, publicData.weeklyDays, publicData.timezone)
+    ? getNextClassDate(publicData.startDate, publicData?.weeklyDays, publicData.timezone)
     : null;
   const weeklyDays = publicData?.weeklyDays;
   const isRecurring = publicData?.paymentType?.some(type => type.value === 'recurring');
@@ -93,7 +93,7 @@ const SectionFeaturesMaybe = props => {
           <p>{nextClass}</p>
         </>
       )}
-      {isRecurring && (
+      {isRecurring && weeklyDays && weeklyDays.length > 0 && (
         <>
           <h2 className={css.featuresTitle} style={{ marginTop: '16px' }}>
             <MdDateRange style={{ marginRight: '10px' }} />

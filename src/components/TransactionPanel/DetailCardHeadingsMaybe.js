@@ -27,7 +27,7 @@ const DetailCardHeadingsMaybe = props => {
   };
 
   const getNextClassDate = (startDate, weeklyDays, timezone) => {
-    if (!isDateInPast(startDate, timezone)) {
+    if (!isDateInPast(startDate, timezone) || !weeklyDays) {
       return null;
     }
 
@@ -45,8 +45,8 @@ const DetailCardHeadingsMaybe = props => {
     return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
   };
 
-  const nextClass = isDateInPast(publicData.startDate, publicData.timezone)
-    ? getNextClassDate(publicData.startDate, publicData.weeklyDays, publicData.timezone)
+  const nextClass = isDateInPast(publicData?.startDate, publicData?.timezone)
+    ? getNextClassDate(publicData?.startDate, publicData?.weeklyDays, publicData?.timezone)
     : null;
   return showDetailCardHeadings ? (
     <div className={css.detailCardHeadings}>

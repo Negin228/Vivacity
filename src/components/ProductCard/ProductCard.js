@@ -32,7 +32,7 @@ function ProductCard({
   };
 
   const getNextClassDate = (startDate, weeklyDays, timezone) => {
-    if (!isDateInPast(startDate, timezone)) {
+    if (!isDateInPast(startDate, timezone) || !weeklyDays) {
       return null;
     }
 
