@@ -9,15 +9,51 @@ import css from './ProductCard.module.css';
 import { AiFillStar } from 'react-icons/ai';
 import classNames from 'classnames';
 import mt from 'moment-timezone';
-function ProductCard({ title, id, timeZone, startDate, startDateString, images, teacherName }) {
+function ProductCard({
+  title,
+  id,
+  timeZone,
+  startDate,
+  startDateString,
+  images,
+  teacherName,
+  publicData,
+}) {
   const history = useHistory();
   const handleClick = () =>
     history.push({
       pathname: `/l/${createSlug(title)}/${id}`,
     });
 
+  const isDateInPast = (startDateString, timezone) => {
+    const listingTime = moment.tz(startDateString, timezone);
+    const currentTime = moment().tz(timezone);
+    return listingTime.isBefore(currentTime);
+  };
+
+  const getNextClassDate = (startDate, weeklyDays, timezone) => {
+    if (!isDateInPast(startDate, timezone)) {
+      return null;
+    }
+
+    const now = moment().tz(timezone);
+    const availableDays = weeklyDays.map(day => parseInt(day.value)).sort((a, b) => a - b);
+    const currentDay = now.day() + 1;
+    const nextDay = availableDays.find(d => d > currentDay) || availableDays[0];
+    const daysToAdd = nextDay > currentDay ? nextDay - currentDay : 7 - currentDay + nextDay;
+
+    const nextDate = now
+      .add(daysToAdd, 'days')
+      .hour(moment.tz(startDate, timezone).hour())
+      .minute(moment.tz(startDate, timezone).minute());
+
+    return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
+  };
   const formattedDate = convertDate(startDateString, timeZone);
   const formattedTime = convertTimeOnly(startDateString, timeZone);
+  // const startDate = publicData?.startDate;
+  const timezone = publicData?.timezone;
+  const weeklyDays = publicData?.weeklyDays;
   const targetTime = convertTime(startDateString, timeZone);
   if (!targetTime) return null;
   return (
@@ -44,7 +80,11 @@ function ProductCard({ title, id, timeZone, startDate, startDateString, images, 
 
         <div>
           <h3>
-            {targetTime}
+            {startDate && timezone
+              ? isDateInPast(startDate, timezone)
+                ? getNextClassDate(startDate, weeklyDays, timezone)
+                : targetTime
+              : 'Date not available'}
             {/* {formattedDate} at {formattedTime} */}
           </h3>
           <p className={css.price}>

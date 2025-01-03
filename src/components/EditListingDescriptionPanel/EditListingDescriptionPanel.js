@@ -195,6 +195,12 @@ const EditListingDescriptionPanel = props => {
                 ? { price: monthly_price }
                 : { price }
               : { price: new Money(0, config.currency) };
+          const monthlyPriceValue =
+            type?.key === 'free'
+              ? 0
+              : payment_type?.some(type => type.value === 'recurring')
+              ? monthly_price?.amount
+              : null;
           // Create exception plan for recurring payment type
           // Helper function to get duration in minutes
           const getDurationMinutes = duration => {
@@ -257,9 +263,7 @@ const EditListingDescriptionPanel = props => {
               weeklyDays: payment_type?.some(type => type.value === 'recurring')
                 ? weekly_days
                 : null,
-              monthlyPrice: payment_type?.some(type => type.value === 'recurring')
-                ? monthly_price.amount
-                : null,
+              monthlyPrice: monthlyPriceValue,
             },
           };
           setInitialProps({
