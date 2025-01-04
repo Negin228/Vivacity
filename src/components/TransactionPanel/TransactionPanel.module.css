@@ -496,3 +496,10 @@
   margin-top: 0;
   margin-bottom: 1px;
 }
+
+.errorMessage {
+  color: var(--failColor);
+  margin-top: 8px;
+  text-align: center;
+  font-size: 14px;
+}

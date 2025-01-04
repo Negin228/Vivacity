@@ -6,6 +6,14 @@ const {
   handleError,
   serialize,
 } = require('../api-util/sdk');
+const flexIntegrationSdk = require('sharetribe-flex-integration-sdk');
+const clientId = process.env.SHARETRIBE_INTEGRATION_CLIENT_ID;
+const clientSecret = process.env.SHARETRIBE_INTEGRATION_CLIENT_SECRET;
+const integrationSdk = flexIntegrationSdk.createInstance({
+  clientId,
+  clientSecret,
+});
+
 const { transactionLineItems } = require('../api-util/lineItems');
 const moment = require('moment');
 const rootUrl =
@@ -14,7 +22,7 @@ const rootUrl =
     : process.env.REACT_APP_CANONICAL_ROOT_URL;
 module.exports = async (req, res) => {
   try {
-    const { userId, priceId, listingId, customerTimezone, userEmail } = req.body;
+    const { userId, priceId, listingId, customerTimezone, userEmail, isFreeBooking } = req.body;
     console.log(userEmail, 'userEmail');
     console.log(
       '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CHECKOUT STRIPE RECURRING START >>>>>>>>>>>>>>>>>>>>>>>>'
@@ -83,6 +91,33 @@ module.exports = async (req, res) => {
     const transactionId = apiResponse.data.data.id.uuid;
     console.log(transactionId, 'transactionId');
     console.log(data, 'apiResponse');
+    if (isFreeBooking) {
+      console.log(
+        '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CHECKOUT STRIPE RECURRING FREE BOOKING >>>>>>>>>>>>>>>>>>>>>>>>',
+        isFreeBooking
+      );
+
+      // Complete transition for free subscription
+      await integrationSdk.transactions.transition({
+        id: transactionId,
+        transition: 'transition/confirm-subscription',
+        params: {
+          metadata: {
+            subscriptionId: transactionId, // Use transactionId as subscriptionId
+            current_period_start: Math.floor(Date.now() / 1000),
+            current_period_end: Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60, // 30 days
+            plan: 'monthly',
+            priceId: null,
+            membership: true,
+            isFree: true,
+          },
+        },
+      });
+
+      return res.status(200).json({
+        url: `${rootUrl}/membership/success`,
+      });
+    }
     // res
     //   .status(status)
     //   .set('Content-Type', 'application/transit+json')

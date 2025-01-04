@@ -100,6 +100,7 @@ export class TransactionPanelComponent extends Component {
       zoomLoading: true,
       zoomError: null,
       isLoading: false,
+      error: null,
     };
     this.isMobSaf = false;
     this.sendMessageFormName = 'TransactionPanel.SendMessageForm';
@@ -235,31 +236,40 @@ export class TransactionPanelComponent extends Component {
       fetchLineItemsError,
     } = this.props;
 
-    const handleCancelSubscription = async (subscriptionId, transactionId, userId) => {
-      console.log(subscriptionId, transactionId, userId);
-      const body = {
-        subscriptionId,
-        transactionId,
-        userId,
-      };
-      this.setState({ isLoading: true });
-      await cancelSubscription(body)
-        .then(response => {
-          // Handle success
-          console.log('Subscription cancelled successfully:', response);
-          setTimeout(() => {
-            this.setState({ isLoading: false });
-            window.location.reload();
-          }, 5000);
-        })
-        .catch(error => {
-          // Handle error
-          console.error('Error cancelling subscription:', error);
+    const handleCancelSubscription = async (
+      subscriptionId,
+      transactionId,
+      userId,
+      isFreeBooking
+    ) => {
+      this.setState({ isLoading: true, error: null });
+      try {
+        const body = {
+          subscriptionId,
+          transactionId,
+          userId,
+          isFreeBooking,
+        };
+
+        const response = await cancelSubscription(body);
+        console.log('Subscription cancelled successfully:', response);
+
+        // Show loading state briefly before reload
+        setTimeout(() => {
           this.setState({ isLoading: false });
+          window.location.reload();
+        }, 3000);
+      } catch (error) {
+        console.error('Error cancelling subscription:', error);
+        this.setState({
+          isLoading: false,
+          error: 'Failed to cancel subscription. Please try again.',
         });
+      }
     };
     const currentTransaction = ensureTransaction(transaction);
     const currentListing = ensureListing(currentTransaction.listing);
+    const isFreeBooking = currentListing?.attributes?.publicData?.type === 'free';
     const currentProvider = ensureUser(currentTransaction.provider);
     const currentCustomer = ensureUser(currentTransaction.customer);
     const isCustomer = transactionRole === 'customer';
@@ -540,11 +550,14 @@ export class TransactionPanelComponent extends Component {
               {isSubscription && isCustomer ? (
                 <div className={css.stickyButtonContainer}>
                   <Button
-                    onClick={() => handleCancelSubscription(subscriptionId, transactionId, userId)}
+                    onClick={() =>
+                      handleCancelSubscription(subscriptionId, transactionId, userId, isFreeBooking)
+                    }
                     disabled={this.state.isLoading}
                   >
                     {this.state.isLoading ? <IconSpinner /> : 'Cancel Subscription'}
                   </Button>
+                  {this.state.error && <p className={css.errorMessage}>{this.state.error}</p>}
                 </div>
               ) : null}
 

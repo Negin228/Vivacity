@@ -479,11 +479,11 @@ export class CheckoutPageComponent extends Component {
       });
   }
 
-  handleSubmitRecurring(userId, priceId, lisitingId, userEmail) {
+  handleSubmitRecurring(userId, priceId, lisitingId, userEmail, isFreeBooking) {
     const { dispatch } = this.props;
     console.log(userId, 'userId');
     this.setState({ isLoadingRecurring: true }); // Set loading state to true
-    dispatch(stripeRecurringPaymentRequest(userId, priceId, lisitingId, userEmail))
+    dispatch(stripeRecurringPaymentRequest(userId, priceId, lisitingId, userEmail, isFreeBooking))
       .then(response => {
         // Handle success
         console.log('Payment successful:', response);
@@ -873,7 +873,9 @@ export class CheckoutPageComponent extends Component {
               ) : null}
               {isRecurring ? (
                 <Button
-                  onClick={() => this.handleSubmitRecurring(userId, priceId, listingId, userEmail)}
+                  onClick={() =>
+                    this.handleSubmitRecurring(userId, priceId, listingId, userEmail, isFreeBooking)
+                  }
                   disabled={isLoadingRecurring}
                 >
                   {isLoadingRecurring ? <IconSpinner /> : 'Subscribe'}
