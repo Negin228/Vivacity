@@ -35,6 +35,7 @@ import {
   fetchMoreMessages,
   fetchTimeSlots,
   fetchTransactionLineItems,
+  cancelSubscriptionThunk,
 } from './TransactionPage.duck';
 import css from './TransactionPage.module.css';
 
@@ -82,6 +83,7 @@ export const TransactionPageComponent = props => {
     lineItems,
     fetchLineItemsInProgress,
     fetchLineItemsError,
+    cancelSubscription,
   } = props;
 
   const currentTransaction = ensureTransaction(transaction);
@@ -258,6 +260,7 @@ export const TransactionPageComponent = props => {
       lineItems={lineItems}
       fetchLineItemsInProgress={fetchLineItemsInProgress}
       fetchLineItemsError={fetchLineItemsError}
+      cancelSubscription={cancelSubscription}
     />
   ) : (
     loadingOrFailedFetching
@@ -426,6 +429,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(fetchTimeSlots(listingId, start, end, timeZone)),
     onFetchTransactionLineItems: (bookingData, listingId, isOwnListing) =>
       dispatch(fetchTransactionLineItems(bookingData, listingId, isOwnListing)),
+    cancelSubscription: (subscriptionId, userId, isFreeBooking, transactionId) =>
+      dispatch(cancelSubscriptionThunk(subscriptionId, userId, isFreeBooking, transactionId)),
   };
 };
 

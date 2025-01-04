@@ -23,6 +23,8 @@ import { findNextBoundary, nextMonthFn, monthIdStringInTimeZone } from '../../ut
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { fetchCurrentUserNotifications } from '../../ducks/user.duck';
 import moment from 'moment';
+import { cancelSubscription } from '../../util/api';
+import { add } from 'lodash';
 const { UUID } = sdkTypes;
 
 const MESSAGES_PAGE_SIZE = 100;
@@ -68,6 +70,9 @@ export const FETCH_LINE_ITEMS_REQUEST = 'app/TransactionPage/FETCH_LINE_ITEMS_RE
 export const FETCH_LINE_ITEMS_SUCCESS = 'app/TransactionPage/FETCH_LINE_ITEMS_SUCCESS';
 export const FETCH_LINE_ITEMS_ERROR = 'app/TransactionPage/FETCH_LINE_ITEMS_ERROR';
 
+export const CANCEL_SUBSCRIPTION_REQUEST = 'app/TransactionPage/CANCEL_SUBSCRIPTION_REQUEST';
+export const CANCEL_SUBSCRIPTION_SUCCESS = 'app/TransactionPage/CANCEL_SUBSCRIPTION_SUCCESS';
+export const CANCEL_SUBSCRIPTION_ERROR = 'app/TransactionPage/CANCEL_SUBSCRIPTION_ERROR';
 // ================ Reducer ================ //
 
 const initialState = {
@@ -312,6 +317,12 @@ export const fetchLineItemsError = error => ({
   payload: error,
 });
 
+export const cancelSubscriptionRequest = () => ({ type: CANCEL_SUBSCRIPTION_REQUEST });
+export const cancelSubscriptionSuccess = () => ({ type: CANCEL_SUBSCRIPTION_SUCCESS });
+export const cancelSubscriptionError = error => ({
+  type: CANCEL_SUBSCRIPTION_ERROR,
+  payload: error,
+});
 // ================ Thunks ================ //
 
 const timeSlotsRequest = params => (dispatch, getState, sdk) => {
@@ -700,4 +711,27 @@ export const loadData = params => (dispatch, getState) => {
     dispatch(fetchMessages(txId, 1)),
     dispatch(fetchNextTransitions(txId)),
   ]);
+};
+
+export const cancelSubscriptionThunk = (
+  subscriptionId,
+  transactionId,
+  userId,
+  isFreeBooking
+) => async dispatch => {
+  dispatch(cancelSubscriptionRequest());
+  try {
+    const response = await cancelSubscription({
+      subscriptionId,
+      transactionId,
+      userId,
+      isFreeBooking,
+    });
+    dispatch(cancelSubscriptionSuccess());
+    addMarketplaceEntities(response);
+    return response;
+  } catch (error) {
+    dispatch(cancelSubscriptionError(error));
+    throw error;
+  }
 };

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { array, arrayOf, bool, func, number, object, string } from 'prop-types';
 import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
-import { cancelSubscription } from '../../util/api';
 import classNames from 'classnames';
 import {
   TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY,
@@ -59,6 +58,7 @@ import PanelHeading, {
 import css from './TransactionPanel.module.css';
 import { getZoomFromAPI } from '../../util/api';
 import { convertTime } from '../../util/urlHelpers';
+import { cancelSubscriptionThunk } from '../../containers/TransactionPage/TransactionPage.duck';
 
 // Helper function to get display names for different roles
 const displayNames = (currentUser, currentProvider, currentCustomer, intl) => {
@@ -234,8 +234,8 @@ export class TransactionPanelComponent extends Component {
       lineItems,
       fetchLineItemsInProgress,
       fetchLineItemsError,
+      cancelSubscription,
     } = this.props;
-
     const handleCancelSubscription = async (
       subscriptionId,
       transactionId,
@@ -244,23 +244,15 @@ export class TransactionPanelComponent extends Component {
     ) => {
       this.setState({ isLoading: true, error: null });
       try {
-        const body = {
-          subscriptionId,
-          transactionId,
-          userId,
-          isFreeBooking,
-        };
-
-        const response = await cancelSubscription(body);
-        console.log('Subscription cancelled successfully:', response);
-
-        // Show loading state briefly before reload
+        await cancelSubscription(subscriptionId, transactionId, userId, isFreeBooking);
+        this.setState({
+          isLoading: false,
+          error: null,
+        });
         setTimeout(() => {
-          this.setState({ isLoading: false });
           window.location.reload();
-        }, 3000);
+        }, 5000);
       } catch (error) {
-        console.error('Error cancelling subscription:', error);
         this.setState({
           isLoading: false,
           error: 'Failed to cancel subscription. Please try again.',
