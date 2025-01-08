@@ -261,7 +261,7 @@ export const loadData = (params, search) => {
     ...originMaybe,
     page,
     perPage: RESULT_PAGE_SIZE,
-    pub_lastClass: `${currentUnixTimestamp - 100},`,
+    pub_lastClass: `${currentUnixTimestamp - 10},`,
     // pub_lastClass: `${currentUnixTimestamp - 100},${unixTimestampFuture}`,
     include: ['author', 'images'],
     'fields.listing': ['title', 'geolocation', 'price', 'publicData'],

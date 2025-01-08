@@ -106,7 +106,7 @@ export const getAllListings = () => async (dispatch, getState, sdk) => {
       'limit.images': 1,
       minStock: 1,
       perPage: 10,
-      pub_lastClass: `${currentUnixTimestamp - 100},`,
+      pub_lastClass: `${currentUnixTimestamp - 10},`,
       // pub_lastClass: `${currentUnixTimestamp - 100},${unixTimestampFuture}`,
       // pub_featured: true,
     });
