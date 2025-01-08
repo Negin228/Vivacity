@@ -487,6 +487,8 @@ export const requestPublishListingDraft = listingId => async (dispatch, getState
     // requestAddAvailabilityException()
     const listing = await sdk.ownListings.show({ id: listingId });
     const { publicData } = listing.data.data.attributes;
+    const { paymentType } = publicData;
+    const isRecurring = paymentType?.some(type => type.value === 'recurring');
     const timezone = publicData?.timezone;
     const start = moment.tz(publicData.startDateString, timezone);
 
@@ -503,7 +505,9 @@ export const requestPublishListingDraft = listingId => async (dispatch, getState
       //   .toISOString(),
       seats: 1,
     };
-    await dispatch(requestAddAvailabilityException(params));
+    if (!isRecurring) {
+      await dispatch(requestAddAvailabilityException(params));
+    }
     const response = await sdk.ownListings.publishDraft({ id: listingId }, { expand: true });
     await dispatch(createStripeProductRequest(listing, listingId));
     await dispatch(addMarketplaceEntities(response));
@@ -614,7 +618,6 @@ export function requestUpdateListing(tab, data) {
 
 export const requestAddAvailabilityException = params => (dispatch, getState, sdk) => {
   dispatch(addAvailabilityExceptionRequest(params));
-
   return sdk.availabilityExceptions
     .create(params, { expand: true })
     .then(response => {
