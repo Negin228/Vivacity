@@ -9,7 +9,7 @@ const TRAINER_FETCH_REQUEST = 'app/LandingPage/TRAINER_FETCH_REQUEST';
 const TRAINER_FETCH_SUCCESS = 'app/LandingPage/TRAINER_FETCH_SUCCESS';
 const TRAINER_FETCH_ERROR = 'app/LandingPage/TRAINER_FETCH_ERROR';
 import axios from 'axios';
-
+import moment from 'moment';
 const initialState = {
   productsLoading: false,
   productIds: null,
@@ -78,6 +78,17 @@ const availabilityFilterMaybe = {
   ).toISOString(),
   availability: 'time-partial',
 };
+// Current date and time
+const currentDate = moment();
+// Calculate 2 years from now
+const futureDate = currentDate.add(2, 'years');
+
+// Get the UNIX timestamp
+const unixTimestampFuture = futureDate.unix();
+
+// Get the current date's UNIX timestamp
+const currentUnixTimestamp = moment().unix();
+console.log({ currentUnixTimestamp, unixTimestampFuture });
 export const getAllListings = () => async (dispatch, getState, sdk) => {
   dispatch(fetchProductsRequest());
 
@@ -95,6 +106,8 @@ export const getAllListings = () => async (dispatch, getState, sdk) => {
       'limit.images': 1,
       minStock: 1,
       perPage: 10,
+      pub_lastClass: `${currentUnixTimestamp - 100},`,
+      // pub_lastClass: `${currentUnixTimestamp - 100},${unixTimestampFuture}`,
       // pub_featured: true,
     });
 

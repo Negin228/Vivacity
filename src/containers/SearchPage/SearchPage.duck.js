@@ -5,7 +5,7 @@ import { convertUnitToSubUnit, unitDivisor } from '../../util/currency';
 import { formatDateStringToTz, getExclusiveEndDateWithTz } from '../../util/dates';
 import { parse } from '../../util/urlHelpers';
 import config from '../../config';
-
+import moment from 'moment';
 // Pagination page size might need to be dynamic on responsive page layouts
 // Current design has max 3 columns 12 is divisible by 2 and 3
 // So, there's enough cards to fill all columns on full pagination pages
@@ -187,7 +187,7 @@ export const searchListings = searchParams => (dispatch, getState, sdk) => {
     ).toISOString(),
     availability: 'time-partial',
   };
-  // console.log('hihi', availabilityFilterMaybe);
+
   const params = {
     ...rest,
     ...priceMaybe,
@@ -245,12 +245,24 @@ export const loadData = (params, search) => {
 
   const { page = 1, address, origin, ...rest } = queryParams;
   const originMaybe = config.sortSearchByDistance && origin ? { origin } : {};
+  // Current date and time
+  const currentDate = moment();
+  // Calculate 2 years from now
+  const futureDate = currentDate.add(2, 'years');
+
+  // Get the UNIX timestamp
+  const unixTimestampFuture = futureDate.unix();
+
+  // Get the current date's UNIX timestamp
+  const currentUnixTimestamp = moment().unix();
+  // console.log('hihi', availabilityFilterMaybe);
   return searchListings({
     ...rest,
     ...originMaybe,
     page,
     perPage: RESULT_PAGE_SIZE,
-
+    pub_lastClass: `${currentUnixTimestamp - 100},`,
+    // pub_lastClass: `${currentUnixTimestamp - 100},${unixTimestampFuture}`,
     include: ['author', 'images'],
     'fields.listing': ['title', 'geolocation', 'price', 'publicData'],
     'fields.user': ['profile.displayName', 'profile.abbreviatedName'],
