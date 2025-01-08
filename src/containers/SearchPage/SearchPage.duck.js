@@ -191,7 +191,7 @@ export const searchListings = searchParams => (dispatch, getState, sdk) => {
   const params = {
     ...rest,
     ...priceMaybe,
-    ...availabilityFilterMaybe,
+    // ...availabilityFilterMaybe,
     ...availabilityMaybe,
     per_page: perPage,
   };

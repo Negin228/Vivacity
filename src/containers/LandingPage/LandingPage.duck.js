@@ -78,23 +78,14 @@ const availabilityFilterMaybe = {
   ).toISOString(),
   availability: 'time-partial',
 };
-// Current date and time
-const currentDate = moment();
-// Calculate 2 years from now
-const futureDate = currentDate.add(2, 'years');
 
-// Get the UNIX timestamp
-const unixTimestampFuture = futureDate.unix();
-
-// Get the current date's UNIX timestamp
 const currentUnixTimestamp = moment().unix();
-console.log({ currentUnixTimestamp, unixTimestampFuture });
 export const getAllListings = () => async (dispatch, getState, sdk) => {
   dispatch(fetchProductsRequest());
 
   try {
     const response = await sdk.listings.query({
-      ...availabilityFilterMaybe,
+      // ...availabilityFilterMaybe,
       include: ['images', 'author'],
       'fields.listing': ['title', 'metadata', 'price', 'publicData', 'createdAt'],
       'fields.image': [
@@ -107,7 +98,6 @@ export const getAllListings = () => async (dispatch, getState, sdk) => {
       minStock: 1,
       perPage: 10,
       pub_lastClass: `${currentUnixTimestamp - 10},`,
-      // pub_lastClass: `${currentUnixTimestamp - 100},${unixTimestampFuture}`,
       // pub_featured: true,
     });
 
