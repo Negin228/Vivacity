@@ -128,9 +128,11 @@ export const ManageListingCardComponent = props => {
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
   const id = currentListing.id.uuid;
-  const { title = '', price, state } = currentListing.attributes;
+  const { title = '', price, state, publicData } = currentListing.attributes;
   const slug = createSlug(title);
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
+  const { paymentType = [] } = publicData ?? {};
+  const isRecurring = paymentType?.some(type => type.value === 'recurring');
   const isClosed = state === LISTING_STATE_CLOSED;
   const isDraft = state === LISTING_STATE_DRAFT;
   const firstImage =
@@ -313,7 +315,7 @@ export const ManageListingCardComponent = props => {
                 {formattedPrice}
               </div>
               <div className={css.perUnit}>
-                <FormattedMessage id={unitTranslationKey} />
+                {isRecurring ? 'per month' : <FormattedMessage id={unitTranslationKey} />}
               </div>
             </React.Fragment>
           ) : (
