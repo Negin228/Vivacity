@@ -63,9 +63,10 @@ export const ListingCardComponent = props => {
   const slug = createSlug(title);
   const firstImage =
     currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
-  const { type } = publicData ?? {};
+  const { type, paymentType = [] } = publicData ?? {};
   const isFree = type === 'free';
-
+  const isRecurring = paymentType?.some(type => type.value === 'recurring');
+  const weeklyDays = publicData?.weeklyDays;
   const certificateOptions = findOptionsForSelectFilter('certificate', filtersConfig);
   const certificate = publicData
     ? getCertificateInfo(certificateOptions, publicData.certificate)
@@ -113,7 +114,7 @@ export const ListingCardComponent = props => {
               {formattedPrice}
             </div>
             <div className={css.perUnit}>
-              <FormattedMessage id={unitTranslationKey} />
+              {isRecurring ? 'per month' : <FormattedMessage id={unitTranslationKey} />}
             </div>
           </div>
         )}

@@ -73,4 +73,7 @@
     font-weight: 600;
     margin: 0;
   }
-  
+  .classDate{
+    margin-bottom: 0;
+    line-height: 1.4;
+  }

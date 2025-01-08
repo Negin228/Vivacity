@@ -24,7 +24,8 @@ function ProductCard({
     history.push({
       pathname: `/l/${createSlug(title)}/${id}`,
     });
-
+  const { paymentType = [] } = publicData || {};
+  const isRecurring = paymentType?.some(type => type.value === 'recurring');
   const isDateInPast = (startDateString, timezone) => {
     const listingTime = moment.tz(startDateString, timezone);
     const currentTime = moment().tz(timezone);
@@ -79,14 +80,25 @@ function ProductCard({
         </div> */}
 
         <div>
-          <h3>
-            {startDate && timezone
-              ? isDateInPast(startDate, timezone)
-                ? getNextClassDate(startDate, weeklyDays, timezone)
-                : targetTime
-              : 'Date not available'}
-            {/* {formattedDate} at {formattedTime} */}
-          </h3>
+          {isRecurring && weeklyDays && weeklyDays.length > 0 ? (
+            <>
+              <p className={css.classDate}>
+                {weeklyDays
+                  .sort((a, b) => parseInt(a.value) - parseInt(b.value))
+                  .map(x => x.label)
+                  .join(', ')}{' '}
+                every week.
+              </p>
+            </>
+          ) : !isRecurring ? (
+            <p className={css.classDate}>
+              {startDate && timezone
+                ? isDateInPast(startDate, timezone)
+                  ? getNextClassDate(startDate, weeklyDays, timezone)
+                  : targetTime
+                : 'Date not available'}
+            </p>
+          ) : null}
           <p className={css.price}>
             {title} with {teacherName}
           </p>

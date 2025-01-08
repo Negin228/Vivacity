@@ -392,6 +392,17 @@ export const InboxPageComponent = props => {
         params: { tab: 'sales' },
       },
     },
+    {
+      text: (
+        <span>
+          <FormattedMessage id="TopbarDesktop.yourListingsLink" />
+        </span>
+      ),
+      selected: false,
+      linkProps: {
+        name: 'ManageListingsPage',
+      },
+    },
   ];
   const nav = <TabNav rootClassName={css.tabs} tabRootClassName={css.tab} tabs={tabs} />;
 

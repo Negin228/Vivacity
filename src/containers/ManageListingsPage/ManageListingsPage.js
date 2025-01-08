@@ -15,6 +15,10 @@ import {
   LayoutWrapperMain,
   LayoutWrapperFooter,
   Footer,
+  LayoutSideNavigation,
+  LayoutWrapperSideNav,
+  TabNav,
+  NotificationBadge,
 } from '../../components';
 import { TopbarContainer } from '../../containers';
 
@@ -48,6 +52,7 @@ export class ManageListingsPageComponent extends Component {
       queryParams,
       scrollingDisabled,
       intl,
+      providerNotificationCount,
     } = this.props;
 
     const hasPaginationInfo = !!pagination && pagination.totalItems != null;
@@ -98,7 +103,10 @@ export class ManageListingsPageComponent extends Component {
     const listingMenuOpen = this.state.listingMenuOpen;
     const closingErrorListingId = !!closingListingError && closingListingError.listingId;
     const openingErrorListingId = !!openingListingError && openingListingError.listingId;
-
+    const providerNotificationBadge =
+      providerNotificationCount > 0 ? (
+        <NotificationBadge count={providerNotificationCount} />
+      ) : null;
     const title = intl.formatMessage({ id: 'ManageListingsPage.title' });
 
     const panelWidth = 62.5;
@@ -108,14 +116,58 @@ export class ManageListingsPageComponent extends Component {
       `(max-width: 1920px) ${panelWidth / 2}vw`,
       `${panelWidth / 3}vw`,
     ].join(', ');
-
+    const tabs = [
+      {
+        text: (
+          <span>
+            <FormattedMessage id="InboxPage.ordersTabTitle" />
+          </span>
+        ),
+        selected: false,
+        linkProps: {
+          name: 'InboxPage',
+          params: { tab: 'orders' },
+        },
+      },
+      {
+        text: (
+          <span>
+            <FormattedMessage id="InboxPage.salesTabTitle" />
+            {providerNotificationBadge}
+          </span>
+        ),
+        selected: false,
+        linkProps: {
+          name: 'InboxPage',
+          params: { tab: 'sales' },
+        },
+      },
+      {
+        text: (
+          <span>
+            <FormattedMessage id="TopbarDesktop.yourListingsLink" />
+          </span>
+        ),
+        selected: true,
+        linkProps: {
+          name: 'ManageListingsPage',
+        },
+      },
+    ];
+    const nav = <TabNav rootClassName={css.tabs} tabRootClassName={css.tab} tabs={tabs} />;
     return (
       <Page title={title} scrollingDisabled={scrollingDisabled}>
-        <LayoutSingleColumn>
+        <LayoutSideNavigation>
           <LayoutWrapperTopbar>
             <TopbarContainer currentPage="ManageListingsPage" />
-            <UserNav selectedPageName="ManageListingsPage" />
+            {/* <UserNav selectedPageName="ManageListingsPage" /> */}
           </LayoutWrapperTopbar>
+          <LayoutWrapperSideNav className={css.navigation}>
+            <h1 className={css.titleInbox}>
+              <FormattedMessage id="InboxPage.title" />
+            </h1>
+            {nav}
+          </LayoutWrapperSideNav>
           <LayoutWrapperMain>
             {queryInProgress ? loadingResults : null}
             {queryListingsError ? queryError : null}
@@ -144,7 +196,7 @@ export class ManageListingsPageComponent extends Component {
           <LayoutWrapperFooter>
             <Footer />
           </LayoutWrapperFooter>
-        </LayoutSingleColumn>
+        </LayoutSideNavigation>
       </Page>
     );
   }
@@ -199,6 +251,7 @@ const mapStateToProps = state => {
     closingListing,
     closingListingError,
   } = state.ManageListingsPage;
+  const { currentUserNotificationCount: providerNotificationCount } = state.user;
   const listings = getOwnListingsById(state, currentPageResultIds);
   return {
     currentPageResultIds,
@@ -212,6 +265,7 @@ const mapStateToProps = state => {
     openingListingError,
     closingListing,
     closingListingError,
+    providerNotificationCount,
   };
 };
 
