@@ -141,6 +141,7 @@ module.exports = async (req, res) => {
     let allMeetingUrls = [];
     let initialMeeting;
     let lastMeeting;
+    let lastClass;
     if (isRecurring) {
       meetingParams.recurrence = {
         type: 2,
@@ -181,6 +182,9 @@ module.exports = async (req, res) => {
           currentMeeting = nextMeeting;
         }
       }
+      lastClass = moment(
+        currentMeeting.occurrences[currentMeeting.occurrences.length - 1].start_time
+      ).unix();
     } else {
       initialMeeting = await createZoomMeeting(meetingParams, zoomUser.id, access_token);
       allMeetingUrls.push({
@@ -190,6 +194,7 @@ module.exports = async (req, res) => {
         end_date: meetingParams.start_time,
       });
       lastMeeting = initialMeeting;
+      lastClass = moment(meetingParams.start_time).unix();
     }
 
     // Update listing with meeting URLs
@@ -202,6 +207,7 @@ module.exports = async (req, res) => {
       },
       publicData: {
         timeUpdated: false,
+        lastClass: lastClass,
       },
     });
     return res.redirect(`${ROOT_URL}${backURL}`);

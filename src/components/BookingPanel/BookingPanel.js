@@ -24,6 +24,7 @@ import { ensureListing, ensureUser } from '../../util/data';
 
 import css from './BookingPanel.module.css';
 import { Form } from 'react-final-form';
+import AddMoreMeetings from '../../containers/addMoreMeetings/AddMoreMeetings';
 
 // This defines when ModalInMobile shows content as Modal
 const MODAL_BREAKPOINT = 1023;
@@ -129,6 +130,7 @@ const BookingPanel = props => {
   const monthlyPrice = listing.attributes.publicData?.monthlyPrice;
   const isBook = !!parse(location.search).book;
   const { publicData } = listing.attributes;
+  const isRecurring = publicData?.paymentType.some(type => type.value === 'recurring');
   // console.log('BookingPanel props', publicData);
   const currentListing = ensureListing(listing);
   const currentAuthor = ensureUser(currentListing.author);
@@ -200,7 +202,6 @@ const BookingPanel = props => {
             {subTitleText ? <div className={css.bookingHelp}>{subTitleText}</div> : null}
           </div>
         </div> */}
-
         {/* <div className={css.detailsContainerDesktop}>
           <div className={css.detailsAspectWrapper}>
             <ResponsiveImage
@@ -267,6 +268,10 @@ const BookingPanel = props => {
             checkOldTransactionData={checkOldTransactionData}
           />
         ) : null}
+        <div className={css.addMoreMeetings}>
+          {' '}
+          {isOwnListing && isRecurring && <AddMoreMeetings listing={listing} />}
+        </div>
       </ModalInMobile>
       <div className={css.openBookingForm}>
         <div className={css.priceContainer}>
@@ -277,7 +282,10 @@ const BookingPanel = props => {
             <FormattedMessage id={unitTranslationKey} />
           </div>
         </div>
-
+        <div className={css.addMoreMeetings}>
+          {' '}
+          {isOwnListing && isRecurring && <AddMoreMeetings listing={listing} />}
+        </div>
         {showBookingTimeForm ? (
           <Button
             rootClassName={css.bookButton}
