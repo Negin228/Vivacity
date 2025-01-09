@@ -36,6 +36,7 @@ Tab.propTypes = {
 
 const TabNav = props => {
   const { className, rootClassName, tabRootClassName, tabs } = props;
+  console.log(props, 'props');
   const classes = classNames(rootClassName || css.root, className);
   const tabClasses = tabRootClassName || css.tab;
   return (

@@ -14,6 +14,7 @@ import css from './ListingPage.module.css';
 import moment from 'moment';
 export const ActionBarMaybe = props => {
   const { isOwnListing, listing, editParams } = props;
+  const { id, slug, type } = editParams;
   const state = listing.attributes.state;
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
   const isClosed = state === LISTING_STATE_CLOSED;
@@ -71,7 +72,11 @@ export const ActionBarMaybe = props => {
           {showExpiryWarning && <div className={css.warningMessage}>{warningMessage}</div>}
         </p>
 
-        <NamedLink className={css.editListingLink} name="EditListingPage" params={editParams}>
+        <NamedLink
+          className={css.editListingLink}
+          name="EditListingPage"
+          params={{ id, slug, type, tab: 'photos' }}
+        >
           <EditIcon className={css.editIcon} />
           <FormattedMessage id={message} />
         </NamedLink>

@@ -173,123 +173,124 @@ const EditListingDescriptionFormComponent = props => (
           {errorMessageUpdateListing}
           {errorMessageShowListing}
           {/* description section  */}
-          <FieldTextInput
-            id="title"
-            name="title"
-            className={css.title}
-            type="text"
-            label="Name of class"
-            placeholder="Enter name of class. e.g. Vinyasa yoga"
-            maxLength={TITLE_MAX_LENGTH}
-            validate={composeValidators(required(titleRequiredMessage), maxLength60Message)}
-            autoFocus
-          />
-
-          <FieldTextInput
-            id="description"
-            name="description"
-            className={css.description}
-            type="textarea"
-            label={descriptionMessage}
-            placeholder={descriptionPlaceholderMessage}
-            validate={composeValidators(required(descriptionRequiredMessage))}
-          />
-
-          <FieldSelectModern
-            className={css.features}
-            id="languages"
-            name="languages"
-            label="Language"
-            options={config.custom.languages}
-            placeholder="Select a language"
-            validate={fieldSelectModernRequired('Please select a language')}
-            isSearchable={true}
-          />
-          {/* features section */}
-          <FieldCheckboxGroup
-            className={css.features}
-            id="yogaStyles"
-            name="yogaStyles"
-            label="Workout Type"
-            options={config.custom.workoutTypes}
-          />
-          {values?.yogaStyles?.includes('other') ? (
+          <fieldset disabled={hasZoom} className={css.fieldset}>
             <FieldTextInput
-              id="otherWorkoutType"
-              name="otherWorkoutType"
+              id="title"
+              name="title"
               className={css.title}
               type="text"
-              label="Other Workout Type"
-              placeholder="Enter other workout type"
-              validate={required('Please enter other workout type')}
+              label="Name of class"
+              placeholder="Enter name of class. e.g. Vinyasa yoga"
+              maxLength={TITLE_MAX_LENGTH}
+              validate={composeValidators(required(titleRequiredMessage), maxLength60Message)}
+              autoFocus
             />
-          ) : null}
-          {/* pricing section  */}
-          <FieldSelectModern
-            className={css.features}
-            id="type"
-            name="type"
-            label="Type"
-            options={config.custom.typeOptions}
-            placeholder="Select a type"
-            validate={fieldSelectModernRequired('Please select a type')}
-          />
-          <FieldSelectModern
-            className={css.features}
-            id="payment_type"
-            name="payment_type"
-            label="Payment Type (You can select One or Both) "
-            options={[
-              { value: 'per_session', label: 'Per Session' },
-              { value: 'recurring', label: 'Subscription' },
-            ]}
-            placeholder="Select payment type"
-            validate={fieldSelectModernRequired('Please select a payment type')}
-            isMulti
-            isSearchable={true}
-          />
-          {values?.type?.key === config.isPaid &&
-          values?.payment_type?.some(type => type.value === 'per_session') ? (
-            <FieldCurrencyInput
-              id="price"
-              name="price"
-              className={css.priceInput}
-              label={pricePerUnitMessage}
-              placeholder={pricePlaceholderMessage}
-              currencyConfig={config.currencyConfig}
-              validate={priceValidators}
-              style={{ marginBottom: '32px' }}
-            />
-          ) : null}
-          {values?.type?.key === config.isPaid &&
-          values?.payment_type?.some(type => type.value === 'recurring') ? (
-            <FieldCurrencyInput
-              id="monthly_price"
-              name="monthly_price"
-              className={css.priceInput}
-              label="Monthly Price"
-              placeholder="Enter monthly price"
-              currencyConfig={config.currencyConfig}
-              validate={priceValidators}
-              style={{ marginBottom: '32px' }}
-            />
-          ) : null}
-          {/* date and availability section */}
 
-          <FieldTextInput
-            className={css.title}
-            id="stock"
-            name="stock"
-            label="Maximum Capacity"
-            placeholder="How many students can attend this class?"
-            type="number"
-            min={0}
-            validate={stockValidator}
-            onKeyDown={e => (e.keyCode === 189 || e.keyCode === 190) && e.preventDefault()}
-          />
-          {setStockError ? <p className={css.error}>{stockErrorMessage}</p> : null}
-          {/* Recurrence section */}
-          {/* {values?.payment_type?.some(type => type.value === 'recurring') && (
+            <FieldTextInput
+              id="description"
+              name="description"
+              className={css.description}
+              type="textarea"
+              label={descriptionMessage}
+              placeholder={descriptionPlaceholderMessage}
+              validate={composeValidators(required(descriptionRequiredMessage))}
+            />
+
+            <FieldSelectModern
+              className={css.features}
+              id="languages"
+              name="languages"
+              label="Language"
+              options={config.custom.languages}
+              placeholder="Select a language"
+              validate={fieldSelectModernRequired('Please select a language')}
+              isSearchable={true}
+            />
+            {/* features section */}
+            <FieldCheckboxGroup
+              className={css.features}
+              id="yogaStyles"
+              name="yogaStyles"
+              label="Workout Type"
+              options={config.custom.workoutTypes}
+            />
+            {values?.yogaStyles?.includes('other') ? (
+              <FieldTextInput
+                id="otherWorkoutType"
+                name="otherWorkoutType"
+                className={css.title}
+                type="text"
+                label="Other Workout Type"
+                placeholder="Enter other workout type"
+                validate={required('Please enter other workout type')}
+              />
+            ) : null}
+            {/* pricing section  */}
+            <FieldSelectModern
+              className={css.features}
+              id="type"
+              name="type"
+              label="Type"
+              options={config.custom.typeOptions}
+              placeholder="Select a type"
+              validate={fieldSelectModernRequired('Please select a type')}
+            />
+            <FieldSelectModern
+              className={css.features}
+              id="payment_type"
+              name="payment_type"
+              label="Payment Type (You can select One or Both) "
+              options={[
+                { value: 'per_session', label: 'Per Session' },
+                { value: 'recurring', label: 'Subscription' },
+              ]}
+              placeholder="Select payment type"
+              validate={fieldSelectModernRequired('Please select a payment type')}
+              isMulti
+              isSearchable={true}
+            />
+            {values?.type?.key === config.isPaid &&
+            values?.payment_type?.some(type => type.value === 'per_session') ? (
+              <FieldCurrencyInput
+                id="price"
+                name="price"
+                className={css.priceInput}
+                label={pricePerUnitMessage}
+                placeholder={pricePlaceholderMessage}
+                currencyConfig={config.currencyConfig}
+                validate={priceValidators}
+                style={{ marginBottom: '32px' }}
+              />
+            ) : null}
+            {values?.type?.key === config.isPaid &&
+            values?.payment_type?.some(type => type.value === 'recurring') ? (
+              <FieldCurrencyInput
+                id="monthly_price"
+                name="monthly_price"
+                className={css.priceInput}
+                label="Monthly Price"
+                placeholder="Enter monthly price"
+                currencyConfig={config.currencyConfig}
+                validate={priceValidators}
+                style={{ marginBottom: '32px' }}
+              />
+            ) : null}
+            {/* date and availability section */}
+
+            <FieldTextInput
+              className={css.title}
+              id="stock"
+              name="stock"
+              label="Maximum Capacity"
+              placeholder="How many students can attend this class?"
+              type="number"
+              min={0}
+              validate={stockValidator}
+              onKeyDown={e => (e.keyCode === 189 || e.keyCode === 190) && e.preventDefault()}
+            />
+            {setStockError ? <p className={css.error}>{stockErrorMessage}</p> : null}
+            {/* Recurrence section */}
+            {/* {values?.payment_type?.some(type => type.value === 'recurring') && (
             <FieldSelectModern
               className={css.features}
               id="recurrence_type"
@@ -305,7 +306,7 @@ const EditListingDescriptionFormComponent = props => (
             />
           )} */}
 
-          {/* {values?.payment_type?.some(type => type.value === 'recurring') && (
+            {/* {values?.payment_type?.some(type => type.value === 'recurring') && (
             <>
               <FieldTextInput
                 id="repeat_interval"
@@ -372,87 +373,89 @@ const EditListingDescriptionFormComponent = props => (
               ) : null}
             </>
           )} */}
-          {values?.payment_type?.some(type => type.value === 'recurring') && (
-            <FieldSelectModern
-              className={css.features}
-              id="weekly_days"
-              name="weekly_days"
-              label="Days of the Week (You can select multiple days)"
-              options={[
-                { value: '1', label: 'Sunday' },
-                { value: '2', label: 'Monday' },
-                { value: '3', label: 'Tuesday' },
-                { value: '4', label: 'Wednesday' },
-                { value: '5', label: 'Thursday' },
-                { value: '6', label: 'Friday' },
-                { value: '7', label: 'Saturday' },
-              ]}
-              isMulti
-            />
-          )}
-          <fieldset disabled={hasZoom} className={css.fieldset}>
-            <FieldSelectModern
-              className={css.features}
-              id="timezone"
-              name="timezone"
-              label="Time Zone"
-              options={config.custom.timezones}
-              placeholder="Select time zone"
-              validate={fieldSelectModernRequired('Please select a time zone')}
-              isSearchable={true}
-              disabled={hasZoom}
-            />
-            <Datepicker
-              className={css.title}
-              id="start_date"
-              name="start_date"
-              label="Date "
-              placeholder="Choose date"
-              minDate={new Date()}
-              onFieldChange={e => form.change('time', e)}
-              dateFormat="MM/dd/yyyy "
-              style={{ marginBottom: '32px' }}
-              validate={composeValidators(required('Start date is required'))}
-              disabled={hasZoom}
-            />
-            <Datepicker
-              className={css.title}
-              id="time"
-              name="time"
-              label="Time"
-              placeholder="Choose time"
-              minDate={new Date()}
-              style={{ marginBottom: '32px' }}
-              showTimeSelect
-              onFieldChange={e => form.change('start_date', e)}
-              showTimeSelectOnly
-              timeIntervals={15}
-              timeCaption="Time"
-              dateFormat="h:mm aa"
-              validate={composeValidators(required('Time is required'))}
-              disabled={hasZoom}
-            />
-            <FieldSelectModern
-              className={css.features}
-              id="class_duration"
-              name="class_duration"
-              label="Class Duration"
-              options={config.custom.durationOptions}
-              placeholder="Select duration"
-              validate={fieldSelectModernRequired('Please select a duration')}
-              isSearchable={true}
-              disabled={hasZoom}
-            />
+            {values?.payment_type?.some(type => type.value === 'recurring') && (
+              <FieldSelectModern
+                className={css.features}
+                id="weekly_days"
+                name="weekly_days"
+                label="Days of the Week (You can select multiple days)"
+                options={[
+                  { value: '1', label: 'Sunday' },
+                  { value: '2', label: 'Monday' },
+                  { value: '3', label: 'Tuesday' },
+                  { value: '4', label: 'Wednesday' },
+                  { value: '5', label: 'Thursday' },
+                  { value: '6', label: 'Friday' },
+                  { value: '7', label: 'Saturday' },
+                ]}
+                isMulti
+              />
+            )}
+            <fieldset disabled={hasZoom} className={css.fieldset}>
+              <FieldSelectModern
+                className={css.features}
+                id="timezone"
+                name="timezone"
+                label="Time Zone"
+                options={config.custom.timezones}
+                placeholder="Select time zone"
+                validate={fieldSelectModernRequired('Please select a time zone')}
+                isSearchable={true}
+                disabled={hasZoom}
+              />
+              <Datepicker
+                className={css.title}
+                id="start_date"
+                name="start_date"
+                label="Date "
+                placeholder="Choose date"
+                minDate={new Date()}
+                onFieldChange={e => form.change('time', e)}
+                dateFormat="MM/dd/yyyy "
+                style={{ marginBottom: '32px' }}
+                validate={composeValidators(required('Start date is required'))}
+                disabled={hasZoom}
+              />
+              <Datepicker
+                className={css.title}
+                id="time"
+                name="time"
+                label="Time"
+                placeholder="Choose time"
+                minDate={new Date()}
+                style={{ marginBottom: '32px' }}
+                showTimeSelect
+                onFieldChange={e => form.change('start_date', e)}
+                showTimeSelectOnly
+                timeIntervals={15}
+                timeCaption="Time"
+                dateFormat="h:mm aa"
+                validate={composeValidators(required('Time is required'))}
+                disabled={hasZoom}
+              />
+              <FieldSelectModern
+                className={css.features}
+                id="class_duration"
+                name="class_duration"
+                label="Class Duration"
+                options={config.custom.durationOptions}
+                placeholder="Select duration"
+                validate={fieldSelectModernRequired('Please select a duration')}
+                isSearchable={true}
+                disabled={hasZoom}
+              />
+            </fieldset>
+
+            <Button
+              className={css.submitButton}
+              type="submit"
+              inProgress={submitInProgress}
+              disabled={submitDisabled}
+              ready={submitReady}
+            >
+              {saveActionMsg}
+            </Button>
           </fieldset>
-          <Button
-            className={css.submitButton}
-            type="submit"
-            inProgress={submitInProgress}
-            disabled={submitDisabled}
-            ready={submitReady}
-          >
-            {saveActionMsg}
-          </Button>
         </Form>
       );
     }}
