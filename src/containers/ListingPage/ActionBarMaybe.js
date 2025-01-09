@@ -10,16 +10,42 @@ import {
 } from '../../util/types';
 import { NamedLink } from '../../components';
 import EditIcon from './EditIcon';
-
 import css from './ListingPage.module.css';
-
+import moment from 'moment';
 export const ActionBarMaybe = props => {
   const { isOwnListing, listing, editParams } = props;
   const state = listing.attributes.state;
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
   const isClosed = state === LISTING_STATE_CLOSED;
   const isDraft = state === LISTING_STATE_DRAFT;
+  console.log('Listing: actionbar ', listing);
+  const isRecurringPayment = listing?.attributes?.publicData?.paymentType?.some(
+    type => type.value === 'recurring'
+  );
+  const getMeetingStatus = () => {
+    const lastClass = listing?.attributes?.publicData?.lastClass;
+    if (!lastClass) return 'no-meetings';
 
+    const lastClassDate = moment.unix(lastClass);
+    const today = moment();
+    const daysUntilExpiry = lastClassDate.diff(today, 'days');
+
+    if (daysUntilExpiry <= 0) return 'expired';
+    if (daysUntilExpiry <= 15) return 'expiring-soon';
+    return 'active';
+  };
+
+  const meetingStatus = getMeetingStatus();
+
+  // Debug current Unix timestamp
+  const showExpiryWarning = isOwnListing && isRecurringPayment && meetingStatus !== 'active';
+  const warningMessage =
+    showExpiryWarning &&
+    (meetingStatus === 'expired'
+      ? 'Your Zoom meetings have expired. Please extend them from the Edit listing page.'
+      : `Your meetings will expire in ${moment
+          .unix(listing.attributes.publicData.lastClass)
+          .diff(moment(), 'days')} days. Please extend your Zoom meetings.`);
   if (isOwnListing) {
     let ownListingTextTranslationId = 'ListingPage.ownListing';
 
@@ -41,11 +67,13 @@ export const ActionBarMaybe = props => {
       <div className={css.actionBar}>
         <p className={ownListingTextClasses}>
           <FormattedMessage id={ownListingTextTranslationId} />
+          {showExpiryWarning && <div className={css.warningMessage}>{warningMessage}</div>}
         </p>
-        {/* <NamedLink className={css.editListingLink} name="EditListingPage" params={editParams}>
+
+        <NamedLink className={css.editListingLink} name="EditListingPage" params={editParams}>
           <EditIcon className={css.editIcon} />
           <FormattedMessage id={message} />
-        </NamedLink> */}
+        </NamedLink>
       </div>
     );
   } else if (isClosed) {

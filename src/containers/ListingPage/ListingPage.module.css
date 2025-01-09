@@ -586,3 +586,7 @@
   word-break: break-word;
   hyphens: auto;
 }
+
+.warningMessage {
+  color: var(--attentionColor);
+}

@@ -11,6 +11,8 @@ import css from './EditListingPhotosPanel.module.css';
 import { withRouter } from 'react-router-dom';
 import ExternalLink from '../ExternalLink/ExternalLink';
 import ZoomPopupModal from './ZoomPopupModal';
+import AddMoreMeetings from '../../containers/addMoreMeetings/AddMoreMeetings';
+import moment from 'moment';
 
 const ROOT_API_URL =
   process.env.REACT_APP_CANONICAL_ROOT_URL === 'http://localhost:3000'
@@ -48,7 +50,10 @@ class EditListingPhotosPanel extends Component {
     const rootClass = rootClassName || css.root;
     const classes = classNames(rootClass, className);
     const currentListing = ensureOwnListing(listing);
-
+    const isRecurring = currentListing?.attributes?.publicData?.paymentType.some(
+      type => type.value === 'recurring'
+    );
+    const isRecurringAndPublished = isRecurring && currentListing.attributes.state === 'published';
     const isPublished =
       currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
     const panelTitle = isPublished ? (
@@ -153,7 +158,11 @@ class EditListingPhotosPanel extends Component {
 
     const zoomContent = startUrl && joinUrl && (
       <div className="bg-green-100 mb-8 max-w-lg text-green-700 border border-solid border-green-300 rounded p-4 inline-block">
-        <h2 className="my-0 text-lg">Scheduled Zoom meeting</h2>
+        <h2 className="my-0 text-lg">
+          {' '}
+          Scheduled Zoom meeting (End date:{' '}
+          {moment.unix(listing?.attributes?.publicData?.lastClass).format('MMM DD, YYYY')})
+        </h2>
         <div className="my-0 text-sm flex gap-3  mt-2">
           <span>Start URL:</span>{' '}
           <ExternalLink href={startUrl} className="break-words">
@@ -167,6 +176,7 @@ class EditListingPhotosPanel extends Component {
             {joinUrl?.slice(0, 40) + '...'}
           </ExternalLink>
         </div>
+        {isRecurringAndPublished && <AddMoreMeetings listing={listing} location={location} />}
       </div>
     );
 
@@ -177,6 +187,7 @@ class EditListingPhotosPanel extends Component {
         ) : (
           <>
             <h1 className={css.title}>{panelTitle}</h1>
+
             {zoomContent}
             <EditListingPhotosForm
               className={css.form}

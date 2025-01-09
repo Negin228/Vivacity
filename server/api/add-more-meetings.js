@@ -9,15 +9,12 @@ const ERROR_PAGE_URL = `${ROOT_URL}/zoom-error?error=true`;
 const ROOT_API_URL = ROOT_URL === 'http://localhost:3000' ? 'http://localhost:3500' : ROOT_URL;
 
 // Helper Functions
-const getZoomToken = async code => {
+const getZoomToken = async (code, backURL) => {
   const data = `${zoomClientId}:${zoomClientSecret}`;
   const hash = Buffer.from(data, 'utf8').toString('base64');
-  const fullRedirectUri = `${ROOT_API_URL}/api/auth/callback/zoom/extend`;
-
-  console.log('Token request with redirect_uri:', fullRedirectUri);
 
   const response = await fetch(
-    `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${fullRedirectUri}`,
+    `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${ROOT_API_URL}/api/auth/callback/zoom/extend?backurl=${backURL}`,
     {
       method: 'POST',
       headers: { Authorization: `Basic ${hash}` },
@@ -86,13 +83,23 @@ const calculateApiCalls = weeklyDays => {
   return totalMeetings <= 60 ? 1 : Math.ceil(totalMeetings / 60);
 };
 module.exports = async (req, res) => {
-  const { code, backUrl, state: listingId } = req.query;
-  console.log(code, backUrl, listingId, 'code, backUrl, listingId');
-  //   const ROOT_URL = process.env.REACT_APP_CANONICAL_ROOT_URL;
-
+  const { code, backurl: backURL } = req.query;
+  console.log(code, backURL, 'code, backUrl');
   try {
     // Get zoom access token
-    const access_token = await getZoomToken(code, backUrl);
+    // Validate parameters
+    if (!code || !backURL) {
+      console.error('Missing required parameters');
+      return res.redirect(ERROR_PAGE_URL);
+    }
+
+    const listingId = backURL.split('/')?.[3];
+    if (!listingId) {
+      console.error('Invalid listing ID in backURL');
+      return res.redirect(ERROR_PAGE_URL);
+    }
+    console.log('Listing ID:', listingId);
+    const access_token = await getZoomToken(code, backURL);
     const zoomUser = await getZoomUser(access_token);
     console.log('Zoom user:', zoomUser);
     console.log('Listing ID:', listingId);
@@ -191,7 +198,7 @@ module.exports = async (req, res) => {
         'YYYY-MM-DD HH:mm:ss'
       )
     );
-    return res.redirect(`${ROOT_URL}/l/listing/${listingId}`);
+    return res.redirect(`${ROOT_URL}${backURL}`);
   } catch (error) {
     console.error('Error extending meetings:', error);
     return res.redirect(ERROR_PAGE_URL);

@@ -268,10 +268,6 @@ const BookingPanel = props => {
             checkOldTransactionData={checkOldTransactionData}
           />
         ) : null}
-        <div className={css.addMoreMeetings}>
-          {' '}
-          {isOwnListing && isRecurring && <AddMoreMeetings listing={listing} />}
-        </div>
       </ModalInMobile>
       <div className={css.openBookingForm}>
         <div className={css.priceContainer}>
@@ -282,10 +278,7 @@ const BookingPanel = props => {
             <FormattedMessage id={unitTranslationKey} />
           </div>
         </div>
-        <div className={css.addMoreMeetings}>
-          {' '}
-          {isOwnListing && isRecurring && <AddMoreMeetings listing={listing} />}
-        </div>
+        <div className={css.addMoreMeetings}> </div>
         {showBookingTimeForm ? (
           <Button
             rootClassName={css.bookButton}
