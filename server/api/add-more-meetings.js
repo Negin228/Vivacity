@@ -37,9 +37,9 @@ const getZoomUser = async access_token => {
 };
 
 const calculateRemainingMeetings = (weeklyDays, seriesNumber) => {
-  const totalMeetings = weeklyDays.length * 52;
+  const totalMeetings = weeklyDays.length * 26; // 6 months
   const meetingsCreated = seriesNumber * 60;
-  return totalMeetings - meetingsCreated;
+  return Math.max(0, Math.min(60, totalMeetings - meetingsCreated));
 };
 const createZoomMeeting = async (params, userId, access_token) => {
   const response = await fetch(`https://api.zoom.us/v2/users/${userId}/meetings`, {
@@ -79,8 +79,19 @@ const createAdditionalMeetings = async (
 };
 
 const calculateApiCalls = weeklyDays => {
-  const totalMeetings = weeklyDays.length * 52;
-  return totalMeetings <= 60 ? 1 : Math.ceil(totalMeetings / 60);
+  const totalMeetings = weeklyDays.length * 26; // 26 weeks = 6 months
+
+  if (totalMeetings <= 60) {
+    return {
+      apiCalls: 1,
+      endTimes: totalMeetings,
+    };
+  }
+
+  return {
+    apiCalls: Math.ceil(totalMeetings / 60),
+    endTimes: 60,
+  };
 };
 module.exports = async (req, res) => {
   const { code, backurl: backURL } = req.query;
@@ -119,7 +130,7 @@ module.exports = async (req, res) => {
     console.log(apiCallsNeeded, 'apiCallsNeeded');
     const duration = parseInt(publicData.classDuration.value.split('_')[0]);
     // Setup meeting params from last class date
-    console.log(duration, 'duration');
+    const { apiCalls, endTimes } = calculateApiCalls(publicData.weeklyDays);
     const meetingParams = {
       topic: listing.data.data.attributes.title,
       start_time: moment
@@ -127,13 +138,13 @@ module.exports = async (req, res) => {
         .add(7, 'days')
         .format(),
       timezone: publicData.timezone,
-      duration: duration, // Use extracted duration
+      duration: duration,
       type: 8,
       recurrence: {
         type: 2,
         repeat_interval: 1,
         weekly_days: publicData.weeklyDays.map(day => day.value).join(','),
-        end_times: 60,
+        end_times: endTimes, // Use calculated endTimes
       },
     };
     console.log(meetingParams, 'meetingParams');
@@ -152,7 +163,11 @@ module.exports = async (req, res) => {
     currentMeeting = initialMeeting;
 
     // Create additional meetings if needed
-    for (let i = 1; i < apiCallsNeeded; i++) {
+    for (let i = 1; i < apiCalls; i++) {
+      // Changed from apiCallsNeeded
+      const remainingMeetings = calculateRemainingMeetings(publicData.weeklyDays, i);
+      if (remainingMeetings <= 0) break; // Add break condition
+
       const nextMeeting = await createAdditionalMeetings(
         currentMeeting.occurrences[currentMeeting.occurrences.length - 1].start_time,
         meetingParams,
@@ -174,17 +189,20 @@ module.exports = async (req, res) => {
     }
 
     // Update listing with final data
-    await integrationSdk.listings.update({
+    const updateResponse = await integrationSdk.listings.update({
       id: listingId,
-      privateData: {
-        zoom: { series: allMeetingUrls },
-      },
+      privateData: { zoom: { series: allMeetingUrls } },
       publicData: {
         lastClass: moment(
           currentMeeting.occurrences[currentMeeting.occurrences.length - 1].start_time
         ).unix(),
       },
     });
+
+    if (!updateResponse) {
+      console.error('Failed to update listing');
+      return res.redirect(ERROR_PAGE_URL);
+    }
     if (!initialMeeting?.occurrences?.length) {
       console.error('Failed to create initial zoom meeting');
       return res.redirect(ERROR_PAGE_URL);

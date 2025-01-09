@@ -54,13 +54,30 @@ const createZoomMeeting = async (params, userId, access_token) => {
 };
 
 const calculateApiCalls = weeklyDays => {
-  const totalMeetings = weeklyDays.length * 52;
-  return totalMeetings <= 60 ? 1 : Math.ceil(totalMeetings / 60);
+  // Calculate meetings for 6 months (26 weeks)
+  const totalMeetings = weeklyDays.length * 26;
+
+  // If total meetings <= 60, we need 1 API call but will set end_times to 26
+
+  if (totalMeetings <= 60) {
+    return {
+      apiCalls: 1,
+      endTimes: totalMeetings, // Exact number needed for 6 months
+    };
+  }
+
+  // For more meetings, calculate needed API calls
+  return {
+    apiCalls: Math.ceil(totalMeetings / 60),
+    endTimes: 60,
+  };
 };
 
 const calculateRemainingMeetings = (weeklyDays, seriesNumber) => {
-  const totalMeetings = weeklyDays.length * 52; // Total meetings for a year
-  return totalMeetings - seriesNumber * 60; // Subtract meetings already created
+  const totalMeetings = weeklyDays.length * 26; // 6 months
+  const meetingsCreated = seriesNumber * 60;
+  const remaining = totalMeetings - meetingsCreated;
+  return Math.max(0, Math.min(60, remaining));
 };
 
 const createAdditionalMeetings = async (
@@ -75,17 +92,18 @@ const createAdditionalMeetings = async (
 
   if (remainingMeetings <= 0) return null;
 
-  const nextStartDate = moment(lastMeetingDate)
-    .tz(params.timezone)
-    .add(7, 'days');
+  // const nextStartDate = moment(lastMeetingDate)
+  //   .tz(params.timezone)
+  //   .add(7, 'days');
 
   const newParams = {
     ...params,
-    start_time: nextStartDate.format('YYYY-MM-DDTHH:mm:ssZ'),
+    start_time: moment(lastMeetingDate)
+      .tz(params.timezone)
+      .add(7, 'days')
+      .format('YYYY-MM-DDTHH:mm:ssZ'),
     recurrence: {
-      type: 2,
-      repeat_interval: 1,
-      weekly_days: weeklyDays.map(day => day.value).join(','),
+      ...params.recurrence,
       end_times: Math.min(60, remainingMeetings),
     },
   };
@@ -143,17 +161,19 @@ module.exports = async (req, res) => {
     let lastMeeting;
     let lastClass;
     if (isRecurring) {
+      const { apiCalls, endTimes } = calculateApiCalls(weeklyDays);
       meetingParams.recurrence = {
         type: 2,
         repeat_interval: 1,
         weekly_days: weeklyDays.map(day => day.value).join(','),
-        end_times: 60,
+        end_times: endTimes, // Use calculated endTimes
       };
 
-      const apiCallsNeeded = calculateApiCalls(weeklyDays);
-      console.log(`Need ${apiCallsNeeded} API calls for ${weeklyDays.length} weekly meetings`);
-      console.log('Array initialized:', allMeetingUrls);
+      console.log(
+        `Need ${apiCalls} API calls for ${weeklyDays.length} weekly meetings for 6 months`
+      );
       initialMeeting = await createZoomMeeting(meetingParams, zoomUser.id, access_token);
+
       allMeetingUrls.push({
         start_url: initialMeeting.start_url,
         join_url: initialMeeting.join_url,
@@ -162,7 +182,9 @@ module.exports = async (req, res) => {
       });
 
       let currentMeeting = initialMeeting;
-      for (let i = 1; i < apiCallsNeeded; i++) {
+      for (let i = 1; i < apiCalls; i++) {
+        const remainingMeetings = calculateRemainingMeetings(weeklyDays, i);
+        if (remainingMeetings <= 0) break;
         const nextMeeting = await createAdditionalMeetings(
           currentMeeting.occurrences[currentMeeting.occurrences.length - 1].start_time,
           meetingParams,
