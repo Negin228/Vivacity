@@ -32,6 +32,7 @@ const getOldTransactionData = require('./api/check-transaction');
 const createUser = require('./api/sign-up');
 const acceptTransaction = require('./api/accept-transaction');
 const router = express.Router();
+const extendMeetingsWithZoom = require('./api/add-more-meetings');
 
 // ================ API router middleware: ================ //
 
@@ -98,6 +99,6 @@ router.post('/create-stripe-product-and-price', createStripeProductAndPrice);
 
 router.get('/stripe/success', subscriptionSuccess);
 router.get('/stripe/cancel', subscriptionDecline);
-
+router.get('/auth/callback/zoom/extend', extendMeetingsWithZoom);
 router.post('/cancel-stripe-recurring', cancelStripeRecurring);
 module.exports = router;

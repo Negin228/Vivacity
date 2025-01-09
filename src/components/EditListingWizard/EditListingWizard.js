@@ -301,10 +301,10 @@ class EditListingWizard extends Component {
     const isNewListingFlow = [LISTING_PAGE_PARAM_TYPE_NEW, LISTING_PAGE_PARAM_TYPE_DRAFT].includes(
       params.type
     );
-    console.log(params.type, 'params.type');
-    if (params.type === 'edit') {
-      return <NamedRedirect name="LandingPage" />;
-    }
+    // console.log(params.type, 'params.type');
+    // if (params.type === 'edit') {
+    //   return <NamedRedirect name="LandingPage" />;
+    // }
     const rootClasses = rootClassName || css.root;
     const classes = classNames(rootClasses, className);
     const currentListing = ensureListing(listing);
