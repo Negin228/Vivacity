@@ -160,8 +160,11 @@ class EditListingPhotosPanel extends Component {
       <div className="bg-green-100 mb-8 max-w-lg text-green-700 border border-solid border-green-300 rounded p-4 inline-block">
         <h2 className="my-0 text-lg">
           {' '}
-          Scheduled Zoom meeting (End date:{' '}
-          {moment.unix(listing?.attributes?.publicData?.lastClass).format('MMM DD, YYYY')})
+          Scheduled Zoom meeting
+          {listing?.attributes?.publicData?.lastClass &&
+            ` (End date: ${moment
+              .unix(listing.attributes.publicData.lastClass)
+              .format('MMM DD, YYYY')})`}
         </h2>
         <div className="my-0 text-sm flex gap-3  mt-2">
           <span>Start URL:</span>{' '}

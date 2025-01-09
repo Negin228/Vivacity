@@ -36,9 +36,10 @@ export const ActionBarMaybe = props => {
   };
 
   const meetingStatus = getMeetingStatus();
+  const hasLastClass = Boolean(listing?.attributes?.publicData?.lastClass);
+  const showExpiryWarning =
+    isOwnListing && isRecurringPayment && hasLastClass && meetingStatus !== 'active';
 
-  // Debug current Unix timestamp
-  const showExpiryWarning = isOwnListing && isRecurringPayment && meetingStatus !== 'active';
   const warningMessage =
     showExpiryWarning &&
     (meetingStatus === 'expired'
