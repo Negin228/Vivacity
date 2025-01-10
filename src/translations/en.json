@@ -469,7 +469,7 @@
   "ManageListingCard.closeListing": "Close teacher profile",
   "ManageListingCard.closedListing": "This teacher profile is closed and not visible on the marketplace.",
   "ManageListingCard.draftOverlayText": "{listingTitle} is a draft and can't be booked.",
-  "ManageListingCard.editListing": "Edit class listing",
+  "ManageListingCard.editListing": "Update class listing",
   "ManageListingCard.finishListingDraft": "Finish class listing",
   "ManageListingCard.manageAvailability": "Manage availability",
   "ManageListingCard.openListing": "Open teacher profile",
