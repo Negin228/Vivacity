@@ -151,12 +151,12 @@ class EditListingPhotosPanel extends Component {
               By authorizing with Zoom, you'll be creating a 6-month series of recurring meetings in
               your zoom account. Your students can subscribe to these classes on a monthly basis.
               When your class schedule is nearing its end, you can easily extend the meetings for
-              another 6 months by updating your class with the "Add more meetings" button which will
+              another 6 months by updating your class with the "Extend Meetings" button which will
               be available here after you publish the class.{' '}
             </>
           )}
-          In order to proceed further, you need to authorize us via Zoom so that we can schedule a
-          meeting on your behalf.
+          In order to proceed further, you need to authorize us via Zoom so that we can schedule
+          meetings on your behalf.
         </p>
 
         <ExternalLink
