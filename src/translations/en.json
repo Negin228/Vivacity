@@ -1155,5 +1155,6 @@
   "TransactionPanel.saleSuscriptionConfirmedTitle": "Subscription confirmed",
   "ActivityFeed.ownTransitionConfirmedSubscription": "{ displayName } subscribed to your session.",
   "ActivityFeed.transitionConfirmedSubscription": "You subscribed to { listingTitle }.",
-  "TransactionPanel.perSubscription": "per month"
+  "TransactionPanel.perSubscription": "per month",
+  "SuccessPage.CheckoutPage": "My Classes"
 }
