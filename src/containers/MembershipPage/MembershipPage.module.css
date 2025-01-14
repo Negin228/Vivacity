@@ -1,0 +1,11 @@
+.link {
+  color: #fff;
+  font-weight: 600;
+  border: 2px solid black;
+  padding: 10px 20px;
+  background-color: var(--marketplaceColorDark);
+  text-decoration: none;
+  margin-top: 1rem;
+  display: inline-block;
+  transition: color 0.2s;
+}

@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { LISTING_STATE_DRAFT } from '../../util/types';
 import { EditListingPhotosForm } from '../../forms';
 import { ensureOwnListing } from '../../util/data';
-import { ListingLink, Modal } from '../../components';
+import { ListingLink, Modal, NamedLink } from '../../components';
 
 import css from './EditListingPhotosPanel.module.css';
 import { withRouter } from 'react-router-dom';
@@ -134,13 +134,29 @@ class EditListingPhotosPanel extends Component {
     const doesNotHaveZoom = !getZoomUrls(currentListing);
 
     const currentPath = location.pathname;
+    const isWithinOneYear = () => {
+      const lastClass = listing?.attributes?.publicData?.lastClass;
+      if (!lastClass) return false;
 
+      const lastClassDate = moment.unix(lastClass);
+      const oneYearFromNow = moment().add(1, 'year');
+      return lastClassDate.isBefore(oneYearFromNow);
+    };
     const zoomMeetingScheduleContent = (
       <div>
         <h1>Zoom Meeting</h1>
         <p className="leading-snug">
-          In order to proceed further, you need to authorize us via Zoom so that we can schedule a
-          meeting on your behalf.
+          {isRecurring && (
+            <>
+              By authorizing with Zoom, you'll be creating a 6-month series of recurring meetings in
+              your zoom account. Your students can subscribe to these classes on a monthly basis.
+              When your class schedule is nearing its end, you can easily extend the meetings for
+              another 6 months by updating your class with the "Extend Meetings" button which will
+              be available here after you publish the class.{' '}
+            </>
+          )}
+          In order to proceed further, you need to authorize us via Zoom so that we can schedule
+          meetings on your behalf.
         </p>
 
         <ExternalLink
@@ -161,10 +177,31 @@ class EditListingPhotosPanel extends Component {
         <h2 className="my-0 text-lg">
           {' '}
           Scheduled Zoom meeting
-          {listing?.attributes?.publicData?.lastClass &&
-            ` (End date: ${moment
-              .unix(listing.attributes.publicData.lastClass)
-              .format('MMM DD, YYYY')})`}
+          {listing?.attributes?.publicData &&
+            (isRecurring
+              ? listing?.attributes?.publicData?.lastClass &&
+                ` (End date: ${moment
+                  .unix(listing.attributes.publicData.lastClass)
+                  .format('MMM DD, YYYY')})`
+              : listing?.attributes?.publicData?.startDate &&
+                ` (Start date: ${moment(listing.attributes.publicData.startDate).format(
+                  'MMM DD, YYYY'
+                )})`)}
+          {isRecurring && listing?.attributes?.publicData?.lastClass && (
+            <>
+              <p className="text-sm mt-2">
+                Your class meetings are scheduled until{' '}
+                {moment.unix(listing.attributes.publicData.lastClass).format('MMM DD, YYYY')}.
+              </p>
+              <p className="text-sm mt-1">
+                {listing.attributes.state === 'published'
+                  ? isWithinOneYear()
+                    ? 'You can extend your meetings for 6 more months using the button below when they are about to expire.'
+                    : 'The option to extend meetings will be available when your meetings are within one year of expiry.'
+                  : 'The option to extend meetings will be available after you publish your class.'}
+              </p>
+            </>
+          )}
         </h2>
         <div className="my-0 text-sm flex gap-3  mt-2">
           <span>Start URL:</span>{' '}
@@ -179,7 +216,15 @@ class EditListingPhotosPanel extends Component {
             {joinUrl?.slice(0, 40) + '...'}
           </ExternalLink>
         </div>
-        {isRecurringAndPublished && <AddMoreMeetings listing={listing} location={location} />}
+        {isRecurringAndPublished && isWithinOneYear() && (
+          <AddMoreMeetings listing={listing} location={location} />
+        )}
+        {isRecurring && (
+          <p className="text-sm mt-2 text-gray-600">
+            Need help? Please <NamedLink name="ContactPage">contact the site admin</NamedLink> for
+            assistance.
+          </p>
+        )}
       </div>
     );
 

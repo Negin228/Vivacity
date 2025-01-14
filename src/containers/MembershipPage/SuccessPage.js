@@ -8,10 +8,13 @@ import {
   LayoutWrapperFooter,
   LayoutWrapperMain,
   LayoutWrapperTopbar,
+  NamedLink,
   NamedRedirect,
 } from '../../components';
 import { BsFillPatchCheckFill } from 'react-icons/bs';
 import { useHistory, useParams, withRouter, useRouteMatch } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
+import css from './MembershipPage.module.css';
 
 function SuccessPage(props) {
   const { location } = props;
@@ -48,6 +51,9 @@ function SuccessPage(props) {
                 <p className="m-0 text-gray-500 text-md font-semibold">
                   See you in one of our classes soon!
                 </p>
+                <NamedLink name="InboxPage" params={{ tab: 'orders' }} className={css.link}>
+                  <FormattedMessage id="SuccessPage.CheckoutPage" />
+                </NamedLink>
               </div>
             </div>
           </div>
