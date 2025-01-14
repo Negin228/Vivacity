@@ -77,4 +77,9 @@
 .classDate {
   margin-bottom: 0;
   line-height: 1.4;
+  font-weight: 500;
+}
+.weekLabel {
+  font-weight: 600;
+  font-style: italic;
 }

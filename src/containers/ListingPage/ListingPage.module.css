@@ -590,3 +590,7 @@
 .warningMessage {
   color: var(--attentionColor);
 }
+.weekLabel {
+  font-weight: 600;
+  font-style: italic;
+}
