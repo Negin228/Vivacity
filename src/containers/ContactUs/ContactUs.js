@@ -14,16 +14,41 @@ import FieldInput from './FieldInput';
 import { composeValidators, emailFormatValid, required } from '../../util/validators';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+
+console.log('Allowed Origin:', process.env.REACT_APP_CANONICAL_ROOT_URL);
+console.log('Backend:', process.env.REACT_APP_ENV);
+
 function ContactUs() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const history = useHistory();
 
+  
   const handleSubmit = async formValues => {
     const { fullName, email, message, userType } = formValues;
     const name = fullName || '';
+
+    // Basic validation to ensure no fields are empty
+    if (!name || !email || !message || !userType) {
+    setErrorMessage("Please fill in all the fields.");
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+    if (!emailRegex.test(email)) {
+      setErrorMessage("Please enter a valid email address.");
+      return;
+    }
+
     setSubmitting(true);
     setErrorMessage(null);
+    console.log("Submitting data:", {
+      name,
+      userType,
+      email,
+      message,
+    });
 
     try {
       const response = await axios.post('/contact-us', {
@@ -31,24 +56,37 @@ function ContactUs() {
         userType,
         email,
         message,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
       const { success } = response.data;
 
-      if (success)
+      if (success) {
         history.push({
           pathname: '/success',
-          params: {
-            success,
-          },
+          params: { success },
         });
+      }
     } catch (e) {
-      const error = e.response?.data?.message || e.message;
-      setErrorMessage(error);
+      if (e.response) {
+        console.error("Server error response:", e.response);
+        const error = e.response?.data?.message || "An error occurred";
+        setErrorMessage(error);
+      } else if (e.request) {
+        console.error("Error with request:", e.request);
+        setErrorMessage("No response received from the server.");
+      } else {
+        console.error("Error setting up request:", e.message);
+        setErrorMessage(e.message);
+      }
     } finally {
       setSubmitting(false);
     }
   };
+
   return (
     <StaticPage
       title="Contact Us"

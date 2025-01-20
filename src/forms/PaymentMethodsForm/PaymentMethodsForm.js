@@ -163,7 +163,6 @@ class PaymentMethodsForm extends Component {
       formId,
       formValues: values,
     };
-
     onSubmit(params);
   }
 

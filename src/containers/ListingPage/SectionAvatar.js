@@ -1,22 +1,28 @@
 import React from 'react';
-import { AvatarLarge, AvatarMedium } from '../../components';
-
+import { AvatarLarge, AvatarMedium, NamedLink } from '../../components'; // Imported NamedLink
 import css from './ListingPage.module.css';
 
 const SectionAvatar = props => {
   const { user } = props;
+  const profileLink = user ? `/profile/${user.id?.uuid}` : '#'; // Constructed link to the profile page
+
   return (
     <div className={css.sectionAvatar}>
-      <AvatarLarge
-        user={user}
-        className={css.avatarDesktop}
-        initialsClassName={css.initialsDesktop}
-        disableProfileLink
-      />
+      <NamedLink name="ProfilePage" params={{ id: user.id.uuid }}>
+        <AvatarLarge
+          user={user}
+          className={css.avatarDesktop}
+          initialsClassName={css.initialsDesktop}
+          disableProfileLink
+        />
+      </NamedLink>
 
-      <AvatarMedium user={user} className={css.avatarMobile} disableProfileLink />
+      <NamedLink name="ProfilePage" params={{ id: user.id.uuid }}>
+        <AvatarMedium user={user} className={css.avatarMobile} disableProfileLink />
+      </NamedLink>
     </div>
   );
 };
 
 export default SectionAvatar;
+

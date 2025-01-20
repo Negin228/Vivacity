@@ -45,6 +45,7 @@ const { sitemapStructure } = require('./sitemap');
 const csp = require('./csp');
 const sdkUtils = require('./api-util/sdk');
 const flexIntegrationSdk = require('sharetribe-flex-integration-sdk');
+const cors = require('cors');
 
 const buildPath = path.resolve(__dirname, '..', 'build');
 const env = process.env.REACT_APP_ENV;
@@ -69,11 +70,14 @@ const integrationSdk = flexIntegrationSdk.createInstance({
 });
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 const options = {
   auth: {
     api_key: process.env.SENDGRID_API_KEY,
   },
 };
+
+
 // const handlePaymentIntentSucceeded = async paymentIntent => {
 //   try {
 //     const { id, metadata, charges } = paymentIntent;
@@ -402,42 +406,51 @@ app.post('/deauthorize-zoom/:key', middlewares, async (req, res) => {
   return res.status(200).end();
 });
 
-app.post('*', async (req, res) => {
-  if (req.url.startsWith('/contact-us')) {
-    const { name, email, userType, message } = req.body;
+app.post('/contact-us', bodyParser.json(), async (req, res) => {
+  const { name, email, userType, message } = req.body;
+  console.log('SENDGRID_SENDER_EMAIL:', process.env.SENDGRID_SENDER_EMAIL);
+  console.log('Request received:', req.body);
 
-    if (!userType || !message)
-      return res.status(422).send({ message: 'Please fill all the fields' });
-    // Check if the environment variable is set
-    if (!process.env.SENDGRID_SENDER_EMAIL) {
-        console.error('Environment variable SENDGRID_SENDER_EMAIL is not set');
-        return res.status(500).send({ message: 'Server configuration error', success: false });
-    }
-    try {
-      const mailBody = `
+  // Validate required fields
+  if (!userType || !message || !name || !email) {
+    return res.status(422).send({ message: 'Please fill all the fields' });
+  }
+
+  // Check environment variable
+  if (!process.env.SENDGRID_SENDER_EMAIL) {
+    console.error('Environment variable SENDGRID_SENDER_EMAIL is not set');
+    return res
+      .status(500)
+      .send({ message: 'Server configuration error', success: false });
+  }
+
+  try {
+    const mailBody = `
       <h3>
-      The following user contacted via contact form.
+        The following user contacted via contact form:
       </h3>
       ${name ? `<strong>Name:</strong> ${name}` : ''} <br />
-      ${email ? `<strong>Email:</strong>  ${email}` : ''} <br/> 
-      <strong>User type: </strong> ${userType} <br/> 
+      ${email ? `<strong>Email:</strong> ${email}` : ''} <br/> 
+      <strong>User type:</strong> ${userType} <br/> 
       <strong>Message:</strong> ${message} <br/>
-      `;
-      const sent = await transporter.sendMail({
-        //TODO: Replace it by admin's email
-        from: process.env.SENDGRID_SENDER_EMAIL,
-        to: process.env.SENDGRID_SENDER_EMAIL,
-        subject: 'Vivacity contact form message',
-        replyTo: email ? email : '',
-        text: userType,
+    `;
 
-        html: mailBody,
-      });
-      return res.send({ message: 'Message sent successfully', success: true });
-      } catch (e) {
-    console.error('Email sending error:', e.message); // Log the error message
-    return res.status(500).send({ message: 'Message sending failed', success: false });
-    }
+    const sent = await transporter.sendMail({
+      from: process.env.SENDGRID_SENDER_EMAIL, // Use a verified sender address
+      to: 'contact@vivacity.studio',
+      subject: 'Vivacity Contact Form Message',
+      replyTo: email, // Add user email for reply-to
+      text: `User Type: ${userType}\nMessage: ${message}`,
+      html: mailBody,
+    });
+
+    console.log('Email sent:', sent);
+    return res.status(200).send({ message: 'Message sent successfully', success: true });
+  } catch (e) {
+    console.error('Email sending error:', e.message);
+    return res
+      .status(500)
+      .send({ message: 'Message sending failed', success: false });
   }
 });
 app.get('*', async (req, res) => {

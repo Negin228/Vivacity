@@ -41,6 +41,8 @@
   }
 }
 
+
+
 .createListingLink {
   margin-top: 18px;
 
@@ -56,6 +58,17 @@
   height: 100px;
   border-radius: 5px;
   padding: 0px 10px;
+}
+.image:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
+
+.imageHoverEffect {
+  transition: transform 0.3s ease;
+}
+.imageHoverEffect:hover {
+  transform: scale(1.1);
 }
 .container {
   margin: 0 1rem;
