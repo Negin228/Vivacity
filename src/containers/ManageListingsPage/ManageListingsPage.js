@@ -53,6 +53,7 @@ export class ManageListingsPageComponent extends Component {
       scrollingDisabled,
       intl,
       providerNotificationCount,
+      currentUserListing,
     } = this.props;
 
     const hasPaginationInfo = !!pagination && pagination.totalItems != null;
@@ -116,44 +117,58 @@ export class ManageListingsPageComponent extends Component {
       `(max-width: 1920px) ${panelWidth / 2}vw`,
       `${panelWidth / 3}vw`,
     ].join(', ');
-    const tabs = [
-      {
-        text: (
-          <span>
-            <FormattedMessage id="InboxPage.ordersTabTitle" />
-          </span>
-        ),
-        selected: false,
-        linkProps: {
-          name: 'InboxPage',
-          params: { tab: 'orders' },
-        },
-      },
-      {
-        text: (
-          <span>
-            <FormattedMessage id="InboxPage.salesTabTitle" />
-            {providerNotificationBadge}
-          </span>
-        ),
-        selected: false,
-        linkProps: {
-          name: 'InboxPage',
-          params: { tab: 'sales' },
-        },
-      },
-      {
-        text: (
-          <span>
-            <FormattedMessage id="TopbarDesktop.yourListingsLink" />
-          </span>
-        ),
-        selected: true,
-        linkProps: {
-          name: 'ManageListingsPage',
-        },
-      },
-    ];
+    const tabs = currentUserListing
+      ? [
+          {
+            text: (
+              <span>
+                <FormattedMessage id="InboxPage.ordersTabTitle" />
+              </span>
+            ),
+            selected: false,
+            linkProps: {
+              name: 'InboxPage',
+              params: { tab: 'orders' },
+            },
+          },
+          {
+            text: (
+              <span>
+                <FormattedMessage id="InboxPage.salesTabTitle" />
+                {providerNotificationBadge}
+              </span>
+            ),
+            selected: false,
+            linkProps: {
+              name: 'InboxPage',
+              params: { tab: 'sales' },
+            },
+          },
+          {
+            text: (
+              <span>
+                <FormattedMessage id="TopbarDesktop.yourListingsLink" />
+              </span>
+            ),
+            selected: true,
+            linkProps: {
+              name: 'ManageListingsPage',
+            },
+          },
+        ]
+      : [
+          {
+            text: (
+              <span>
+                <FormattedMessage id="TopbarDesktop.yourListingsLink" />
+              </span>
+            ),
+            selected: true,
+            linkProps: {
+              name: 'ManageListingsPage',
+            },
+          },
+        ];
     const nav = <TabNav rootClassName={css.tabs} tabRootClassName={css.tab} tabs={tabs} />;
     return (
       <Page title={title} scrollingDisabled={scrollingDisabled}>
@@ -251,7 +266,10 @@ const mapStateToProps = state => {
     closingListing,
     closingListingError,
   } = state.ManageListingsPage;
-  const { currentUserNotificationCount: providerNotificationCount } = state.user;
+  const {
+    currentUserNotificationCount: providerNotificationCount,
+    currentUserListing,
+  } = state.user;
   const listings = getOwnListingsById(state, currentPageResultIds);
   return {
     currentPageResultIds,
@@ -266,6 +284,7 @@ const mapStateToProps = state => {
     closingListing,
     closingListingError,
     providerNotificationCount,
+    currentUserListing,
   };
 };
 
