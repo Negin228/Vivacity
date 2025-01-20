@@ -105,7 +105,7 @@ const FeedSection = props => {
         </div>
       ) : null}
       {(isCustomer && joinUrl && (isSubscription && subscriptionId)) ||
-      (isPerSession && transactionId && isAccepted) ? (
+      (isPerSession && transactionId && isAccepted && isCustomer) ? (
         <div className="mt-4 w-full  bg-marketplaceColor hover:bg-marketplaceColorDark transition duration-100 rounded shadow">
           <ExternalLink
             href={joinUrl}
