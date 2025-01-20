@@ -50,7 +50,7 @@ class EditListingPhotosPanel extends Component {
     const rootClass = rootClassName || css.root;
     const classes = classNames(rootClass, className);
     const currentListing = ensureOwnListing(listing);
-    const isRecurring = currentListing?.attributes?.publicData?.paymentType.some(
+    const isRecurring = currentListing?.attributes?.publicData?.paymentType?.some(
       type => type.value === 'recurring'
     );
     const isRecurringAndPublished = isRecurring && currentListing.attributes.state === 'published';

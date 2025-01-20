@@ -130,7 +130,8 @@ const BookingPanel = props => {
   const monthlyPrice = listing.attributes.publicData?.monthlyPrice;
   const isBook = !!parse(location.search).book;
   const { publicData } = listing.attributes;
-  const isRecurring = publicData?.paymentType.some(type => type.value === 'recurring');
+
+  const isRecurring = publicData?.paymentType?.some(type => type.value === 'recurring');
   // console.log('BookingPanel props', publicData);
   const currentListing = ensureListing(listing);
   const currentAuthor = ensureUser(currentListing.author);
