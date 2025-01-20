@@ -31,6 +31,8 @@ const defaultDirectives = {
 
     'sentry.io',
     '*.stripe.com',
+    '*.google-analytics.com',
+    '*.googletagmanager.com',
   ],
   fontSrc: [self, data, 'assets-sharetribecom.sharetribe.com', 'fonts.gstatic.com'],
   frameSrc: [self, '*.stripe.com'],
@@ -56,6 +58,8 @@ const defaultDirectives = {
     'www.google.com',
     'www.google-analytics.com',
     'stats.g.doubleclick.net',
+    '*.google-analytics.com',
+    '*.googletagmanager.com',
 
     '*.stripe.com',
   ],
@@ -65,11 +69,20 @@ const defaultDirectives = {
     unsafeEval,
     data,
     'maps.googleapis.com',
+    '*.google-analytics.com',
+    '*.googletagmanager.com',
     'api.mapbox.com',
     '*.google-analytics.com',
     'js.stripe.com',
   ],
-  styleSrc: [self, unsafeInline, 'fonts.googleapis.com', 'api.mapbox.com'],
+  styleSrc: [
+    self,
+    unsafeInline,
+    'fonts.googleapis.com',
+    'api.mapbox.com',
+    '*.google-analytics.com',
+    '*.googletagmanager.com',
+  ],
 };
 
 /**
