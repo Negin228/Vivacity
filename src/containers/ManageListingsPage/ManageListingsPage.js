@@ -19,6 +19,7 @@ import {
   LayoutWrapperSideNav,
   TabNav,
   NotificationBadge,
+  NamedRedirect,
 } from '../../components';
 import { TopbarContainer } from '../../containers';
 
@@ -54,15 +55,16 @@ export class ManageListingsPageComponent extends Component {
       intl,
       providerNotificationCount,
       currentUserListing,
+      isTeacher,
     } = this.props;
 
     const hasPaginationInfo = !!pagination && pagination.totalItems != null;
     const listingsAreLoaded = !queryInProgress && hasPaginationInfo;
 
     const loadingResults = (
-      <h2>
+      <h3>
         <FormattedMessage id="ManageListingsPage.loadingOwnListings" />
-      </h2>
+      </h3>
     );
 
     const queryError = (
@@ -73,19 +75,19 @@ export class ManageListingsPageComponent extends Component {
 
     const noResults =
       listingsAreLoaded && pagination.totalItems === 0 ? (
-        <h1 className={css.title}>
+        <h3 className={css.title}>
           <FormattedMessage id="ManageListingsPage.noResults" />
-        </h1>
+        </h3>
       ) : null;
 
     const heading =
       listingsAreLoaded && pagination.totalItems > 0 ? (
-        <h1 className={css.title}>
+        <h3 className={css.title}>
           <FormattedMessage
             id="ManageListingsPage.youHaveListings"
             values={{ count: pagination.totalItems }}
           />
-        </h1>
+        </h3>
       ) : (
         noResults
       );
@@ -117,7 +119,7 @@ export class ManageListingsPageComponent extends Component {
       `(max-width: 1920px) ${panelWidth / 2}vw`,
       `${panelWidth / 3}vw`,
     ].join(', ');
-    const tabs = currentUserListing
+    const tabs = isTeacher
       ? [
           {
             text: (
@@ -156,20 +158,13 @@ export class ManageListingsPageComponent extends Component {
             },
           },
         ]
-      : [
-          {
-            text: (
-              <span>
-                <FormattedMessage id="TopbarDesktop.yourListingsLink" />
-              </span>
-            ),
-            selected: true,
-            linkProps: {
-              name: 'ManageListingsPage',
-            },
-          },
-        ];
+      : [];
+
     const nav = <TabNav rootClassName={css.tabs} tabRootClassName={css.tab} tabs={tabs} />;
+
+    if (!isTeacher) {
+      return <NamedRedirect name="LandingPage" />;
+    }
     return (
       <Page title={title} scrollingDisabled={scrollingDisabled}>
         <LayoutSideNavigation>
@@ -269,7 +264,9 @@ const mapStateToProps = state => {
   const {
     currentUserNotificationCount: providerNotificationCount,
     currentUserListing,
+    currentUser,
   } = state.user;
+  const isTeacher = currentUser?.attributes?.profile?.publicData.userType === 'teacher';
   const listings = getOwnListingsById(state, currentPageResultIds);
   return {
     currentPageResultIds,
@@ -285,6 +282,7 @@ const mapStateToProps = state => {
     closingListingError,
     providerNotificationCount,
     currentUserListing,
+    isTeacher,
   };
 };
 

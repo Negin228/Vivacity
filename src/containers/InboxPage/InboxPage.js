@@ -309,7 +309,7 @@ export const InboxPageComponent = props => {
   } = props;
   const { tab } = params;
   const ensuredCurrentUser = ensureCurrentUser(currentUser);
-
+  const isTeacher = ensuredCurrentUser?.attributes?.profile?.publicData?.userType === 'teacher';
   const validTab = tab === 'orders' || tab === 'sales';
   if (!validTab) {
     return <NotFoundPage />;
@@ -421,7 +421,7 @@ export const InboxPageComponent = props => {
           <h1 className={css.title}>
             <FormattedMessage id="InboxPage.title" />
           </h1>
-          {currentUserListing ? nav : <div className={css.navPlaceholder} />}
+          {isTeacher ? nav : <div className={css.navPlaceholder} />}
         </LayoutWrapperSideNav>
         <LayoutWrapperMain>
           {error}
