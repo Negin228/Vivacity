@@ -1,1 +1,1 @@
-{{transaction.provider.display-name}} accepted your booking request!
+🎉 Your Booking Is Confirmed!
