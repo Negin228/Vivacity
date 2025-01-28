@@ -32,6 +32,14 @@ exports.transactionLineItems = (listing, bookingData) => {
   const bookingType = bookingData?.bookingType;
   const isBookingFree = bookingType === 'free';
   const unitPrice = listing.attributes.price;
+  const publicData = listing.attributes.publicData;
+  const { paymentType = [], monthlyPrice } = publicData || {};
+
+  const isRecurring = paymentType?.some(type => type.value === 'recurring');
+  const monthlyPriceMoney =
+    isRecurring && monthlyPrice
+      ? new Money(monthlyPrice, process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY || 'USD')
+      : null;
   const hasStockReservationQuantity = bookingData && bookingData.stockReservationQuantity;
   const hasQuantity = bookingData && bookingData.quantity;
   const { bookingStart, bookingEnd } = bookingData || {};
@@ -62,7 +70,7 @@ exports.transactionLineItems = (listing, bookingData) => {
 
   const booking = {
     code: bookingUnitType,
-    unitPrice: isBookingFree ? new Money(0, 'USD') : unitPrice,
+    unitPrice: isBookingFree ? new Money(0, 'USD') : isRecurring ? monthlyPriceMoney : unitPrice,
     quantity: orderQuantity,
     includeFor: ['customer', 'provider'],
   };

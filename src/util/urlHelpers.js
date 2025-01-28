@@ -280,6 +280,6 @@ export const convertTimeOnly = (time, timezone) => {
   const targetTime = inputDate
     .clone()
     .tz(myTimeZone)
-    .format('h:mm a');
+    .format('h:mm a zz');
   return targetTime;
 };
