@@ -11,11 +11,11 @@ import { findOptionsForSelectFilter } from '../../util/search';
 import { createSlug } from '../../util/urlHelpers';
 import config from '../../config';
 import { NamedLink, ResponsiveImage } from '../../components';
-
+import { types as sdkTypes } from '../../util/sdkLoader';
 import css from './ListingCard.module.css';
 
 const MIN_LENGTH_FOR_LONG_WORDS = 10;
-
+const { Money } = sdkTypes;
 const priceData = (price, intl) => {
   if (price && price.currency === config.currency) {
     const formattedPrice = formatMoney(intl, price);
@@ -63,7 +63,7 @@ export const ListingCardComponent = props => {
   const slug = createSlug(title);
   const firstImage =
     currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
-  const { type, paymentType = [] } = publicData ?? {};
+  const { type, paymentType = [], monthlyPrice } = publicData ?? {};
   const isFree = type === 'free';
   const isRecurring = paymentType?.some(type => type.value === 'recurring');
   const isPerSession = paymentType?.some(type => type.value === 'perSession');
@@ -77,7 +77,8 @@ export const ListingCardComponent = props => {
     ? getCertificateInfo(certificateOptions, publicData.certificate)
     : null;
   const { formattedPrice, priceTitle } = priceData(price, intl);
-
+  const monthlyPriceFormatted =
+    isRecurring && monthlyPrice ? formatMoney(intl, new Money(monthlyPrice, config.currency)) : '';
   const unitType = config.bookingUnitType;
   const isNightly = unitType === LINE_ITEM_NIGHT;
   const isDaily = unitType === LINE_ITEM_DAY;
@@ -116,7 +117,7 @@ export const ListingCardComponent = props => {
         ) : (
           <div className={css.price}>
             <div className={css.priceValue} title={priceTitle}>
-              {formattedPrice}
+              {isRecurring ? monthlyPriceFormatted : formattedPrice}
             </div>
             <div className={css.perUnit}>
               {hasBoth ? (

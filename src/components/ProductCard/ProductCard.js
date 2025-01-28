@@ -24,6 +24,8 @@ function ProductCard({
     history.push({
       pathname: `/l/${createSlug(title)}/${id}`,
     });
+  const timeOfClass = convertTimeOnly(startDateString, timeZone);
+
   const { paymentType = [] } = publicData || {};
   const isRecurring = paymentType?.some(type => type.value === 'recurring');
   const isDateInPast = (startDateString, timezone) => {
@@ -88,6 +90,7 @@ function ProductCard({
                   .map(x => x.label)
                   .join(', ')}{' '}
                 <span className={css.weekLabel}>every week.</span>
+                <span> at {timeOfClass}</span>
               </p>
             </>
           ) : !isRecurring ? (
