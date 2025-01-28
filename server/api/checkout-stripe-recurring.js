@@ -154,6 +154,7 @@ module.exports = async (req, res) => {
             plan: 'monthly',
             priceId: priceId,
           },
+          application_fee_percent: 10,
         },
         success_url: `${rootUrl}/api/stripe/success?userId=${userId}`,
         cancel_url: `${rootUrl}/api/stripe/cancel`,
