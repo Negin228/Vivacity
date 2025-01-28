@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
       processAlias: 'flex-subscription/release-4',
       transition: 'transition/request-payment',
       params: {
-        bookingType: 'paid',
+        bookingType: isFreeBooking ? 'free' : 'paid',
         hasStockReservationQuantity: listing.attributes.publicData.stock,
         hasQuantity: listing.attributes.publicData.stock,
         bookingStart: listing.attributes.publicData.startDate,
