@@ -38,11 +38,11 @@ import {
 import MenuIcon from './MenuIcon';
 import Overlay from './Overlay';
 import css from './ManageListingCard.module.css';
-
+import { types as sdkTypes } from '../../util/sdkLoader';
 // Menu content needs the same padding
 const MENU_CONTENT_OFFSET = -12;
 const MAX_LENGTH_FOR_WORDS_IN_TITLE = 7;
-
+const { Money } = sdkTypes;
 const priceData = (price, intl) => {
   if (price && price.currency === config.currency) {
     const formattedPrice = formatMoney(intl, price);
@@ -131,8 +131,10 @@ export const ManageListingCardComponent = props => {
   const { title = '', price, state, publicData } = currentListing.attributes;
   const slug = createSlug(title);
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
-  const { paymentType = [] } = publicData ?? {};
+  const { paymentType = [], monthlyPrice } = publicData ?? {};
   const isRecurring = paymentType?.some(type => type.value === 'recurring');
+  const monthlyPriceFormatted =
+    isRecurring && monthlyPrice ? formatMoney(intl, new Money(monthlyPrice, config.currency)) : '';
   const isClosed = state === LISTING_STATE_CLOSED;
   const isDraft = state === LISTING_STATE_DRAFT;
   const firstImage =
@@ -312,7 +314,7 @@ export const ManageListingCardComponent = props => {
           {formattedPrice ? (
             <React.Fragment>
               <div className={css.priceValue} title={priceTitle}>
-                {formattedPrice}
+                {isRecurring ? monthlyPriceFormatted : formattedPrice}
               </div>
               <div className={css.perUnit}>
                 {isRecurring ? 'per month' : <FormattedMessage id={unitTranslationKey} />}
