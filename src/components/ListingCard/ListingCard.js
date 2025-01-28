@@ -120,13 +120,7 @@ export const ListingCardComponent = props => {
               {isRecurring ? monthlyPriceFormatted : formattedPrice}
             </div>
             <div className={css.perUnit}>
-              {hasBoth ? (
-                <FormattedMessage id={unitTranslationKey} />
-              ) : isRecurring ? (
-                'per month'
-              ) : (
-                <FormattedMessage id={unitTranslationKey} />
-              )}
+              {isRecurring ? 'per month' : <FormattedMessage id={unitTranslationKey} />}
             </div>
           </div>
         )}

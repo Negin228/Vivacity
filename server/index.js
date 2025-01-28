@@ -77,7 +77,6 @@ const options = {
   },
 };
 
-
 // const handlePaymentIntentSucceeded = async paymentIntent => {
 //   try {
 //     const { id, metadata, charges } = paymentIntent;
@@ -178,7 +177,9 @@ const updateUserSubscriptionDeleted = async dataObject => {
     console.log('Transaction status:', transaction.status);
 
     const lastTransition =
-      transaction.data.data.attributes.lastTransition === 'transition/confirm-subscription';
+      transaction.data.data.attributes.lastTransition === 'transition/confirm-subscription' ||
+      transaction.data.data.attributes.lastTransition === 'transition/complete' ||
+      transaction.data.data.attributes.lastTransition === 'transition/';
 
     // Function to update transaction metadata
     const updateTransactionMetadata = async () => {
@@ -419,9 +420,7 @@ app.post('/contact-us', bodyParser.json(), async (req, res) => {
   // Check environment variable
   if (!process.env.SENDGRID_SENDER_EMAIL) {
     console.error('Environment variable SENDGRID_SENDER_EMAIL is not set');
-    return res
-      .status(500)
-      .send({ message: 'Server configuration error', success: false });
+    return res.status(500).send({ message: 'Server configuration error', success: false });
   }
 
   try {
@@ -448,9 +447,7 @@ app.post('/contact-us', bodyParser.json(), async (req, res) => {
     return res.status(200).send({ message: 'Message sent successfully', success: true });
   } catch (e) {
     console.error('Email sending error:', e.message);
-    return res
-      .status(500)
-      .send({ message: 'Message sending failed', success: false });
+    return res.status(500).send({ message: 'Message sending failed', success: false });
   }
 });
 app.get('*', async (req, res) => {
