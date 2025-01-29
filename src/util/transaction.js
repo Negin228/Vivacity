@@ -175,7 +175,6 @@ const stateDescription = {
       on: {
         [TRANSITION_REVIEW_2_BY_PROVIDER]: STATE_REVIEWED,
         [TRANSITION_EXPIRE_PROVIDER_REVIEW_PERIOD]: STATE_REVIEWED,
-        [TRANSITION_CANCEL_AFTER_REVIEW]: STATE_CANCELED,
       },
     },
     [STATE_REVIEWED_BY_PROVIDER]: {
@@ -184,7 +183,12 @@ const stateDescription = {
         [TRANSITION_EXPIRE_CUSTOMER_REVIEW_PERIOD]: STATE_REVIEWED,
       },
     },
-    [STATE_REVIEWED]: { type: 'final' },
+    [STATE_REVIEWED]: {
+      on: {
+        [TRANSITION_CANCEL_AFTER_REVIEW]: STATE_CANCELED,
+      },
+    },
+    [STATE_CANCELED]: { type: 'final' },
   },
 };
 
