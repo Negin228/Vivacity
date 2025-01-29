@@ -38,18 +38,33 @@ const getZoomUser = async access_token => {
   return userData;
 };
 
-const createZoomMeeting = async (params, userId, access_token) => {
+const createZoomMeeting = async (params, userId, token) => {
+  console.log('Meeting params:', JSON.stringify(params, null, 2));
+
+  // Ensure single meeting has correct type and no recurrence
+  if (params.type === 2) {
+    params = {
+      ...params,
+      start_time: moment(params.start_time).format('YYYY-MM-DDTHH:mm:ssZ'),
+      type: 2, // Scheduled meeting
+      settings: {
+        join_before_host: true,
+        waiting_room: false,
+      },
+    };
+  }
+
   const response = await fetch(`https://api.zoom.us/v2/users/${userId}/meetings`, {
     method: 'POST',
     headers: {
+      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${access_token}`,
     },
     body: JSON.stringify(params),
   });
 
   const meetingData = await response.json();
-  if (response.status >= 400) throw Object.assign(new Error(), meetingData);
+  console.log('Meeting response:', JSON.stringify(meetingData, null, 2));
   return meetingData;
 };
 

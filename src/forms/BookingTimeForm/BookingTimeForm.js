@@ -256,16 +256,30 @@ export class BookingTimeFormComponent extends Component {
           const isAccepted =
             checkOldTransactionData?.attributes?.lastTransition === 'transition/accept';
           const shouldDisableButton = () => {
-            if (checkOldTransactionData) {
-              const processName = checkOldTransactionData.attributes.processName;
-              if (processName === 'flex-subscription' && subscriptionId) {
-                return true;
-              }
-              if (processName === 'flex-hourly-default-process' && transactionId) {
-                return true;
-              }
+            if (!checkOldTransactionData) return false;
+
+            const processName = checkOldTransactionData.attributes.processName;
+
+            // For both payment types
+            if (hasBoth) {
+              return processName === 'flex-subscription' && subscriptionId;
             }
-            return false;
+
+            // For subscription only
+            if (isRecurringOnly) {
+              return processName === 'flex-subscription' && subscriptionId;
+            }
+
+            // For per session only
+            if (isPerSessionOnly) {
+              return (
+                (processName === 'flex-hourly-default-process' && transactionId) ||
+                (processName === 'vivacity-free-process' && transactionId)
+              );
+            }
+
+            // For free process only
+            return processName === 'vivacity-free-process' && transactionId;
           };
           console.log(shouldDisableButton(), 'shouldDisableButton');
 
