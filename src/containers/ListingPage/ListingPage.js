@@ -24,7 +24,7 @@ import {
   ensureUser,
   userDisplayNameAsString,
 } from '../../util/data';
-import { timestampToDate, calculateQuantityFromHours } from '../../util/dates';
+import { timestampToDate, calculateQuantityFromHours, getNextClassDate } from '../../util/dates';
 import { richText } from '../../util/richText';
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { manageDisableScrolling, isScrollingDisabled } from '../../ducks/UI.duck';
@@ -58,6 +58,7 @@ import SectionFeaturesMaybe from './SectionFeaturesMaybe';
 import SectionReviews from './SectionReviews';
 import SectionMapMaybe from './SectionMapMaybe';
 import css from './ListingPage.module.css';
+import moment from 'moment';
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
 
@@ -105,8 +106,23 @@ export class ListingPageComponent extends Component {
     const { bookingStartTime, bookingEndTime, ...restOfValues } = values;
     const bookingStart = timestampToDate(bookingStartTime);
     const bookingEnd = timestampToDate(bookingEndTime);
-
+    const isDateInPast = (startDateString, timezone) => {
+      const listingTime = moment.tz(startDateString, timezone);
+      const currentTime = moment().tz(timezone);
+      return listingTime.isBefore(currentTime);
+    };
+    const nextClass = isDateInPast(
+      listing.attributes.publicData.startDate,
+      listing.attributes.publicData.timezone
+    )
+      ? getNextClassDate(
+          listing.attributes.publicData.startDate,
+          listing.attributes.publicData.weeklyDays,
+          listing.attributes.publicData.timezone
+        )
+      : null;
     const bookingData = {
+      nextClass,
       quantity: 1,
       bookingType,
       ...restOfValues,

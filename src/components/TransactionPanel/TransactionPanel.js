@@ -386,6 +386,7 @@ export class TransactionPanelComponent extends Component {
     const bookingSubTitle = price
       ? `${formatMoney(intl, price)} ${intl.formatMessage({ id: unitTranslationKey })}`
       : '';
+
     console.log();
     const firstImage =
       currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;

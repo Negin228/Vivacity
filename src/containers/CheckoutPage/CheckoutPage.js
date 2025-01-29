@@ -393,12 +393,14 @@ export class CheckoutPageComponent extends Component {
     const quantityMaybe = quantity ? { quantity } : {};
     const isFreeBooking = pageData.bookingData?.bookingType === 'free';
     const type = pageData?.bookingData?.paymentMethod?.value;
+    const nextClass = pageData?.bookingData?.nextClass;
     const orderParams = {
       listingId: pageData.listing.id,
       bookingType: pageData.bookingData?.bookingType,
       type,
       ...quantityMaybe,
       ...optionalPaymentParams,
+      nextClass,
     };
     return handlePaymentIntentCreation(orderParams, isFreeBooking);
   }

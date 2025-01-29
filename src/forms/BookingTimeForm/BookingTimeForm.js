@@ -282,6 +282,10 @@ export class BookingTimeFormComponent extends Component {
             return processName === 'vivacity-free-process' && transactionId;
           };
           console.log(shouldDisableButton(), 'shouldDisableButton');
+          const isUpcomingDate = dateStr => {
+            const bookedDate = moment(dateStr, 'dddd, MMMM Do YYYY, h:mm a');
+            return bookedDate.isAfter(moment());
+          };
 
           const panelCard = (
             <div className={css.detailsContainerDesktop}>
@@ -365,6 +369,14 @@ export class BookingTimeFormComponent extends Component {
                     />
                   )}
                 </p>
+                {checkOldTransactionData?.attributes?.metadata?.customerTime &&
+                  isUpcomingDate(checkOldTransactionData.attributes.metadata.customerTime) &&
+                  values?.paymentMethod?.value === 'per_session' && (
+                    <p className={css.message}>
+                      You have already booked this class for{' '}
+                      {checkOldTransactionData.attributes.metadata.customerTime}
+                    </p>
+                  )}
                 <div className={submitButtonClasses}>
                   <PrimaryButton type="submit" disabled={shouldDisableButton()}>
                     {shouldDisableButton() ? (
@@ -375,6 +387,7 @@ export class BookingTimeFormComponent extends Component {
                       <FormattedMessage id="BookingTimeForm.requestToBook" />
                     )}
                   </PrimaryButton>
+
                   {joinUrl}
                 </div>
               </Form>

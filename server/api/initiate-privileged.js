@@ -22,10 +22,15 @@ module.exports = (req, res) => {
     })
     .then(trustedSdk => {
       const { params } = bodyParams;
+      console.log('params', params);
+      console.log(bodyParams, 'bodyParams');
+      const nextClass = bodyParams?.params?.nextClass;
+      const dateFormat = 'dddd, MMMM Do YYYY, h:mm a z';
+      console.log('nextClass', nextClass);
       const providerTimezone = l.attributes.publicData.timezone;
-      const time = l.attributes.publicData?.startDateString;
-      const inputDate = moment.tz(time, customerTimezone);
-      const inputDateProvider = moment.tz(time, providerTimezone);
+      const time = nextClass || l.attributes.publicData?.startDateString;
+      const inputDate = moment.tz(time, dateFormat, customerTimezone);
+      const inputDateProvider = moment.tz(time, dateFormat, providerTimezone);
       const customerTime = inputDate
         .clone()
         .tz(customerTimezone)
