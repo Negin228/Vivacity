@@ -1,4 +1,4 @@
-const { getIntegrationSdk } = require('../api-util/sdk');
+const { getIntegrationSdk, getSdk, handleError, serialize } = require('../api-util/sdk');
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const flexIntegrationSdk = require('sharetribe-flex-integration-sdk');
@@ -54,6 +54,9 @@ module.exports = async (req, res) => {
   console.log('transactionId', transactionId);
   console.log(userId, 'userId');
   const integration = await getIntegrationSdk();
+  const sdk = getSdk(req, res);
+  const currentUser = await sdk.currentUser.show();
+  console.log(currentUser, 'currentUser');
   const userWithStripeAccount = await integration.users.show({
     id: userId,
     include: ['stripeAccount'],
@@ -75,10 +78,21 @@ module.exports = async (req, res) => {
     }
 
     // Handle transition for both free and paid bookings
-    await handleTransition(transactionId, subscriptionId);
-    return res.status(200).json({ success: true });
+    const apiResponse = await handleTransition(transactionId, subscriptionId);
+    const { status = 200, statusText = 'OK', data } = apiResponse;
+
+    res
+      .status(status)
+      .set('Content-Type', 'application/transit+json')
+      .send(
+        serialize({
+          status,
+          statusText,
+          data,
+        })
+      )
+      .end();
   } catch (error) {
-    console.error('Error canceling subscription:', error);
-    return res.status(500).json({ error: error.message });
+    handleError(res, error);
   }
 };
