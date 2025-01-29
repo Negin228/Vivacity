@@ -12,7 +12,7 @@ const integrationSdk = flexIntegrationSdk.createInstance({
 const handleTransition = async (transactionId, subscriptionId = null) => {
   // Get transaction details
   const transaction = await integrationSdk.transactions.show({ id: transactionId });
-  const lastTransition = transaction.data.attributes.lastTransition;
+  const lastTransition = transaction.data.data.attributes.lastTransition;
 
   // Define transition based on last state
   let transitionName;

@@ -251,7 +251,7 @@ export class TransactionPanelComponent extends Component {
         });
         setTimeout(() => {
           window.location.reload();
-        }, 5000);
+        }, 3000);
       } catch (error) {
         this.setState({
           isLoading: false,
