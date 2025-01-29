@@ -9,6 +9,7 @@ import config from '../../config';
 // import moment from 'moment';
 import 'moment-timezone';
 import { convertTime } from '../../util/urlHelpers';
+import { getNextClassDate } from '../../util/dates';
 const SectionFeaturesMaybe = props => {
   const { options, publicData } = props;
   if (!publicData) {
@@ -19,25 +20,6 @@ const SectionFeaturesMaybe = props => {
     const listingTime = moment.tz(startDateString, timezone);
     const currentTime = moment().tz(timezone);
     return listingTime.isBefore(currentTime);
-  };
-
-  const getNextClassDate = (startDate, weeklyDays, timezone) => {
-    if (!isDateInPast(startDate, timezone) || !weeklyDays) {
-      return null;
-    }
-
-    const now = moment().tz(timezone);
-    const availableDays = weeklyDays.map(day => parseInt(day.value)).sort((a, b) => a - b);
-    const currentDay = now.day() + 1;
-    const nextDay = availableDays.find(d => d > currentDay) || availableDays[0];
-    const daysToAdd = nextDay > currentDay ? nextDay - currentDay : 7 - currentDay + nextDay;
-
-    const nextDate = now
-      .add(daysToAdd, 'days')
-      .hour(moment.tz(startDate, timezone).hour())
-      .minute(moment.tz(startDate, timezone).minute());
-
-    return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
   };
 
   const nextClass = isDateInPast(publicData.startDate, publicData.timezone)

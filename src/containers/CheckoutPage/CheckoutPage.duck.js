@@ -325,7 +325,8 @@ export const stripeRecurringPaymentRequest = (
   priceId,
   listingId,
   userEmail,
-  isFreeBooking
+  isFreeBooking,
+  paymentType
 ) => async (dispatch, getState, sdk) => {
   const customerTimezone = getDefaultTimeZoneOnBrowser();
   dispatch(recurringPaymentRequest());
@@ -336,6 +337,7 @@ export const stripeRecurringPaymentRequest = (
     customerTimezone,
     userEmail,
     isFreeBooking,
+    paymentType,
   })
     .then(response => {
       // Redirect to the Stripe Checkout session URL

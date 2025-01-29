@@ -22,7 +22,15 @@ const rootUrl =
     : process.env.REACT_APP_CANONICAL_ROOT_URL;
 module.exports = async (req, res) => {
   try {
-    const { userId, priceId, listingId, customerTimezone, userEmail, isFreeBooking } = req.body;
+    const {
+      userId,
+      priceId,
+      listingId,
+      customerTimezone,
+      userEmail,
+      isFreeBooking,
+      paymentType,
+    } = req.body;
     console.log(userEmail, 'userEmail');
     console.log(
       '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CHECKOUT STRIPE RECURRING START >>>>>>>>>>>>>>>>>>>>>>>>'
@@ -32,7 +40,7 @@ module.exports = async (req, res) => {
     let lineItems = null;
     let l = null;
     let bodyParams = {};
-
+    const type = paymentType || 'recurring';
     const listingResponse = await sdk.listings.show({ id: listingId });
     const listing = listingResponse.data.data;
     bodyParams = {
@@ -50,7 +58,7 @@ module.exports = async (req, res) => {
       },
     };
     l = listing;
-    lineItems = transactionLineItems(listing, { ...bodyParams.params });
+    lineItems = transactionLineItems(listing, { ...bodyParams.params, type });
     console.log(bodyParams, lineItems, 'hello');
 
     const trustedSdk = await getTrustedSdk(req);

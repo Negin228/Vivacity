@@ -9,6 +9,7 @@ import css from './ProductCard.module.css';
 import { AiFillStar } from 'react-icons/ai';
 import classNames from 'classnames';
 import mt from 'moment-timezone';
+import { getNextClassDate } from '../../util/dates';
 function ProductCard({
   title,
   id,
@@ -34,24 +35,24 @@ function ProductCard({
     return listingTime.isBefore(currentTime);
   };
 
-  const getNextClassDate = (startDate, weeklyDays, timezone) => {
-    if (!isDateInPast(startDate, timezone) || !weeklyDays) {
-      return null;
-    }
+  // const getNextClassDate = (startDate, weeklyDays, timezone) => {
+  //   if (!isDateInPast(startDate, timezone) || !weeklyDays) {
+  //     return null;
+  //   }
 
-    const now = moment().tz(timezone);
-    const availableDays = weeklyDays.map(day => parseInt(day.value)).sort((a, b) => a - b);
-    const currentDay = now.day() + 1;
-    const nextDay = availableDays.find(d => d > currentDay) || availableDays[0];
-    const daysToAdd = nextDay > currentDay ? nextDay - currentDay : 7 - currentDay + nextDay;
+  //   const now = moment().tz(timezone);
+  //   const availableDays = weeklyDays.map(day => parseInt(day.value)).sort((a, b) => a - b);
+  //   const currentDay = now.day() + 1;
+  //   const nextDay = availableDays.find(d => d > currentDay) || availableDays[0];
+  //   const daysToAdd = nextDay > currentDay ? nextDay - currentDay : 7 - currentDay + nextDay;
 
-    const nextDate = now
-      .add(daysToAdd, 'days')
-      .hour(moment.tz(startDate, timezone).hour())
-      .minute(moment.tz(startDate, timezone).minute());
+  //   const nextDate = now
+  //     .add(daysToAdd, 'days')
+  //     .hour(moment.tz(startDate, timezone).hour())
+  //     .minute(moment.tz(startDate, timezone).minute());
 
-    return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
-  };
+  //   return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
+  // };
   const formattedDate = convertDate(startDateString, timeZone);
   const formattedTime = convertTimeOnly(startDateString, timeZone);
   // const startDate = publicData?.startDate;

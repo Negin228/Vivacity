@@ -18,7 +18,7 @@ import {
   ensureStripeCustomer,
   ensurePaymentMethodCard,
 } from '../../util/data';
-import { minutesBetween } from '../../util/dates';
+import { getNextClassDate, minutesBetween } from '../../util/dates';
 import { convertTime, createSlug } from '../../util/urlHelpers';
 import {
   isTransactionInitiateAmountTooLowError,
@@ -392,9 +392,11 @@ export class CheckoutPageComponent extends Component {
     const quantity = pageData.bookingData?.quantity;
     const quantityMaybe = quantity ? { quantity } : {};
     const isFreeBooking = pageData.bookingData?.bookingType === 'free';
+    const type = pageData?.bookingData?.paymentMethod?.value;
     const orderParams = {
       listingId: pageData.listing.id,
       bookingType: pageData.bookingData?.bookingType,
+      type,
       ...quantityMaybe,
       ...optionalPaymentParams,
     };
@@ -479,11 +481,20 @@ export class CheckoutPageComponent extends Component {
       });
   }
 
-  handleSubmitRecurring(userId, priceId, lisitingId, userEmail, isFreeBooking) {
+  handleSubmitRecurring(userId, priceId, lisitingId, userEmail, isFreeBooking, paymentType) {
     const { dispatch } = this.props;
     console.log(userId, 'userId');
     this.setState({ isLoadingRecurring: true }); // Set loading state to true
-    dispatch(stripeRecurringPaymentRequest(userId, priceId, lisitingId, userEmail, isFreeBooking))
+    dispatch(
+      stripeRecurringPaymentRequest(
+        userId,
+        priceId,
+        lisitingId,
+        userEmail,
+        isFreeBooking,
+        paymentType
+      )
+    )
       .then(response => {
         // Handle success
         console.log('Payment successful:', response);
@@ -541,6 +552,7 @@ export class CheckoutPageComponent extends Component {
       stripeCustomerFetched,
     } = this.props;
     const isFreeBooking = this.state.pageData?.bookingData?.bookingType === 'free';
+
     // Since the listing data is already given from the ListingPage
     // and stored to handle refreshes, it might not have the possible
     // deleted or closed information in it. If the transaction
@@ -562,18 +574,13 @@ export class CheckoutPageComponent extends Component {
     const listingTitle = currentListing.attributes.title;
     const listingDescription = currentListing.attributes.description;
     const title = intl.formatMessage({ id: 'CheckoutPage.title' }, { listingTitle });
-    console.log(listing, 'listing');
     const isRecurring = bookingData?.paymentMethod?.value === 'recurring';
-    console.log(bookingData, 'bookingData');
+    const paymentType = bookingData?.paymentType?.value;
     const listingId = listing?.id?.uuid;
-    console.log(listingId, 'listingId');
     const priceId = listing?.attributes?.publicData?.priceId;
     const monthlyPrice = listing?.attributes?.publicData?.monthlyPrice;
     const data = listing?.attributes?.publicData;
-    console.log(data, 'data');
-    console.log(isRecurring, 'isRecurring');
     const { isLoadingRecurring } = this.state;
-    console.log(isLoadingRecurring, 'isLoadingRecurring');
     const pageProps = { title, scrollingDisabled };
     const topbar = (
       <div className={css.topbar}>
@@ -808,24 +815,24 @@ export class CheckoutPageComponent extends Component {
       return listingTime.isBefore(currentTime);
     };
 
-    const getNextClassDate = (startDate, weeklyDays, timezone) => {
-      if (!isDateInPast(startDate, timezone) || !weeklyDays) {
-        return null;
-      }
+    // const getNextClassDate = (startDate, weeklyDays, timezone) => {
+    //   if (!isDateInPast(startDate, timezone) || !weeklyDays) {
+    //     return null;
+    //   }
 
-      const now = moment().tz(timezone);
-      const availableDays = weeklyDays.map(day => parseInt(day.value)).sort((a, b) => a - b);
-      const currentDay = now.day() + 1;
-      const nextDay = availableDays.find(d => d > currentDay) || availableDays[0];
-      const daysToAdd = nextDay > currentDay ? nextDay - currentDay : 7 - currentDay + nextDay;
+    //   const now = moment().tz(timezone);
+    //   const availableDays = weeklyDays.map(day => parseInt(day.value)).sort((a, b) => a - b);
+    //   const currentDay = now.day() + 1;
+    //   const nextDay = availableDays.find(d => d > currentDay) || availableDays[0];
+    //   const daysToAdd = nextDay > currentDay ? nextDay - currentDay : 7 - currentDay + nextDay;
 
-      const nextDate = now
-        .add(daysToAdd, 'days')
-        .hour(moment.tz(startDate, timezone).hour())
-        .minute(moment.tz(startDate, timezone).minute());
+    //   const nextDate = now
+    //     .add(daysToAdd, 'days')
+    //     .hour(moment.tz(startDate, timezone).hour())
+    //     .minute(moment.tz(startDate, timezone).minute());
 
-      return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
-    };
+    //   return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
+    // };
     const { publicData } = currentListing.attributes;
     const nextClass = isDateInPast(publicData.startDate, publicData.timezone)
       ? getNextClassDate(publicData.startDate, publicData.weeklyDays, publicData.timezone)
@@ -874,7 +881,14 @@ export class CheckoutPageComponent extends Component {
               {isRecurring ? (
                 <Button
                   onClick={() =>
-                    this.handleSubmitRecurring(userId, priceId, listingId, userEmail, isFreeBooking)
+                    this.handleSubmitRecurring(
+                      userId,
+                      priceId,
+                      listingId,
+                      userEmail,
+                      isFreeBooking,
+                      paymentType
+                    )
                   }
                   disabled={isLoadingRecurring}
                 >

@@ -35,8 +35,8 @@ exports.transactionLineItems = (listing, bookingData) => {
   const publicData = listing.attributes.publicData;
   const { paymentType = [], monthlyPrice, type } = publicData || {};
   const isBookingFree = type === 'free';
-  console.log('isBookingFree', isBookingFree);
-  const isRecurring = paymentType?.some(type => type.value === 'recurring');
+  const paymentTypeBookingData = bookingData?.type;
+  const isRecurring = paymentTypeBookingData === 'recurring';
   const monthlyPriceMoney =
     isRecurring && monthlyPrice
       ? new Money(monthlyPrice, process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY || 'USD')

@@ -4,6 +4,7 @@
 import moment from 'moment-timezone/builds/moment-timezone-with-data-10-year-range.min';
 import jstz from 'jstimezonedetect';
 import mt from 'moment';
+import { convertTime } from './urlHelpers';
 /**
  * Input names for the DateRangePicker from react-dates.
  */
@@ -29,7 +30,21 @@ export const isDate = d =>
  * @returns {boolean} true if given parameters have the same timestamp.
  */
 export const isSameDate = (a, b) => a && isDate(a) && b && isDate(b) && a.getTime() === b.getTime();
+export const getNextClassDate = (startDate, weeklyDays) => {
+  const timezone = moment.tz.guess();
+  const now = moment().tz(timezone);
+  const availableDays = weeklyDays.map(day => parseInt(day.value)).sort((a, b) => a - b);
+  const currentDay = now.day() + 1;
+  const nextDay = availableDays.find(d => d > currentDay) || availableDays[0];
+  const daysToAdd = nextDay > currentDay ? nextDay - currentDay : 7 - currentDay + nextDay;
 
+  const nextDate = now
+    .add(daysToAdd, 'days')
+    .hour(moment.tz(startDate, timezone).hour())
+    .minute(moment.tz(startDate, timezone).minute());
+
+  return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
+};
 /**
  * Check if the browser's DateTimeFormat API supports time zones.
  *

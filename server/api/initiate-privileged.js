@@ -5,7 +5,7 @@ module.exports = (req, res) => {
   const { isSpeculative, quantityMaybe, bodyParams, queryParams } = req.body;
 
   const listingId = bodyParams && bodyParams.params ? bodyParams.params.listingId : null;
-  console.log('bodyParams', bodyParams);
+
   const sdk = getSdk(req, res);
   let lineItems = null;
   let l = null;
