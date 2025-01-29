@@ -262,18 +262,12 @@ export class BookingTimeFormComponent extends Component {
 
             // For both payment types
             if (hasBoth) {
-              return (
-                (processName === 'flex-subscription' && subscriptionId) ||
-                (processName === 'vivacity-free-process' && transactionId)
-              );
+              return processName === 'flex-subscription' && subscriptionId;
             }
 
             // For subscription only
             if (isRecurringOnly) {
-              return (
-                (processName === 'flex-subscription' && subscriptionId) ||
-                (processName === 'vivacity-free-process' && transactionId)
-              );
+              return processName === 'flex-subscription' && subscriptionId;
             }
 
             // For per session only
