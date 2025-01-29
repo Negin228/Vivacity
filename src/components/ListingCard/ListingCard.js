@@ -66,6 +66,11 @@ export const ListingCardComponent = props => {
   const { type, paymentType = [], monthlyPrice } = publicData ?? {};
   const isFree = type === 'free';
   const isRecurring = paymentType?.some(type => type.value === 'recurring');
+  const isPerSession = paymentType?.some(type => type.value === 'perSession');
+  const hasBoth =
+    paymentType?.length === 2 &&
+    paymentType.some(type => type.value === 'recurring') &&
+    paymentType.some(type => type.value === 'per_session');
   const weeklyDays = publicData?.weeklyDays;
   const certificateOptions = findOptionsForSelectFilter('certificate', filtersConfig);
   const certificate = publicData

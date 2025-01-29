@@ -9,6 +9,44 @@ const integrationSdk = flexIntegrationSdk.createInstance({
   clientSecret,
 });
 // Cancels a subscription
+const handleTransition = async (transactionId, subscriptionId = null) => {
+  // Get transaction details
+  const transaction = await integrationSdk.transactions.show({ id: transactionId });
+  const lastTransition = transaction.data.data.attributes.lastTransition;
+
+  // Define transition based on last state
+  let transitionName;
+  switch (lastTransition) {
+    case 'transition/confirm-subscription':
+      transitionName = 'transition/cancel';
+      break;
+    case 'transition/complete':
+      transitionName = 'transition/cancel-after-delivery';
+      break;
+    case 'transition/review-1-by-customer':
+    case 'transition/expire-review-period':
+      transitionName = 'transition/cancel-after-review';
+      break;
+    default:
+      transitionName = 'transition/cancel';
+  }
+
+  // Perform transition
+  return await integrationSdk.transactions.transition(
+    {
+      id: transactionId,
+      transition: transitionName,
+      params: {
+        metadata: {
+          subscriptionId: null,
+          oldSubscriptionId: subscriptionId || transactionId,
+          membership: false,
+        },
+      },
+    },
+    { expand: true }
+  );
+};
 module.exports = async (req, res) => {
   const { subscriptionId, userId, isFreeBooking, transactionId } = req.body;
   console.log('isFreeBooking', isFreeBooking);
@@ -21,41 +59,26 @@ module.exports = async (req, res) => {
     include: ['stripeAccount'],
   });
   console.log(userWithStripeAccount, 'userWithStripeAccount');
-  if (isFreeBooking) {
-    try {
-      // Handle transition for free subscription
-      console.log(integrationSdk, 'integrationSdk>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-      await integrationSdk.transactions.transition(
-        {
-          id: transactionId,
-          transition: 'transition/cancel',
-          params: {
-            metadata: {
-              subscriptionId: null,
-              oldSubscriptionId: transactionId,
-              membership: false,
-            },
-          },
-        },
-        { expand: true }
-      );
-      console.log('Great Success');
-      return res.status(200).json({ success: true });
-    } catch (error) {
-      console.log(error, 'error');
-      console.error('Error canceling free subscription:', error.data.errors);
-      return res.status(500).json({ error: error });
-    }
-  }
-  const stripeAccount = userWithStripeAccount?.data?.included[0]?.attributes?.stripeAccountId;
-  console.log(stripeAccount, 'stripeAccount');
   try {
-    const subscription = await stripe.subscriptions.cancel(subscriptionId, {
-      stripeAccount: stripeAccount,
-    });
-    res.status(200).json(subscription);
+    if (!isFreeBooking) {
+      console.log('Is not free booking');
+      const userWithStripeAccount = await integration.users.show({
+        id: userId,
+        include: ['stripeAccount'],
+      });
+      const stripeAccount = userWithStripeAccount?.data?.included[0]?.attributes?.stripeAccountId;
+
+      // Cancel Stripe subscription
+      await stripe.subscriptions.cancel(subscriptionId, {
+        stripeAccount: stripeAccount,
+      });
+    }
+
+    // Handle transition for both free and paid bookings
+    await handleTransition(transactionId, subscriptionId);
+    return res.status(200).json({ success: true });
   } catch (error) {
     console.error('Error canceling subscription:', error);
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 };

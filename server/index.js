@@ -77,7 +77,6 @@ const options = {
   },
 };
 
-
 // const handlePaymentIntentSucceeded = async paymentIntent => {
 //   try {
 //     const { id, metadata, charges } = paymentIntent;
@@ -177,31 +176,31 @@ const updateUserSubscriptionDeleted = async dataObject => {
     const transaction = await integrationSdk.transactions.show({ id: transactionId });
     console.log('Transaction status:', transaction.status);
 
-    const lastTransition =
-      transaction.data.data.attributes.lastTransition === 'transition/confirm-subscription';
+    const lastTransition = transaction.data.data.attributes.lastTransition;
 
-    // Function to update transaction metadata
-    const updateTransactionMetadata = async () => {
-      return await integrationSdk.transactions.updateMetadata(
-        {
-          id: transactionId,
-          metadata: {
-            subscriptionId: null,
-            oldSubscriptionId: id,
-            membership: false,
-          },
-        },
-        { expand: true }
-      );
-    };
+    let transitionName;
+    switch (lastTransition) {
+      case 'transition/confirm-subscription':
+        transitionName = 'transition/cancel';
+        break;
+      case 'transition/complete':
+        transitionName = 'transition/cancel-after-delivery';
+        break;
+      case 'transition/review-1-by-customer':
+      case 'transition/expire-review-period':
+        transitionName = 'transition/cancel-after-review';
+        break;
+      default:
+        transitionName = null;
+    }
 
     let result;
-    if (lastTransition) {
-      // Transition the transaction if the last transition is 'confirm-subscription'
+    if (transitionName) {
+      // Transition the transaction if needed
       result = await integrationSdk.transactions.transition(
         {
           id: transactionId,
-          transition: 'transition/cancel',
+          transition: transitionName,
           params: {
             metadata: {
               subscriptionId: null,
@@ -215,11 +214,20 @@ const updateUserSubscriptionDeleted = async dataObject => {
       console.log('Transaction successfully transitioned.');
     } else {
       // Update the transaction metadata if no transition is needed
-      result = await updateTransactionMetadata();
+      result = await integrationSdk.transactions.updateMetadata(
+        {
+          id: transactionId,
+          metadata: {
+            subscriptionId: null,
+            oldSubscriptionId: id,
+            membership: false,
+          },
+        },
+        { expand: true }
+      );
       console.log('Transaction metadata updated successfully:', result);
     }
   } catch (error) {
-    // Log detailed error information for debugging
     console.error(
       'Error updating transaction metadata:',
       error?.data?.errors || error.message || error
@@ -419,9 +427,7 @@ app.post('/contact-us', bodyParser.json(), async (req, res) => {
   // Check environment variable
   if (!process.env.SENDGRID_SENDER_EMAIL) {
     console.error('Environment variable SENDGRID_SENDER_EMAIL is not set');
-    return res
-      .status(500)
-      .send({ message: 'Server configuration error', success: false });
+    return res.status(500).send({ message: 'Server configuration error', success: false });
   }
 
   try {
@@ -448,9 +454,7 @@ app.post('/contact-us', bodyParser.json(), async (req, res) => {
     return res.status(200).send({ message: 'Message sent successfully', success: true });
   } catch (e) {
     console.error('Email sending error:', e.message);
-    return res
-      .status(500)
-      .send({ message: 'Message sending failed', success: false });
+    return res.status(500).send({ message: 'Message sending failed', success: false });
   }
 });
 app.get('*', async (req, res) => {
