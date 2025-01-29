@@ -65,17 +65,17 @@
   @apply --marketplaceTinyFontStyles;
   color: var(--matterColorAnti);
   text-align: center;
-  margin: auto 24px 20px 24px;
+  margin: auto 24px 10px 24px;
   flex-shrink: 0;
 
   @media (--viewportMedium) {
     margin-top: auto;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   @media (--viewportLarge) {
     margin-top: 4px;
-    margin-bottom: 21px;
+    margin-bottom: 10px;
   }
 }
 
@@ -97,6 +97,6 @@
 }
 .message {
   /* margin: 0 0px 12px 0px; */
-  padding: 10px;
+  padding: 0 10px;
   color: red;
 }

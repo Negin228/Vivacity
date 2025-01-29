@@ -255,11 +255,18 @@ export class BookingTimeFormComponent extends Component {
           console.log(paymentMethodOptions);
           const isAccepted =
             checkOldTransactionData?.attributes?.lastTransition === 'transition/accept';
+          const isUpcomingDate = dateStr => {
+            const bookedDate = moment(dateStr, 'dddd, MMMM Do YYYY, h:mm a');
+            return bookedDate.isAfter(moment());
+          };
           const shouldDisableButton = () => {
             if (!checkOldTransactionData) return false;
-
+            const customerTime = checkOldTransactionData?.attributes?.metadata?.customerTime;
+            const isUpcoming = customerTime && isUpcomingDate(customerTime);
+            const isPerSession = values?.paymentMethod?.value === 'per_session';
             const processName = checkOldTransactionData.attributes.processName;
 
+            if (isUpcoming && isPerSession) return true;
             // For both payment types
             if (hasBoth) {
               return processName === 'flex-subscription' && subscriptionId;
@@ -282,10 +289,6 @@ export class BookingTimeFormComponent extends Component {
             return processName === 'vivacity-free-process' && transactionId;
           };
           console.log(shouldDisableButton(), 'shouldDisableButton');
-          const isUpcomingDate = dateStr => {
-            const bookedDate = moment(dateStr, 'dddd, MMMM Do YYYY, h:mm a');
-            return bookedDate.isAfter(moment());
-          };
 
           const panelCard = (
             <div className={css.detailsContainerDesktop}>
