@@ -35,6 +35,8 @@ import {
 import { SendMessageForm } from '../../forms';
 import config from '../../config';
 import moment from 'moment';
+import { types as sdkTypes } from '../../util/sdkLoader';
+const { UUID, Money } = sdkTypes;
 
 // These are internal components that make this file more readable.
 import AddressLinkMaybe from './AddressLinkMaybe';
@@ -383,8 +385,15 @@ export class TransactionPanelComponent extends Component {
 
     console.log(unitTranslationKey, 'unitTranslationKey');
     const price = currentListing.attributes.price;
+    const monthlyPrice = new Money(
+      currentListing?.attributes?.publicData?.monthlyPrice,
+      currentListing?.attributes?.price?.currency
+    );
+
     const bookingSubTitle = price
-      ? `${formatMoney(intl, price)} ${intl.formatMessage({ id: unitTranslationKey })}`
+      ? transaction.attributes.processName === 'flex-subscription'
+        ? `${formatMoney(intl, monthlyPrice)} per month`
+        : `${formatMoney(intl, price)} ${intl.formatMessage({ id: unitTranslationKey })}`
       : '';
 
     console.log();
