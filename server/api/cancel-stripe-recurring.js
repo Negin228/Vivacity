@@ -11,6 +11,7 @@ const integrationSdk = flexIntegrationSdk.createInstance({
 // Cancels a subscription
 const handleTransition = async (transactionId, subscriptionId = null) => {
   // Get transaction details
+
   const transaction = await integrationSdk.transactions.show({ id: transactionId });
   const lastTransition = transaction.data.data.attributes.lastTransition;
 
@@ -49,9 +50,11 @@ const handleTransition = async (transactionId, subscriptionId = null) => {
 };
 module.exports = async (req, res) => {
   const { subscriptionId, userId, isFreeBooking, transactionId } = req.body;
-  console.log('isFreeBooking', isFreeBooking);
-  console.log('subscriptionId', subscriptionId);
-  console.log('transactionId', transactionId);
+  if (!transactionId) {
+    return res.status(400).json({
+      message: 'transactionId is required',
+    });
+  }
   console.log(userId, 'userId');
   const integration = await getIntegrationSdk();
   const sdk = getSdk(req, res);

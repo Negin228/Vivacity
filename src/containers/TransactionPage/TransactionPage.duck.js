@@ -727,8 +727,9 @@ export const cancelSubscriptionThunk = (
       userId,
       isFreeBooking,
     });
+    dispatch(addMarketplaceEntities(response));
     dispatch(cancelSubscriptionSuccess());
-    addMarketplaceEntities(response);
+
     return response;
   } catch (error) {
     dispatch(cancelSubscriptionError(error));

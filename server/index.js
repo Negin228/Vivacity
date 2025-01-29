@@ -178,6 +178,7 @@ const updateUserSubscriptionDeleted = async dataObject => {
 
     const lastTransition = transaction.data.data.attributes.lastTransition;
 
+    await new Promise(resolve => setTimeout(resolve, 2000));
     let transitionName;
     switch (lastTransition) {
       case 'transition/confirm-subscription':
