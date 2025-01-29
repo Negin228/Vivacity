@@ -30,11 +30,12 @@ const PROVIDER_COMMISSION_PERCENTAGE = -10;
  */
 exports.transactionLineItems = (listing, bookingData) => {
   const bookingType = bookingData?.bookingType;
-  const isBookingFree = bookingType === 'free';
+  // const isBookingFree = bookingType === 'free';
   const unitPrice = listing.attributes.price;
   const publicData = listing.attributes.publicData;
-  const { paymentType = [], monthlyPrice } = publicData || {};
-
+  const { paymentType = [], monthlyPrice, type } = publicData || {};
+  const isBookingFree = type === 'free';
+  console.log('isBookingFree', isBookingFree);
   const isRecurring = paymentType?.some(type => type.value === 'recurring');
   const monthlyPriceMoney =
     isRecurring && monthlyPrice
