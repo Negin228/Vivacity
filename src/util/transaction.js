@@ -53,6 +53,8 @@ export const TRANSITION_REVIEW_2_BY_CUSTOMER = 'transition/review-2-by-customer'
 export const TRANSITION_EXPIRE_CUSTOMER_REVIEW_PERIOD = 'transition/expire-customer-review-period';
 export const TRANSITION_EXPIRE_PROVIDER_REVIEW_PERIOD = 'transition/expire-provider-review-period';
 export const TRANSITION_EXPIRE_REVIEW_PERIOD = 'transition/expire-review-period';
+export const TRANSITION_CANCEL_AFTER_DELIVERY = 'transition/cancel-after-delivery';
+export const TRANSITION_CANCEL_AFTER_REVIEW = 'transition/cancel-after-review';
 
 /**
  * Actors
@@ -165,6 +167,7 @@ const stateDescription = {
         [TRANSITION_EXPIRE_REVIEW_PERIOD]: STATE_REVIEWED,
         [TRANSITION_REVIEW_1_BY_CUSTOMER]: STATE_REVIEWED,
         [TRANSITION_REVIEW_1_BY_PROVIDER]: STATE_REVIEWED_BY_PROVIDER,
+        [TRANSITION_CANCEL_AFTER_DELIVERY]: STATE_CANCELED,
       },
     },
 
@@ -172,6 +175,7 @@ const stateDescription = {
       on: {
         [TRANSITION_REVIEW_2_BY_PROVIDER]: STATE_REVIEWED,
         [TRANSITION_EXPIRE_PROVIDER_REVIEW_PERIOD]: STATE_REVIEWED,
+        [TRANSITION_CANCEL_AFTER_REVIEW]: STATE_CANCELED,
       },
     },
     [STATE_REVIEWED_BY_PROVIDER]: {

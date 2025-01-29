@@ -260,22 +260,32 @@ export class BookingTimeFormComponent extends Component {
 
             const processName = checkOldTransactionData.attributes.processName;
 
-            // Check if listing has both payment types
+            // For both payment types
             if (hasBoth) {
-              return processName === 'flex-subscription' && subscriptionId;
+              return (
+                (processName === 'flex-subscription' && subscriptionId) ||
+                (processName === 'vivacity-free-process' && transactionId)
+              );
             }
 
-            // Check if listing is subscription only
+            // For subscription only
             if (isRecurringOnly) {
-              return processName === 'flex-subscription' && subscriptionId;
+              return (
+                (processName === 'flex-subscription' && subscriptionId) ||
+                (processName === 'vivacity-free-process' && transactionId)
+              );
             }
 
-            // Check if listing is per session only
+            // For per session only
             if (isPerSessionOnly) {
-              return processName === 'flex-hourly-default-process' && transactionId;
+              return (
+                (processName === 'flex-hourly-default-process' && transactionId) ||
+                (processName === 'vivacity-free-process' && transactionId)
+              );
             }
 
-            return false;
+            // For free process only
+            return processName === 'vivacity-free-process' && transactionId;
           };
           console.log(shouldDisableButton(), 'shouldDisableButton');
 
