@@ -555,6 +555,7 @@ export class TransactionPanelComponent extends Component {
                     onClick={() =>
                       handleCancelSubscription(subscriptionId, transactionId, userId, isFreeBooking)
                     }
+                    type="button"
                     disabled={this.state.isLoading}
                   >
                     {this.state.isLoading ? <IconSpinner /> : 'Cancel Subscription'}

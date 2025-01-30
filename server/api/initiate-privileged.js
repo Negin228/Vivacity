@@ -29,8 +29,12 @@ module.exports = (req, res) => {
       console.log('nextClass', nextClass);
       const providerTimezone = l.attributes.publicData.timezone;
       const time = nextClass || l.attributes.publicData?.startDateString;
-      const inputDate = moment.tz(time, dateFormat, customerTimezone);
-      const inputDateProvider = moment.tz(time, dateFormat, providerTimezone);
+      const inputDate = nextClass
+        ? moment.tz(time, dateFormat, customerTimezone)
+        : moment.tz(time, customerTimezone);
+      const inputDateProvider = nextClass
+        ? moment.tz(time, dateFormat, providerTimezone)
+        : moment.tz(time, providerTimezone);
       const customerTime = inputDate
         .clone()
         .tz(customerTimezone)
