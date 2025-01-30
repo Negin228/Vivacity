@@ -259,14 +259,18 @@ export class BookingTimeFormComponent extends Component {
             const bookedDate = moment(dateStr, 'dddd, MMMM Do YYYY, h:mm a');
             return bookedDate.isAfter(moment());
           };
+          const processName = checkOldTransactionData?.attributes.processName;
+          const isDeclinedOrExpired =
+            checkOldTransactionData?.attributes?.lastTransition === 'transition/decline' ||
+            checkOldTransactionData?.attributes?.lastTransition === 'transition/expire';
+
           const shouldDisableButton = () => {
             if (!checkOldTransactionData) return false;
             const customerTime = checkOldTransactionData?.attributes?.metadata?.customerTime;
             const isUpcoming = customerTime && isUpcomingDate(customerTime);
             const isPerSession = values?.paymentMethod?.value === 'per_session';
-            const processName = checkOldTransactionData.attributes.processName;
 
-            if (isUpcoming && isPerSession && isAccepted) return true;
+            if (isUpcoming && isPerSession && !isDeclinedOrExpired) return true;
             // For both payment types
             if (hasBoth) {
               return processName === 'flex-subscription' && subscriptionId;
@@ -372,13 +376,12 @@ export class BookingTimeFormComponent extends Component {
                     />
                   )}
                 </p>
-                {checkOldTransactionData?.attributes?.metadata?.customerTime &&
-                  isUpcomingDate(checkOldTransactionData.attributes.metadata.customerTime) &&
+                {isUpcomingDate(checkOldTransactionData?.attributes.metadata.customerTime) &&
                   values?.paymentMethod?.value === 'per_session' &&
-                  isAccepted && (
+                  !isDeclinedOrExpired && (
                     <p className={css.message}>
                       You have already booked this class for{' '}
-                      {checkOldTransactionData.attributes.metadata.customerTime}
+                      {checkOldTransactionData?.attributes.metadata.customerTime}
                     </p>
                   )}
                 <div className={submitButtonClasses}>
