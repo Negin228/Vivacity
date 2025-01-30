@@ -48,15 +48,12 @@ const handleTransition = async (transactionId, subscriptionId = null) => {
   );
 };
 module.exports = async (req, res) => {
-  const { subscriptionId, userId, isFreeBooking, transactionId } = req.body;
-  console.log('isFreeBooking', isFreeBooking);
-  console.log('subscriptionId', subscriptionId);
-  console.log('transactionId', transactionId);
-  console.log(userId, 'userId');
+  const { userId, transactionId } = req.body;
   const integration = await getIntegrationSdk();
-  const sdk = getSdk(req, res);
-  const currentUser = await sdk.currentUser.show();
-  console.log(currentUser, 'currentUser');
+  const transaction = await integration.transactions.show({ id: transactionId });
+  const isFreeBooking = transaction.data.data.attributes.metadata.isFree;
+  console.log(isFreeBooking, 'isFreeBooking');
+  const subscriptionId = transaction.data.data.attributes.metadata.subscriptionId;
   const userWithStripeAccount = await integration.users.show({
     id: userId,
     include: ['stripeAccount'],
