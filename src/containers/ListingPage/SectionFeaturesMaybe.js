@@ -9,20 +9,20 @@ import config from '../../config';
 // import moment from 'moment';
 import 'moment-timezone';
 import { convertTime } from '../../util/urlHelpers';
-import { getNextClassDate } from '../../util/dates';
+import { getNextClassDate, isDateInPast } from '../../util/dates';
 const SectionFeaturesMaybe = props => {
   const { options, publicData } = props;
   if (!publicData) {
     return null;
   }
 
-  const isDateInPast = (startDateString, timezone) => {
-    const listingTime = moment.tz(startDateString, timezone);
-    const currentTime = moment().tz(timezone);
-    return listingTime.isBefore(currentTime);
-  };
+  // const isDateInPast = (startDateString, timezone) => {
+  //   const listingTime = moment.tz(startDateString, timezone);
+  //   const currentTime = moment().tz(timezone);
+  //   return listingTime.isBefore(currentTime);
+  // };
 
-  const nextClass = isDateInPast(publicData.startDate, publicData.timezone)
+  const nextClass = isDateInPast(publicData.startDate)
     ? getNextClassDate(publicData.startDate, publicData?.weeklyDays, publicData.timezone)
     : null;
   const weeklyDays = publicData?.weeklyDays;

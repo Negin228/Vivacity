@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { Form as FinalForm, FormSpy } from 'react-final-form';
 import classNames from 'classnames';
 import { FormattedMessage, intlShape, injectIntl } from '../../util/reactIntl';
-import { timestampToDate } from '../../util/dates';
+import { isDateInPast, timestampToDate } from '../../util/dates';
 import { propTypes } from '../../util/types';
 import config from '../../config';
 import { types as sdkTypes } from '../../util/sdkLoader';
@@ -120,14 +120,14 @@ export class BookingTimeFormComponent extends Component {
             checkOldTransactionData,
           } = fieldRenderProps;
 
-          const isDateInPast = (startDateString, timezone) => {
-            const listingTime = moment.tz(startDateString, timezone);
-            const currentTime = moment().tz(timezone);
-            return listingTime.isBefore(currentTime);
-          };
+          // const isDateInPast = (startDateString, timezone) => {
+          //   const listingTime = moment.tz(startDateString, timezone);
+          //   const currentTime = moment().tz(timezone);
+          //   return listingTime.isBefore(currentTime);
+          // };
 
           const getNextClassDate = (startDate, weeklyDays, timezone) => {
-            if (!isDateInPast(startDate, timezone) || !weeklyDays) {
+            if (!isDateInPast(startDate) || !weeklyDays) {
               return null;
             }
 

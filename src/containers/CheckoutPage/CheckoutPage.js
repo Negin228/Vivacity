@@ -18,7 +18,7 @@ import {
   ensureStripeCustomer,
   ensurePaymentMethodCard,
 } from '../../util/data';
-import { getNextClassDate, minutesBetween } from '../../util/dates';
+import { getNextClassDate, isDateInPast, minutesBetween } from '../../util/dates';
 import { convertTime, createSlug } from '../../util/urlHelpers';
 import {
   isTransactionInitiateAmountTooLowError,
@@ -811,11 +811,11 @@ export class CheckoutPageComponent extends Component {
     // e.g. {country: 'FI'}
 
     const initalValuesForStripePayment = { name: userName };
-    const isDateInPast = (startDateString, timezone) => {
-      const listingTime = moment.tz(startDateString, timezone);
-      const currentTime = moment().tz(timezone);
-      return listingTime.isBefore(currentTime);
-    };
+    // const isDateInPast = (startDateString, timezone) => {
+    //   const listingTime = moment.tz(startDateString, timezone);
+    //   const currentTime = moment().tz(timezone);
+    //   return listingTime.isBefore(currentTime);
+    // };
 
     // const getNextClassDate = (startDate, weeklyDays, timezone) => {
     //   if (!isDateInPast(startDate, timezone) || !weeklyDays) {
@@ -836,7 +836,7 @@ export class CheckoutPageComponent extends Component {
     //   return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
     // };
     const { publicData } = currentListing.attributes;
-    const nextClass = isDateInPast(publicData.startDate, publicData.timezone)
+    const nextClass = isDateInPast(publicData.startDate)
       ? getNextClassDate(publicData.startDate, publicData.weeklyDays, publicData.timezone)
       : null;
     const formattedDate = convertTime(publicData?.startDateString, publicData.timezone);

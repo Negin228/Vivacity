@@ -30,6 +30,12 @@ export const isDate = d =>
  * @returns {boolean} true if given parameters have the same timestamp.
  */
 export const isSameDate = (a, b) => a && isDate(a) && b && isDate(b) && a.getTime() === b.getTime();
+export const isDateInPast = startDateString => {
+  const timezone = moment.tz.guess();
+  const listingTime = moment.tz(startDateString, timezone);
+  const currentTime = moment().tz(timezone);
+  return listingTime.isBefore(currentTime);
+};
 export const getNextClassDate = (startDate, weeklyDays) => {
   const timezone = moment.tz.guess();
   const now = moment().tz(timezone);

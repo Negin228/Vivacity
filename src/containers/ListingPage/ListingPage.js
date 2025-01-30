@@ -24,7 +24,12 @@ import {
   ensureUser,
   userDisplayNameAsString,
 } from '../../util/data';
-import { timestampToDate, calculateQuantityFromHours, getNextClassDate } from '../../util/dates';
+import {
+  timestampToDate,
+  calculateQuantityFromHours,
+  getNextClassDate,
+  isDateInPast,
+} from '../../util/dates';
 import { richText } from '../../util/richText';
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { manageDisableScrolling, isScrollingDisabled } from '../../ducks/UI.duck';
@@ -106,15 +111,12 @@ export class ListingPageComponent extends Component {
     const { bookingStartTime, bookingEndTime, ...restOfValues } = values;
     const bookingStart = timestampToDate(bookingStartTime);
     const bookingEnd = timestampToDate(bookingEndTime);
-    const isDateInPast = (startDateString, timezone) => {
-      const listingTime = moment.tz(startDateString, timezone);
-      const currentTime = moment().tz(timezone);
-      return listingTime.isBefore(currentTime);
-    };
-    const nextClass = isDateInPast(
-      listing.attributes.publicData.startDate,
-      listing.attributes.publicData.timezone
-    )
+    // const isDateInPast = (startDateString, timezone) => {
+    //   const listingTime = moment.tz(startDateString, timezone);
+    //   const currentTime = moment().tz(timezone);
+    //   return listingTime.isBefore(currentTime);
+    // };
+    const nextClass = isDateInPast(listing.attributes.publicData.startDate)
       ? getNextClassDate(
           listing.attributes.publicData.startDate,
           listing.attributes.publicData.weeklyDays,

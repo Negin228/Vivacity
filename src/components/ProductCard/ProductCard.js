@@ -9,7 +9,7 @@ import css from './ProductCard.module.css';
 import { AiFillStar } from 'react-icons/ai';
 import classNames from 'classnames';
 import mt from 'moment-timezone';
-import { getNextClassDate } from '../../util/dates';
+import { getNextClassDate, isDateInPast } from '../../util/dates';
 function ProductCard({
   title,
   id,
@@ -29,11 +29,11 @@ function ProductCard({
 
   const { paymentType = [] } = publicData || {};
   const isRecurring = paymentType?.some(type => type.value === 'recurring');
-  const isDateInPast = (startDateString, timezone) => {
-    const listingTime = moment.tz(startDateString, timezone);
-    const currentTime = moment().tz(timezone);
-    return listingTime.isBefore(currentTime);
-  };
+  // const isDateInPast = (startDateString, timezone) => {
+  //   const listingTime = moment.tz(startDateString, timezone);
+  //   const currentTime = moment().tz(timezone);
+  //   return listingTime.isBefore(currentTime);
+  // };
 
   // const getNextClassDate = (startDate, weeklyDays, timezone) => {
   //   if (!isDateInPast(startDate, timezone) || !weeklyDays) {
@@ -97,7 +97,7 @@ function ProductCard({
           ) : !isRecurring ? (
             <p className={css.classDate}>
               {startDate && timezone
-                ? isDateInPast(startDate, timezone)
+                ? isDateInPast(startDate)
                   ? getNextClassDate(startDate, weeklyDays, timezone)
                   : targetTime
                 : 'Date not available'}

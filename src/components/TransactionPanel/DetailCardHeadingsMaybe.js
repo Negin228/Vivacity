@@ -3,7 +3,7 @@ import AddressLinkMaybe from './AddressLinkMaybe';
 import moment from 'moment-timezone';
 import { convertTime } from '../../util/urlHelpers';
 import css from './TransactionPanel.module.css';
-import { getNextClassDate } from '../../util/dates';
+import { getNextClassDate, isDateInPast } from '../../util/dates';
 
 // Functional component as a helper to build detail card headings
 const DetailCardHeadingsMaybe = props => {
@@ -21,11 +21,11 @@ const DetailCardHeadingsMaybe = props => {
   const { publicData } = listing.attributes;
   console.log(isSubscription);
   console.log(subTitle);
-  const isDateInPast = (startDateString, timezone) => {
-    const listingTime = moment.tz(startDateString, timezone);
-    const currentTime = moment().tz(timezone);
-    return listingTime.isBefore(currentTime);
-  };
+  // const isDateInPast = (startDateString, timezone) => {
+  //   const listingTime = moment.tz(startDateString, timezone);
+  //   const currentTime = moment().tz(timezone);
+  //   return listingTime.isBefore(currentTime);
+  // };
 
   // const getNextClassDate = (startDate, weeklyDays, timezone) => {
   //   if (!isDateInPast(startDate, timezone) || !weeklyDays) {
@@ -46,7 +46,7 @@ const DetailCardHeadingsMaybe = props => {
   //   return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
   // };
 
-  const nextClass = isDateInPast(publicData?.startDate, publicData?.timezone)
+  const nextClass = isDateInPast(publicData?.startDate)
     ? getNextClassDate(publicData?.startDate, publicData?.weeklyDays, publicData?.timezone)
     : null;
   return showDetailCardHeadings ? (
