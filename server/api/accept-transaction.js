@@ -30,9 +30,10 @@ module.exports = async (req, res) => {
     const { attributes } = listing || {};
     const { publicData } = attributes || {};
     const { startDate: lStartDate } = publicData || {};
-
+    const transactionMetadata = transactionData?.data?.data?.attributes?.metadata || {};
+    const { providerTime } = transactionMetadata;
     //startDate with userTimeZone
-    const startDate = moment.tz(lStartDate, userTimeZone);
+    const startDate = moment.tz(providerTime || lStartDate, userTimeZone);
     const currentDate = moment.tz(new Date(), userTimeZone);
     console.log('dates--------------->', {
       currentDate: currentDate.format('YYYY-MM-DD HH:mm a'),
