@@ -273,7 +273,11 @@ export class BookingTimeFormComponent extends Component {
             const isUpcoming = customerTime && isUpcomingDate(customerTime);
             const isPerSession = values?.paymentMethod?.value === 'per_session';
 
-            if (isUpcoming && isPerSession && !isDeclinedOrExpired && isFreeOrHourly) return true;
+            if (isDeclinedOrExpired) {
+              return false;
+            } else if (isUpcoming && isPerSession && isFreeOrHourly) {
+              return true;
+            }
             // For both payment types
             if (hasBoth) {
               return processName === 'flex-subscription' && subscriptionId;
