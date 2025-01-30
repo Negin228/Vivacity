@@ -257,20 +257,23 @@ export class BookingTimeFormComponent extends Component {
             checkOldTransactionData?.attributes?.lastTransition === 'transition/accept';
           const isUpcomingDate = dateStr => {
             const bookedDate = moment(dateStr, 'dddd, MMMM Do YYYY, h:mm a');
+            console.log(bookedDate, 'bookedDate');
             return bookedDate.isAfter(moment());
           };
           const processName = checkOldTransactionData?.attributes.processName;
           const isDeclinedOrExpired =
             checkOldTransactionData?.attributes?.lastTransition === 'transition/decline' ||
             checkOldTransactionData?.attributes?.lastTransition === 'transition/expire';
-
+          const isFreeOrHourly =
+            processName === 'flex-hourly-default-process' ||
+            processName === 'vivacity-free-process';
           const shouldDisableButton = () => {
             if (!checkOldTransactionData) return false;
             const customerTime = checkOldTransactionData?.attributes?.metadata?.customerTime;
             const isUpcoming = customerTime && isUpcomingDate(customerTime);
             const isPerSession = values?.paymentMethod?.value === 'per_session';
 
-            if (isUpcoming && isPerSession && !isDeclinedOrExpired) return true;
+            if (isUpcoming && isPerSession && !isDeclinedOrExpired && isFreeOrHourly) return true;
             // For both payment types
             if (hasBoth) {
               return processName === 'flex-subscription' && subscriptionId;
@@ -378,7 +381,8 @@ export class BookingTimeFormComponent extends Component {
                 </p>
                 {isUpcomingDate(checkOldTransactionData?.attributes.metadata.customerTime) &&
                   values?.paymentMethod?.value === 'per_session' &&
-                  !isDeclinedOrExpired && (
+                  !isDeclinedOrExpired &&
+                  isFreeOrHourly && (
                     <p className={css.message}>
                       You have already booked this class for{' '}
                       {checkOldTransactionData?.attributes.metadata.customerTime}
