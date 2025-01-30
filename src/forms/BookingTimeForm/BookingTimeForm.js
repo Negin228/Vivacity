@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { Form as FinalForm, FormSpy } from 'react-final-form';
 import classNames from 'classnames';
 import { FormattedMessage, intlShape, injectIntl } from '../../util/reactIntl';
-import { isDateInPast, timestampToDate } from '../../util/dates';
+import { getNextClassDate, isDateInPast, timestampToDate } from '../../util/dates';
 import { propTypes } from '../../util/types';
 import config from '../../config';
 import { types as sdkTypes } from '../../util/sdkLoader';
@@ -126,30 +126,27 @@ export class BookingTimeFormComponent extends Component {
           //   return listingTime.isBefore(currentTime);
           // };
 
-          const getNextClassDate = (startDate, weeklyDays, timezone) => {
-            if (!isDateInPast(startDate) || !weeklyDays) {
-              return null;
-            }
+          // const getNextClassDate = (startDate, weeklyDays, timezone) => {
+          //   if (!isDateInPast(startDate) || !weeklyDays) {
+          //     return null;
+          //   }
 
-            const now = moment().tz(timezone);
-            const availableDays = weeklyDays.map(day => parseInt(day.value)).sort((a, b) => a - b);
-            const currentDay = now.day() + 1;
-            const nextDay = availableDays.find(d => d > currentDay) || availableDays[0];
-            const daysToAdd =
-              nextDay > currentDay ? nextDay - currentDay : 7 - currentDay + nextDay;
+          //   const now = moment().tz(timezone);
+          //   const availableDays = weeklyDays.map(day => parseInt(day.value)).sort((a, b) => a - b);
+          //   const currentDay = now.day() + 1;
+          //   const nextDay = availableDays.find(d => d > currentDay) || availableDays[0];
+          //   const daysToAdd =
+          //     nextDay > currentDay ? nextDay - currentDay : 7 - currentDay + nextDay;
 
-            // Use convertTime for consistent formatting
-            const nextDate = now
-              .add(daysToAdd, 'days')
-              .hour(moment.tz(startDate, timezone).hour())
-              .minute(moment.tz(startDate, timezone).minute());
+          //   // Use convertTime for consistent formatting
+          //   const nextDate = now
+          //     .add(daysToAdd, 'days')
+          //     .hour(moment.tz(startDate, timezone).hour())
+          //     .minute(moment.tz(startDate, timezone).minute());
 
-            return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
-          };
-          const nextClass = isDateInPast(
-            listing.attributes.publicData.startDate,
-            listing.attributes.publicData.timezone
-          )
+          //   return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
+          // };
+          const nextClass = isDateInPast(listing.attributes.publicData.startDate)
             ? getNextClassDate(
                 listing.attributes.publicData.startDate,
                 listing.attributes.publicData.weeklyDays,
