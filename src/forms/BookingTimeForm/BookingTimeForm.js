@@ -266,7 +266,7 @@ export class BookingTimeFormComponent extends Component {
             const isPerSession = values?.paymentMethod?.value === 'per_session';
             const processName = checkOldTransactionData.attributes.processName;
 
-            if (isUpcoming && isPerSession) return true;
+            if (isUpcoming && isPerSession && isAccepted) return true;
             // For both payment types
             if (hasBoth) {
               return processName === 'flex-subscription' && subscriptionId;
@@ -374,7 +374,8 @@ export class BookingTimeFormComponent extends Component {
                 </p>
                 {checkOldTransactionData?.attributes?.metadata?.customerTime &&
                   isUpcomingDate(checkOldTransactionData.attributes.metadata.customerTime) &&
-                  values?.paymentMethod?.value === 'per_session' && (
+                  values?.paymentMethod?.value === 'per_session' &&
+                  isAccepted && (
                     <p className={css.message}>
                       You have already booked this class for{' '}
                       {checkOldTransactionData.attributes.metadata.customerTime}
