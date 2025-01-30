@@ -46,9 +46,10 @@ const DetailCardHeadingsMaybe = props => {
   //   return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
   // };
 
-  const nextClass = isDateInPast(publicData?.startDate)
-    ? getNextClassDate(publicData?.startDate, publicData?.weeklyDays, publicData?.timezone)
-    : null;
+  const nextClass =
+    isDateInPast(publicData?.startDate) && publicData?.weeklyDays?.length
+      ? getNextClassDate(publicData?.startDate, publicData?.weeklyDays, publicData?.timezone)
+      : null;
   return showDetailCardHeadings ? (
     <div className={css.detailCardHeadings}>
       <h2 className={css.detailCardTitle}>{listingTitle}</h2>
