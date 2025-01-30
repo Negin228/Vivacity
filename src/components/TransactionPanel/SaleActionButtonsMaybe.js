@@ -19,19 +19,21 @@ const SaleActionButtonsMaybe = props => {
     onAcceptSale,
     onDeclineSale,
     listing,
+    currentTransaction,
   } = props;
   const { attributes } = listing || {};
   const { publicData } = attributes || {};
   const { startDate: lStartDate } = publicData || {};
   const currentTimezone = moment.tz.guess();
-  const startDate = moment.tz(lStartDate, currentTimezone);
+  const transactionMetadata = currentTransaction?.attributes?.metadata || {};
+  const { providerTime } = transactionMetadata;
+  const startDate = moment.tz(providerTime || lStartDate, currentTimezone);
   const currentDate = moment.tz(new Date(), currentTimezone);
   // console.log('dates--------------->', {
   //   currentDate: currentDate.format('YYYY-MM-DD HH:mm a'),
   //   startDate: startDate.format('YYYY-MM-DD HH:mm a'),
   // });
   const isPast = startDate.isBefore(currentDate);
-
   const buttonsDisabled = acceptInProgress || declineInProgress;
 
   const acceptErrorMessage = acceptSaleError ? (

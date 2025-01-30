@@ -410,6 +410,7 @@ export class TransactionPanelComponent extends Component {
         onAcceptSale={() => onAcceptSale(currentTransaction.id)}
         onDeclineSale={() => onDeclineSale(currentTransaction.id)}
         listing={currentListing}
+        currentTransaction={currentTransaction}
       />
     );
 
