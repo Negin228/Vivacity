@@ -312,19 +312,19 @@ export class TransactionPanelComponent extends Component {
       } else if (txIsRequested(tx)) {
         return {
           headingState: HEADING_REQUESTED,
-          showDetailCardHeadings: isCustomer,
+          showDetailCardHeadings: isCustomer || isProvider,
           showSaleButtons: isProvider && !isCustomerBanned,
         };
       } else if (txIsSubscriptionConfirmed(tx)) {
         return {
           headingState: HEADING_SUSCRIPTION_CONFIRMED,
-          showDetailCardHeadings: isCustomer,
+          showDetailCardHeadings: isCustomer || isProvider,
           showAddress: isCustomer,
         };
       } else if (txIsAccepted(tx)) {
         return {
           headingState: HEADING_ACCEPTED,
-          showDetailCardHeadings: isCustomer,
+          showDetailCardHeadings: isCustomer || isProvider,
           showAddress: isCustomer,
         };
       } else if (txIsDeclined(tx)) {
@@ -365,9 +365,9 @@ export class TransactionPanelComponent extends Component {
     const listingTitle = currentListing.attributes.deleted
       ? deletedListingTitle
       : currentListing.attributes.title;
-    console.log(publicData?.startDate, 'startDate');
+    // console.log(publicData?.startDate, 'startDate');
     const formattedDate = convertTime(publicData?.startDateString, publicData?.timezone);
-    console.log(formattedDate, 'formattedDate');
+    // console.log(formattedDate, 'formattedDate');
     // const formattedDate = convertTime(publicData.startDate, publicData.timezone);
     //  moment(publicData.startDate).tz(publicData.timezone, true).local().format('dddd, MMMM Do YYYY, h:mm a')
 

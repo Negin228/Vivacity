@@ -172,13 +172,13 @@ const updateUserSubscriptionDeleted = async dataObject => {
   }
 
   try {
+    await new Promise(resolve => setTimeout(resolve, 2000));
     // Fetch the transaction details
     const transaction = await integrationSdk.transactions.show({ id: transactionId });
     console.log('Transaction status:', transaction.status);
 
     const lastTransition = transaction.data.data.attributes.lastTransition;
 
-    await new Promise(resolve => setTimeout(resolve, 2000));
     let transitionName;
     switch (lastTransition) {
       case 'transition/confirm-subscription':
