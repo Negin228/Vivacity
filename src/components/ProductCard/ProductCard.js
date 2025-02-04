@@ -90,7 +90,7 @@ function ProductCard({
                   .sort((a, b) => parseInt(a.value) - parseInt(b.value))
                   .map(x => x.label)
                   .join(', ')}{' '}
-                <span className={css.weekLabel}>every week.</span>
+                <span className={css.weekLabel}>every week</span>
                 <span> at {timeOfClass}</span>
               </p>
             </>
