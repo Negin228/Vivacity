@@ -146,6 +146,7 @@ export class BookingTimeFormComponent extends Component {
 
           //   return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
           // };
+
           const nextClass = isDateInPast(listing.attributes.publicData.startDate)
             ? getNextClassDate(
                 listing.attributes.publicData.startDate,
@@ -229,7 +230,7 @@ export class BookingTimeFormComponent extends Component {
           const paymentType = listing?.attributes?.publicData?.paymentType;
           const { publicData } = listing?.attributes;
           const weeklyDays = publicData?.weeklyDays;
-
+          const isStartDateInPast = isDateInPast(publicData?.startDate);
           console.log(paymentType, 'paymentType');
           const isRecurringOnly = paymentType?.length === 1 && paymentType[0].value === 'recurring';
           const isPerSessionOnly =
@@ -323,9 +324,11 @@ export class BookingTimeFormComponent extends Component {
                       : `${formattedPrice} ${isRecurringOnly ? 'Per Month' : 'Per Session'}`}
                   </p>
                 )}
-                <p className={css.detailsSubtitle}>
-                  <b>Start date:</b> {formattedDate}
-                </p>
+                {!isStartDateInPast ? (
+                  <p className={css.detailsSubtitle}>
+                    <b>Next Class:</b> {formattedDate}
+                  </p>
+                ) : null}
                 {nextClass && (
                   <p className={css.detailsSubtitle}>
                     <b>Next class:</b> {nextClass}

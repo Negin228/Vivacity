@@ -36,21 +36,60 @@ export const isDateInPast = startDateString => {
   const currentTime = moment().tz(timezone);
   return listingTime.isBefore(currentTime);
 };
+
 export const getNextClassDate = (startDate, weeklyDays) => {
   const timezone = moment.tz.guess();
   const now = moment().tz(timezone);
-  const availableDays = weeklyDays.map(day => parseInt(day.value)).sort((a, b) => a - b);
-  const currentDay = now.day() + 1;
-  const nextDay = availableDays.find(d => d > currentDay) || availableDays[0];
-  const daysToAdd = nextDay > currentDay ? nextDay - currentDay : 7 - currentDay + nextDay;
+  const classTime = moment.tz(startDate, timezone);
 
+  // Convert weeklyDays into sorted numbers
+  const availableDays = weeklyDays.map(day => parseInt(day.value)).sort((a, b) => a - b);
+
+  const currentDay = now.day() + 1; // Today (0 = Sunday, 6 = Saturday)
+  const classHour = classTime.hour();
+  const classMinute = classTime.minute();
+
+  let nextDay = null;
+
+  // Step 1: Check if today is a valid class day and time has NOT passed
+  if (
+    availableDays.includes(currentDay) &&
+    (now.hour() < classHour || (now.hour() === classHour && now.minute() < classMinute))
+  ) {
+    nextDay = currentDay; // Class is today but still upcoming
+  } else {
+    // Step 2: Find the next available day
+    nextDay = availableDays.find(d => d > currentDay) || availableDays[0];
+  }
+
+  // Step 3: Calculate days to add
+  let daysToAdd = nextDay >= currentDay ? nextDay - currentDay : 7 - (currentDay - nextDay);
+
+  // Step 4: Set correct time and date
   const nextDate = now
     .add(daysToAdd, 'days')
-    .hour(moment.tz(startDate, timezone).hour())
-    .minute(moment.tz(startDate, timezone).minute());
+    .hour(classHour)
+    .minute(classMinute)
+    .second(0);
 
   return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
 };
+
+// export const getNextClassDate = (startDate, weeklyDays) => {
+//   const timezone = moment.tz.guess();
+//   const now = moment().tz(timezone);
+//   const availableDays = weeklyDays.map(day => parseInt(day.value)).sort((a, b) => a - b);
+//   const currentDay = now.day() + 1;
+//   const nextDay = availableDays.find(d => d > currentDay) || availableDays[0];
+//   const daysToAdd = nextDay > currentDay ? nextDay - currentDay : 7 - currentDay + nextDay;
+
+//   const nextDate = now
+//     .add(daysToAdd, 'days')
+//     .hour(moment.tz(startDate, timezone).hour())
+//     .minute(moment.tz(startDate, timezone).minute());
+
+//   return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
+// };
 /**
  * Check if the browser's DateTimeFormat API supports time zones.
  *

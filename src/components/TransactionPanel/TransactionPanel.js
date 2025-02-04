@@ -61,6 +61,7 @@ import css from './TransactionPanel.module.css';
 import { getZoomFromAPI } from '../../util/api';
 import { convertTime } from '../../util/urlHelpers';
 import { cancelSubscriptionThunk } from '../../containers/TransactionPage/TransactionPage.duck';
+import { getNextClassDate, isDateInPast } from '../../util/dates';
 
 // Helper function to get display names for different roles
 const displayNames = (currentUser, currentProvider, currentCustomer, intl) => {
@@ -433,7 +434,11 @@ export class TransactionPanelComponent extends Component {
     );
 
     const classes = classNames(rootClassName || css.root, className);
-
+    const isStartDateInPast = isDateInPast(publicData?.startDate);
+    const nextClass =
+      isDateInPast(publicData?.startDate) && publicData?.weeklyDays?.length
+        ? getNextClassDate(publicData?.startDate, publicData?.weeklyDays, publicData?.timezone)
+        : null;
     return (
       <div className={classes}>
         <div className={css.container}>
@@ -453,7 +458,20 @@ export class TransactionPanelComponent extends Component {
                 <AvatarLarge user={currentCustomer} className={css.avatarDesktop} />
               </div>
             ) : null}
-
+            <div className={css.mobileDateContainer}>
+              <h2 className={css.detailCardTitle}>{listingTitle}</h2>
+              <p className={css.detailCardSubtitle}>{bookingSubTitle}</p>
+              {!isStartDateInPast ? (
+                <p className={css.detailCardSubtitle}>
+                  <b>Next Class:</b> {formattedDate}
+                </p>
+              ) : null}
+              {nextClass && (
+                <p className={css.detailCardSubtitle}>
+                  <b>Next Class: </b> {nextClass}
+                </p>
+              )}
+            </div>
             <PanelHeading
               panelHeadingState={stateData.headingState}
               transactionRole={transactionRole}
@@ -472,9 +490,9 @@ export class TransactionPanelComponent extends Component {
                 geolocation={geolocation}
                 showAddress={stateData.showAddress}
               />
+
               <BreakdownMaybe transaction={currentTransaction} transactionRole={transactionRole} />
             </div>
-
             {savePaymentMethodFailed ? (
               <p className={css.genericError}>
                 <FormattedMessage
@@ -522,7 +540,6 @@ export class TransactionPanelComponent extends Component {
             ) : (
               <div className={css.sendingMessageNotAllowed}>{sendingMessageNotAllowed}</div>
             )}
-
             {stateData.showSaleButtons ? (
               <div className={css.mobileActionButtons}>{saleButtons}</div>
             ) : null}

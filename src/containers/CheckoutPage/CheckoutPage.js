@@ -836,6 +836,7 @@ export class CheckoutPageComponent extends Component {
     //   return convertTime(nextDate.format('YYYY-MM-DD HH:mm:ss'), timezone);
     // };
     const { publicData } = currentListing.attributes;
+    const isStartDateInPast = isDateInPast(publicData?.startDate);
     const nextClass = isDateInPast(publicData.startDate)
       ? getNextClassDate(publicData.startDate, publicData.weeklyDays, publicData.timezone)
       : null;
@@ -864,6 +865,26 @@ export class CheckoutPageComponent extends Component {
             </div>
 
             <div className={css.priceBreakdownContainer}>
+              {isFreeBooking ? (
+                <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
+                  Free
+                </p>
+              ) : (
+                <p className={css.detailsSubtitle} style={{ paddingBottom: '10px' }}>
+                  <b>Price:</b>
+                  {isRecurring ? `${formattedMonthlyPrice} Per Month` : detailsSubTitle}
+                </p>
+              )}
+              {!isStartDateInPast ? (
+                <p className={css.detailsSubtitle}>
+                  <b>Next Class:</b> {formattedDate}
+                </p>
+              ) : null}
+              {nextClass && (
+                <p className={css.detailsSubtitle}>
+                  <b>Next class:</b> {nextClass}
+                </p>
+              )}
               {speculateTransactionErrorMessage}
               {breakdown}
             </div>
@@ -956,9 +977,11 @@ export class CheckoutPageComponent extends Component {
                   {isRecurring ? `${formattedMonthlyPrice} Per Month` : detailsSubTitle}
                 </p>
               )}
-              <p className={css.detailsSubtitle}>
-                <b>Start date:</b> {formattedDate}
-              </p>
+              {!isStartDateInPast ? (
+                <p className={css.detailsSubtitle}>
+                  <b>Next Class:</b> {formattedDate}
+                </p>
+              ) : null}
               {nextClass && (
                 <p className={css.detailsSubtitle}>
                   <b>Next class:</b> {nextClass}

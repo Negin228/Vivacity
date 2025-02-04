@@ -152,7 +152,8 @@
   flex-shrink: 0;
   padding: 0 24px 24px 24px;
   width: 100%;
-  position: fixed;
+  position: sticky;
+  /* position: fixed; */
   bottom: 0;
   background-color: var(--matterColorLight);
 

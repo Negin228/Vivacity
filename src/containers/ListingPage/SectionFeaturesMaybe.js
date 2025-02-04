@@ -21,7 +21,7 @@ const SectionFeaturesMaybe = props => {
   //   const currentTime = moment().tz(timezone);
   //   return listingTime.isBefore(currentTime);
   // };
-
+  const isStartDateInPast = isDateInPast(publicData.startDate);
   const nextClass = isDateInPast(publicData.startDate)
     ? getNextClassDate(publicData.startDate, publicData?.weeklyDays, publicData.timezone)
     : null;
@@ -61,11 +61,15 @@ const SectionFeaturesMaybe = props => {
         selectedOptions={[...selectedOptions, otherWorkoutType ? 'other' : '']}
         twoColumns={selectedConfigOptions.length > 5}
       />
-      <h2 className={css.featuresTitle} style={{ marginTop: '16px' }}>
-        <MdDateRange style={{ marginRight: '10px' }} />
-        Start Date
-      </h2>
-      <p>{targetTime}</p>
+      {!isStartDateInPast ? (
+        <>
+          <h2 className={css.featuresTitle} style={{ marginTop: '16px' }}>
+            <MdDateRange style={{ marginRight: '10px' }} />
+            Start Date
+          </h2>
+          <p>{targetTime}</p>
+        </>
+      ) : null}
       {nextClass && (
         <>
           <h2 className={css.featuresTitle} style={{ marginTop: '16px' }}>
