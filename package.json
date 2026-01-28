@@ -38,7 +38,7 @@
     "jstimezonedetect": "^1.0.7",
     "lodash": "^4.17.23",
     "mapbox-gl-multitouch": "^1.0.3",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.34",
     "nodemailer": "^6.7.5",
     "nodemailer-sendgrid-transport": "^0.2.0",
