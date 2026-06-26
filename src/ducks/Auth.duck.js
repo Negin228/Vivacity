@@ -27,34 +27,20 @@ export const CONFIRM_REQUEST = 'app/Auth/CONFIRM_REQUEST';
 export const CONFIRM_SUCCESS = 'app/Auth/CONFIRM_SUCCESS';
 export const CONFIRM_ERROR = 'app/Auth/CONFIRM_ERROR';
 
-// Generic user_logout action that can be handled elsewhere
-// E.g. src/reducers.js clears store as a consequence
 export const USER_LOGOUT = 'app/USER_LOGOUT';
 
 // ================ Reducer ================ //
 
 const initialState = {
   isAuthenticated: false,
-
-  // scopes associated with current token
   authScopes: [],
-
-  // auth info
   authInfoLoaded: false,
-
-  // login
   loginError: null,
   loginInProgress: false,
-
-  // logout
   logoutError: null,
   logoutInProgress: false,
-
-  // signup
   signupError: null,
   signupInProgress: false,
-
-  // confirm (create use with idp)
   confirmError: null,
   confirmInProgress: false,
 };
@@ -69,9 +55,8 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         authInfoLoaded: true,
         isAuthenticated: authenticated(payload),
-        authScopes: payload.scopes,
+        authScopes: payload ? payload.scopes || [] : [],
       };
-
     case LOGIN_REQUEST:
       return {
         ...state,
@@ -84,28 +69,24 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, loginInProgress: false, isAuthenticated: true };
     case LOGIN_ERROR:
       return { ...state, loginInProgress: false, loginError: payload };
-
     case LOGOUT_REQUEST:
       return { ...state, logoutInProgress: true, loginError: null, logoutError: null };
     case LOGOUT_SUCCESS:
       return { ...state, logoutInProgress: false, isAuthenticated: false, authScopes: [] };
     case LOGOUT_ERROR:
       return { ...state, logoutInProgress: false, logoutError: payload };
-
     case SIGNUP_REQUEST:
       return { ...state, signupInProgress: true, loginError: null, signupError: null };
     case SIGNUP_SUCCESS:
       return { ...state, signupInProgress: false };
     case SIGNUP_ERROR:
       return { ...state, signupInProgress: false, signupError: payload };
-
     case CONFIRM_REQUEST:
       return { ...state, confirmInProgress: true, loginError: null, confirmError: null };
     case CONFIRM_SUCCESS:
       return { ...state, confirmInProgress: false, isAuthenticated: true };
     case CONFIRM_ERROR:
       return { ...state, confirmInProgress: false, confirmError: payload };
-
     default:
       return state;
   }
@@ -145,15 +126,16 @@ export const userLogout = () => ({ type: USER_LOGOUT });
 
 export const authInfo = () => (dispatch, getState, sdk) => {
   dispatch(authInfoRequest());
-  return sdk
-    .authInfo()
-    .then(info => dispatch(authInfoSuccess(info)))
+  return fetch('/api/auth/current-user', { credentials: 'include' })
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.data) {
+        dispatch(authInfoSuccess({ isAnonymous: false, scopes: [] }));
+      } else {
+        dispatch(authInfoSuccess(null));
+      }
+    })
     .catch(e => {
-      // Requesting auth info just reads the token from the token
-      // store (i.e. cookies), and should not fail in normal
-      // circumstances. If it fails, it's due to a programming
-      // error. In that case we mark the operation done and dispatch
-      // `null` success action that marks the user as unauthenticated.
       log.error(e, 'auth-info-failed');
       dispatch(authInfoSuccess(null));
     });
@@ -164,11 +146,16 @@ export const login = (username, password) => (dispatch, getState, sdk) => {
     return Promise.reject(new Error('Login or logout already in progress'));
   }
   dispatch(loginRequest());
-
-  // Note that the thunk does not reject when the login fails, it
-  // just dispatches the login error action.
-  return sdk
-    .login({ username, password })
+  return fetch('/api/auth/login', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: username, password }),
+  })
+    .then(res => {
+      if (!res.ok) throw new Error('Invalid email or password');
+      return res.json();
+    })
     .then(() => dispatch(loginSuccess()))
     .then(() => dispatch(fetchCurrentUser()))
     .catch(e => dispatch(loginError(storableError(e))));
@@ -179,13 +166,11 @@ export const logout = () => (dispatch, getState, sdk) => {
     return Promise.reject(new Error('Login or logout already in progress'));
   }
   dispatch(logoutRequest());
-
-  // Note that the thunk does not reject when the logout fails, it
-  // just dispatches the logout error action.
-  return sdk
-    .logout()
+  return fetch('/api/auth/logout', {
+    method: 'POST',
+    credentials: 'include',
+  })
     .then(() => {
-      // The order of the dispatched actions
       dispatch(logoutSuccess());
       dispatch(clearCurrentUser());
       log.clearUserId();
@@ -212,31 +197,39 @@ export const signup = params => (dispatch, getState, sdk) => {
         protectedData: { ...rest },
       };
 
-  // We must login the user if signup succeeds since the API doesn't
-  // do that automatically.
-  return (
-    createUserFromAPI({ createUserParams })
-      // sdk.currentUser
-      //   .create(createUserParams)
-      .then(() => dispatch(signupSuccess()))
-      .then(() => dispatch(login(email, password)))
-      .catch(e => {
-        dispatch(signupError(storableError(e)));
-        log.error(e, 'signup-failed', {
-          email: params.email,
-          firstName: params.firstName,
-          lastName: params.lastName,
-        });
-      })
-  );
+  return fetch('/api/auth/signup', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email,
+      password,
+      firstName,
+      lastName,
+      userType,
+      publicData: createUserParams.publicData,
+    }),
+  })
+    .then(res => {
+      if (!res.ok) return res.json().then(d => { throw new Error(d.errors?.[0]?.title || 'Signup failed'); });
+      return res.json();
+    })
+    .then(() => dispatch(signupSuccess()))
+    .then(() => dispatch(login(email, password)))
+    .catch(e => {
+      dispatch(signupError(storableError(e)));
+      log.error(e, 'signup-failed', {
+        email: params.email,
+        firstName: params.firstName,
+        lastName: params.lastName,
+      });
+    });
 };
 
 export const signupWithIdp = params => (dispatch, getState, sdk) => {
   dispatch(confirmRequest());
   return createUserWithIdp(params)
-    .then(res => {
-      return dispatch(confirmSuccess());
-    })
+    .then(() => dispatch(confirmSuccess()))
     .then(() => dispatch(fetchCurrentUser()))
     .catch(e => {
       log.error(e, 'create-user-with-idp-failed', { params });

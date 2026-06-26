@@ -80,26 +80,15 @@ const availabilityFilterMaybe = {
 };
 
 const currentUnixTimestamp = moment().unix();
+
+
 export const getAllListings = () => async (dispatch, getState, sdk) => {
   dispatch(fetchProductsRequest());
 
   try {
-    const response = await sdk.listings.query({
-      // ...availabilityFilterMaybe,
-      include: ['images', 'author'],
-      'fields.listing': ['title', 'metadata', 'price', 'publicData', 'createdAt'],
-      'fields.image': [
-        'variants.landscape-crop',
-        'variants.landscape-crop2x',
-        'variants.square-small',
-        'variants.square-small2x',
-      ],
-      'limit.images': 1,
-      minStock: 1,
-      perPage: 10,
-      pub_lastClass: `${currentUnixTimestamp - 10},`,
-      // pub_featured: true,
-    });
+    const response = await fetch('/api/listings?perPage=10&include=author', {
+      credentials: 'include',
+    }).then(r => r.json());
 
     dispatch(addMarketplaceEntities(response));
     const denormalisedResponse = denormalisedResponseEntities(response);
@@ -111,7 +100,6 @@ export const getAllListings = () => async (dispatch, getState, sdk) => {
     dispatch(fetchProductsError(storableError(e)));
   }
 };
-
 export const getAllTrainers = () => async (dispatch, getState) => {
   dispatch(fetchTrainerRequest());
   try {
